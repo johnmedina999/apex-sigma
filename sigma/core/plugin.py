@@ -74,6 +74,10 @@ class Plugin(object):
             if 'events' in yml:
                 self.events_info = yml['events']
 
+    def reload_commands(self):
+       for cmd_info in self.commands_info:
+            self.commands[cmd_info['name']].reload_command()
+                
     def load_commands(self):
         for cmd_info in self.commands_info:
             cmd = Command(self, cmd_info)

@@ -35,6 +35,20 @@ class PluginManager(object):
             for ev_type, events in self.events.items():
                 events.update(plugin.events[ev_type])
 
+    def reload_plugin(self, pluginName):
+        for plugin in self.plugins:
+            self.bot.log.info(plugin.name);
+            if plugin.name == pluginName:
+                plugin.reload_commands()
+                return True
+        return False
+                
+    def get_plugins(self):
+        list = ""
+        for plugin in self.plugins:
+            list += plugin.name + ", "
+        return list
+                
     def load_all(self):
         for path in self.plugin_dirs:
             self.load_plugin(path)

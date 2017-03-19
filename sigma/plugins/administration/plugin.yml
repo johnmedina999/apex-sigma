@@ -167,6 +167,22 @@ commands:
     usage:   "{pfx:s}{cmd:s} 123456789123456789"
     description:
       Blacklists a connected server disallowing it to use any and all commands.
+      
+  - name:    reloadplugin
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} fun"
+    description:
+      Reloads the selected plugin (Unimplemented)
+      
+  - name:  listplugins
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    description:
+      Lists server plugins
 
 events:
   - name:    pmredirect
@@ -177,7 +193,7 @@ events:
     pmable:  true
     description:
       Redirects PM info to the bot owner.
-
+      
   - name:    cmd_count_filler
     type:    message
     global:  true
