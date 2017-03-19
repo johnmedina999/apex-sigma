@@ -48,20 +48,22 @@ class Sigma(discord.Client):
         self.member_count = 0
 
         with open('AUTHORS') as authors_file:
-            content = yaml.safe_load(authors_file)
-            self.authors = content['authors']
+            content           = yaml.safe_load(authors_file)
+            self.authors      = content['authors']
             self.contributors = content['contributors']
+            
         with open('DONORS') as donors_file:
-            content = yaml.safe_load(donors_file)
+            content     = yaml.safe_load(donors_file)
             self.donors = content['donors']
+            
         with open('VERSION') as version_file:
-            content = yaml.safe_load(version_file)
-            version = content['version']
+            content         = yaml.safe_load(version_file)
+            version         = content['version']
             self.build_date = datetime.datetime.fromtimestamp(content['build_date']).strftime('%B %d, %Y')
-            self.v_major = version['major']
-            self.v_minor = version['minor']
-            self.v_patch = version['patch']
-            self.codename = content['codename']
+            self.v_major    = version['major']
+            self.v_minor    = version['minor']
+            self.v_patch    = version['patch']
+            self.codename   = content['codename']
             self.beta_state = content['beta']
 
     def run(self, token):
@@ -81,6 +83,7 @@ class Sigma(discord.Client):
                 "token": DiscordListToken,
                 "servers": len(self.servers)
             }
+            
             url = "https://bots.discordlist.net/api.php"
             async with aiohttp.ClientSession() as session:
                 session.post(url, data=payload)
@@ -96,10 +99,8 @@ class Sigma(discord.Client):
 
     @classmethod
     def create_cache(cls):
-        if not os.path.exists('cache/'):
-            os.makedirs('cache/')
-        if not os.path.exists('chains/'):
-            os.makedirs('chains/')
+        if not os.path.exists('cache/'): os.makedirs('cache/')
+        if not os.path.exists('chains/'): os.makedirs('chains/')
 
     async def on_voice_state_update(self, before, after):
         pass
@@ -121,14 +122,17 @@ class Sigma(discord.Client):
         self.log.info('Updating Bot Listing APIs...')
         self.loop.create_task(self.update_discordlist())
         self.log.info('Launching On-Ready Plugins...')
+        
         for ev_name, event in self.plugin_manager.events['ready'].items():
             try:
                 await event.call_ready()
             except Exception as e:
                 self.log.error(e)
+        
         self.log.info('-----------------------------------')
         self.ready = True
         self.log.info('Finished Loading and Successfully Connected to Discord!')
+        
         if os.getenv('DEV_BUILD_ENV'):
             self.log.info('Testing Build Environment Detected\nExiting...')
             exit()
@@ -143,6 +147,7 @@ class Sigma(discord.Client):
                 for ev_name, event in self.plugin_manager.events['mention'].items():
                     task = event.call(message, args)
                     self.loop.create_task(task)
+                    
             # handle raw message events
             for ev_name, event in self.plugin_manager.events['message'].items():
                 task = event.call(message, args)
@@ -159,6 +164,7 @@ class Sigma(discord.Client):
                         task = self.plugin_manager.commands[cmd].call(message, args)
                         self.loop.create_task(task)
                         self.db.add_stats(f'cmd_{cmd}_count')
+                        
                     if message.server:
                         if args:
                             msg = 'CMD: {:s} | USR: {:s} [{:s}] | SRV: {:s} [{:s}] | CHN: {:s} [{:s}] | ARGS: {:s}'

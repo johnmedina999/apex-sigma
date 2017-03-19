@@ -6,16 +6,14 @@ from .plugin import Plugin
 
 class PluginManager(object):
     def __init__(self, bot):
-        self.bot = bot
-        self.client = self.bot
-
-        self.db = bot.db
-        self.music = bot.music
-        self.log = create_logger('Plugin Manager')
-
+        self.bot         = bot
+        self.client      = self.bot
+        self.db          = bot.db
+        self.music       = bot.music
+        self.log         = create_logger('Plugin Manager')
         self.plugin_dirs = []
-        self.plugins = []
-        self.commands = {}
+        self.plugins     = []
+        self.commands    = {}
         self.events = {
             'mention': {},
             'message': {},
@@ -40,7 +38,7 @@ class PluginManager(object):
     def load_all(self):
         for path in self.plugin_dirs:
             self.load_plugin(path)
-
+            
     def get_plugin_dirs(self):
         for root, dirs, files in os.walk('sigma/plugins'):
             if 'plugin.yml' in files:

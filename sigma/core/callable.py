@@ -17,10 +17,11 @@ class NotEnabledError(RuntimeError):
 
 
 class Callable(object):
+
     def __init__(self, plugin, info):
         self.enabled = False
-        self.usage = 'No usage info available.'
-        self.desc = 'No description available.'
+        self.usage   = 'No usage info available.'
+        self.desc    = 'No description available.'
         self.perm = {
             'global': False,
             'sfw': True,
@@ -28,16 +29,15 @@ class Callable(object):
             'donor': False,
             'pmable': False
         }
-        self.db = plugin.db
-        self.music = plugin.music
-        self.log = plugin.log
-        self.bot = plugin.bot
+        
+        self.db     = plugin.db
+        self.music  = plugin.music
+        self.log    = plugin.log
+        self.bot    = plugin.bot
         self.plugin = plugin
 
-        try:
-            self.load_info(info)
-        except NotEnabledError:
-            return
+        try: self.load_info(info)
+        except NotEnabledError: return
 
     def load_info(self, info):
         if 'enabled' in info and info['enabled']:
@@ -58,10 +58,10 @@ class Callable(object):
             if key in info:
                 self.perm[key] = info[key]
 
-        module_path = os.path.join(self.path, self.name)
+        module_path  = os.path.join(self.path, self.name)
         self.modpath = module_path.replace('/', '.').replace('\\', '.')
-        self.module = import_module(self.modpath)
-
+        self.module  = import_module(self.modpath)
+        
     def resource(self, what):
         res = os.path.join(self.path, 'res', what)
 
@@ -75,13 +75,12 @@ class Callable(object):
         return ''
 
     async def call(self, message, *args):
-        server = message.server
+        server  = message.server
         channel = message.channel
-        author = message.author
-        msg = None
+        author  = message.author
+        msg     = None
 
-        if author.bot:
-            return
+        if author.bot: return
 
         perm = check_permitted(self, author, channel, server)
 
@@ -93,13 +92,13 @@ class Callable(object):
             msg = await getattr(self.module, self.name)(self, message, *args)
         except exception as e:
             try:
-                title = ':exclamation: An Error Occurred!'
-                errmsg = 'For more information you can go to the AP Discord server and ask us, '
+                title   = ':exclamation: An Error Occurred!'
+                errmsg  = 'For more information you can go to the AP Discord server and ask us, '
                 errmsg += 'the link is in the help.'
+                
                 self.log.error(f'CMD: {self.name} | ERROR: {e} | TRACE: {e.with_traceback}')
                 error_embed = discord.Embed(color=0xDB0000)
-                error_embed.add_field(name=title,
-                                      value=codeblock(f'Arguments: \"{e}\"\nTraceback: \"{e.with_traceback}\"'))
+                error_embed.add_field(name=title, value=codeblock(f'Arguments: \"{e}\"\nTraceback: \"{e.with_traceback}\"'))
                 error_embed.set_footer(text=errmsg)
                 await self.bot.send_message(channel, None, embed=error_embed)
             except:
