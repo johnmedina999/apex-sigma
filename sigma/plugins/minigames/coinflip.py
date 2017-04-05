@@ -9,7 +9,7 @@ async def coinflip(cmd, message, args):
     else:
         result = 'tails'
     urls = {
-        'heads': 'https://i.imgur.com/qLPkn7k.png',
+        'heads': 'http://i.imgur.com/dQeJ1ZX.png',
         'tails': 'http://i.imgur.com/Xx5dY4M.png'
     }
     embed = discord.Embed(color=0x1abc9c)

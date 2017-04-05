@@ -179,12 +179,10 @@ class Sigma(discord.Client):
                     else:
                         if args:
                             msg = 'CMD: {:s} | USR: {:s} [{:s}] | PRIVATE MESSAGE | ARGS: {:s}'
-                            self.log.info(msg.format(cmd, message.author.name + '#' + message.author.discriminator,
-                                                     message.author.id, ' '.join(args)))
+                            self.log.info(msg.format(cmd, message.author.name + '#' + message.author.discriminator, message.author.id, ' '.join(args)))
                         else:
                             msg = 'CMD: {:s} | USR: {:s} [{:s}] | PRIVATE MESSAGE'
-                            self.log.info(msg.format(cmd, message.author.name + '#' + message.author.discriminator,
-                                                     message.author.id))
+                            self.log.info(msg.format(cmd, message.author.name + '#' + message.author.discriminator, message.author.id))
                 except KeyError:
                     # no such command
                     pass
