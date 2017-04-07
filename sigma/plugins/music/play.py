@@ -27,9 +27,22 @@ async def play(cmd, message, args):
         voice_connected = cmd.bot.is_voice_connected(message.server)
        
         if not voice_connected:
-            await cmd.bot.join_voice_channel(message.author.voice_channel)
-            embed = discord.Embed(title='✅ Joined ' + message.author.voice_channel.name,
-                                  color=0x66cc66)
+            try:
+                await cmd.bot.join_voice_channel(message.author.voice_channel)
+            except exception as e:
+                try:
+                    await voice_instance.disconnect()
+                    try:
+                        await cmd.bot.join_voice_channel(message.author.voice_channel)
+                    except:
+                        self.log.error(f'ERROR: Unable to connect to voice channel')
+                        self.log.error(f'CMD: {self.name} | ERROR: {e} | TRACE: {e.with_traceback}')
+                except:
+                    self.log.error(f'ERROR: Unable to connect to voice channel')
+                    self.log.error(f'CMD: {self.name} | ERROR: {e} | TRACE: {e.with_traceback}')
+                    pass
+                
+            embed = discord.Embed(title='✅ Joined ' + message.author.voice_channel.name, color=0x66cc66)
             await cmd.bot.send_message(message.channel, None, embed=embed)
        
         if len(srv_queue.queue) == 0:
