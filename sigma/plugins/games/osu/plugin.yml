@@ -10,6 +10,6 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    usage:   "{pfx:s}{cmd:s} AXAz0r"
+    usage:   "{pfx:s}{cmd:s} AXAz0r 3"
     description:
       Generates a signature image with the users stats for osu.
