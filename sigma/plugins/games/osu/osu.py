@@ -29,7 +29,7 @@ async def osu(cmd, message, args):
         return
 
     user_color = str(message.author.color)[1:]
-    sig_url = 'https://lemmmy.pw/osusig/sig.php?colour=hex' + user_color + '&uname=' + user_name + '&mode=' + mode
+    sig_url = 'https://lemmmy.pw/osusig/sig.php?colour=hex' + user_color + '&uname=' + user_name + '&mode=' + mode + "&pp=1"
 
     embed = discord.Embed(color=message.author.color)
     embed.set_image(url=sig_url)
