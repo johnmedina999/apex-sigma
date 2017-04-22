@@ -21,6 +21,5 @@ async def leave(cmd, message, args):
             except Exception as e:
                 cmd.log.error(e)
     else:
-        out = discord.Embed(type='rich', color=0xDB0000,
-                            title=':no_entry: Insufficient Permissions. Bot Owner Only.')
+        out = discord.Embed(type='rich', color=0xDB0000, title=':no_entry: Insufficient Permissions. Bot Owner Only.')
         await cmd.bot.send_message(message.channel, None, embed=out)

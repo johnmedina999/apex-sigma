@@ -9,8 +9,7 @@ async def inviteowner(cmd, message, args):
                 if server.id == server_id_lookup:
                     try:
                         invite = await cmd.bot.create_invite(server, max_uses=1)
-                        await cmd.bot.send_message(message.channel,
-                                                   'Invite link to **' + server.name + '**: ' + str(invite))
+                        await cmd.bot.send_message(message.channel, 'Invite link to **' + server.name + '**: ' + str(invite))
                     except Exception as e:
                         invs = await cmd.bot.invites_from(server)
                         inv_out = ''

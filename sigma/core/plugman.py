@@ -42,17 +42,17 @@ class PluginManager(object):
                 plugin.reload_commands()
                 return True
         return False
-                
+
     def get_plugins(self):
         list = ""
         for plugin in self.plugins:
             list += plugin.name + ", "
         return list
-                
+
     def load_all(self):
         for path in self.plugin_dirs:
             self.load_plugin(path)
-            
+
     def get_plugin_dirs(self):
         for root, dirs, files in os.walk('sigma/plugins'):
             if 'plugin.yml' in files:
