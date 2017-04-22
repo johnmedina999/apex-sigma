@@ -241,7 +241,7 @@ commands:
     description:
       Disallows a user from using the bot on your server.
       The user can be blacklisted by either mention or ID.
-      Requires the user to be a server Administrator.
+      Requires Manage Messages and Kick Permissions(s)
 
   - name: ignorechannel
     alts:
@@ -253,7 +253,7 @@ commands:
     description:
       Disallows commands to be used in the specified channel.
       The channel can be blacklisted by either mention or ID.
-      Requires the user to be a server Administrator.
+      Requires Manage Messages and Manage Channel Permissions(s).
 
   - name: cleverbot
     alts:
