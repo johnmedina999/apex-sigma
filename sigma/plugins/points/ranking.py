@@ -16,12 +16,12 @@ async def ranking(cmd, message, args):
 
     for result in number_grabber:
         try:
-            if count > 10: break
-            points += str(result['Points']) + "\n"
-            users += message.server.get_member(result['UserID']).name + "\n"
-
             count += 1
+            if count > 10: break
+
             numbers += str(count) + "\n"
+            users += message.server.get_member(result['UserID']).name + "\n"
+            points += str(result['Points']) + "\n"
         except: pass
 
     embed.add_field(name='#', value=numbers)
