@@ -70,7 +70,6 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
             await cmd.bot.edit_message(slot_spinner, None, embed=slot_embed)
 
         # Result Response
-        subtext = ''
         if res_1 == res_2 == res_3:
             win = True
             pts = pow(len(symbols),6) - 56 #bet_amt * 1   # TODO: This needs to be multiplied by emoji worth
@@ -86,7 +85,7 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
         else:
             cmd.db.take_points(message.server, message.author, bet_amt)
             slot_embed.set_field_at(0, name=':bomb: You Lost...', value=slot_view)
-            slot_embed.set_footer(text='You lost the ' + str(bet_amt) + ' points that you bet.')
+            slot_embed.set_footer(text='You lost the ' + str(bet_amt) + ' points')
             await cmd.bot.edit_message(slot_spinner, None, embed=slot_embed)
     else:
         cd_timestamp = slot_back_data[message.author.id]

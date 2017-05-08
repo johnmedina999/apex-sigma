@@ -8,11 +8,11 @@ async def slots(cmd, message, args):
 
     if args:
         try: 
-            cost = abs(int(args[0]))
-            emoji = min(20, max(2, int(args[1])))
+            #cost = abs(int(args[0]))
+            emoji = min(20, max(2, int(args[0])))
         except: pass
 
-    cost = min(pow(emoji, 3), cost)
+    cost = pow(emoji, 4)
     symbols = [':sunny:', ':crescent_moon:', ':eggplant:', ':gun:', ':diamond_shape_with_a_dot_inside:', ':bell:',
                ':maple_leaf:', ':musical_note:', ':gem:', ':fleur_de_lis:', ':trident:', ':knife:', ':fire:',
                ':clown:', ':radioactive:', ':green_heart:', ':telephone:', ':hamburger:', ':banana:',
