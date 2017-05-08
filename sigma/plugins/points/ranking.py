@@ -15,12 +15,12 @@ async def ranking(cmd, message, args):
     for result in number_grabber:
         number = user = points = ''
         try:
-            count += 1
-            if count > 10: break
-
-            number = str(count) + "\n"
             user = message.server.get_member(result['UserID']).name + "\n"
             points = str(result['Points']) + "\n"
+
+            count += 1
+            if count > 10: break
+            number = str(count) + "\n"
         except: pass
 
         rankingData['numbers'] += number
