@@ -10,14 +10,15 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    usage:   "{pfx:s}{cmd:s}"
+    usage:   "{pfx:s}{cmd:s}{cmd:s}"
     description:
+      Example - >>slots [pts] [emoji]
       Spin the slot machine and test your luck!
-      You can specify the amount you want to bet, this default to 10 if nothing specified.
-      Rewards Bet Amount x 12 for 2 of the same.
-      Rewards Bet Amount x 210 for 3 of the same.
+      You can specify the amount you want to bet and the number of emoji to spin.
+      If nothing is specified emoji it defaults to 2 emoji and 8 pts
+      The max amount you can bet is set by emoji^3
       Can only be spun once every 20 seconds.
-      Only the middle row counts, as indicated by the arrows.
+      Only the middle row counts, as indicated by the arrows. 3 in a row needed to win.
 
   - name: sloths
     global:  true
