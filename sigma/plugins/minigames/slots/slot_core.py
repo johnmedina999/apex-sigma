@@ -73,7 +73,7 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
         subtext = ''
         if res_1 == res_2 == res_3:
             win = True
-            pts = bet_amt * 1   # TODO: This needs to be multiplied by emoji worth
+            pts = pow(len(symbols),6) - 56 #bet_amt * 1   # TODO: This needs to be multiplied by emoji worth
         else:
             win = False
             pts = 0
