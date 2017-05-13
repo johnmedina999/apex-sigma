@@ -149,9 +149,9 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    usage:   "{pfx:s}{cmd:s} @person"
+    usage:   "{pfx:s}{cmd:s} @person <reason>"
     description:
-      Will disable a persons ability to read any and all channels.
+      Will disable a persons ability to read any and all channels and DMs the person the reasons.
       Requires the user who calls the command to have the Manage Messages permision as well as Manage Roles.
 
   - name: unblind
