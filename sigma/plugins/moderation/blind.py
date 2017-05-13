@@ -36,7 +36,7 @@ async def blind(cmd, message, args):
                         await cmd.bot.edit_channel_permissions(chan, target, overwrite)
 
         out_content_to_user = discord.Embed(color=0x993300)
-        out_content_to_user.add_field(name=':boot: You have been blinded!', value=('Reason: ' + reason))
+        out_content_to_user.add_field(name=':eye_in_speech_bubble: You have been blinded!', value=('Reason: ' + reason))
         await cmd.bot.send_message(target, None, embed=out_content_to_user)
 
         embed = discord.Embed(color=0x66CC66, title=':white_check_mark: ' + target.name + ' Was Blinded!')
