@@ -16,6 +16,17 @@ commands:
       Returns the list of command modules or gives you the description
       and usage for a selected command.
 
+  - name:    time
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    usage:   ">>time [UTC offset | timezone | City]"
+    description:
+      Converts UTC time into offset or timezone specified
+      Supports +/- offset, timezone abriviations, or Country/City format, or just City
+      Note that resolving city location may not always be accurate
+
   - name:    remind
     global:  true
     enabled: true
