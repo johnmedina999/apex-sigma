@@ -2,7 +2,7 @@ import discord
 from datetime import datetime, timedelta
 from pytz import timezone, UnknownTimeZoneError, utc
 from geopy import geocoders
-from tzwhere import tzwhere
+import tzwhere
 
 
 async def time(cmd, message, args):
