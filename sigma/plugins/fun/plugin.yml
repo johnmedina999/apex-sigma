@@ -81,9 +81,9 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    usage:   "{pfx:s}{cmd:s}"
+    usage:   ">>xkcd [num]"
     description:
-      Outputs a random xkcd comic.
+      Outputs the specified xkcd or a random xkcd if number not specified.
 
   - name:    pun
     global:  true
