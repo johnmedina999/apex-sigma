@@ -35,6 +35,14 @@ commands:
     description:
       Sets a timer in seconds and displays the message inputted after it's done.
 
+  - name:    ping
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   ">>ping"
+    description:
+      just prints "pong!". Useful to know if the bot is up
+
   - name:    donors
     alts:
       - "dons"
