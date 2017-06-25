@@ -174,7 +174,7 @@ commands:
     sfw:     true
     usage:   "{pfx:s}{cmd:s} fun"
     description:
-      Reloads the selected plugin
+      Reloads the selected plugin. Use "/" for spaces
       
   - name:  listplugins
     global:  true

@@ -17,7 +17,8 @@ async def reloadplugin(cmd, message, args):
         return
 
     else:
-        success = cmd.bot.plugin_manager.reload_plugin("".join(args))
+        print("".join(args))
+        success = cmd.bot.plugin_manager.reload_plugin("".join(args).replace("/", " "))
 
         if not success:
             out_content = discord.Embed(type='rich', color=0x660000, title=':exclamation: Plugin failed to reload')
