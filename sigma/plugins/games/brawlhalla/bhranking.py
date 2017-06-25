@@ -1,4 +1,4 @@
-import discord
+﻿import discord
 import aiohttp
 import lxml.html as l
 
@@ -12,9 +12,9 @@ async def bhranking(cmd, message, args):
         region = args[0].lower()
         if region not in regions:
             embed = discord.Embed(color=0xDB0000)
-            embed.add_field(name=':exclamation: Invalid Region',
+            embed.add_field(name='❗ Invalid Region',
                             value='```\nRegions: ' + ', '.join(regions).upper() + '\n```')
-            await cmd.bot.send_message(message.channel, None, embed=embed)
+            await message.channel.send(None, embed=embed)
             return
     if region == 'global':
         lb_url = url_base
@@ -49,4 +49,4 @@ async def bhranking(cmd, message, args):
         player_list += '\n' + out
     embed.add_field(name='Region', value='```\n' + region.upper() + '\n```', inline=False)
     embed.add_field(name='Brawhalla 1v1 Top 10 Ranked Players', value='```\n' + player_list + '\n```', inline=False)
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

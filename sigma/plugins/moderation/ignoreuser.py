@@ -1,4 +1,4 @@
-import discord
+'''import discord
 from sigma.core.permission import check_admin
 from sigma.core.permission import check_kick
 from sigma.core.permission import check_man_msg
@@ -57,3 +57,4 @@ async def ignoreuser(cmd, message, args):
         embed = discord.Embed(type='rich', color=0xDB0000, title=':no_entry: Insufficient Permissions. Requires Manage Messages and Kick Permissions(s).')
 
     await cmd.bot.send_message(message.channel, None, embed=embed)
+'''

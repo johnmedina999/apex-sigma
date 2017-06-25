@@ -1,4 +1,4 @@
-import random
+﻿import random
 import discord
 from .visual_novels import key_vn_list
 
@@ -11,9 +11,9 @@ async def keyvis(cmd, message, args):
     try:
         item = key_vn_list[choice]
     except KeyError:
-        embed = discord.Embed(color=0x696969, title=':mag: Nothing found for {:s}...'.format(
+        embed = discord.Embed(color=0x696969, title='🔍 Nothing found for {:s}...'.format(
             ' '.join(['`{:s}`'.format(x) for x in args])))
-        await cmd.bot.send_message(message.channel, None, embed=embed)
+        await message.channel.send(None, embed=embed)
         return
 
     ran_image_number = random.randint(1, item[1])
@@ -24,4 +24,4 @@ async def keyvis(cmd, message, args):
         url_base, item[0], '0000'[:-ran_number_length], ran_image_number)
     embed = discord.Embed(color=0x9933FF)
     embed.set_image(url=image_url)
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

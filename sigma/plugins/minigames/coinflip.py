@@ -1,13 +1,9 @@
-import random
+﻿import random
 import discord
 
 async def coinflip(cmd, message, args):
     cmd.db.add_stats('CoinFlipCount')
-    number = random.randint(0, 1)
-    
-    if number == 1: result = 'heads'
-    else:           result = 'tails'
-
+    result = random.choice(['heads', 'tails'])
     urls = {
         'heads': 'http://i.imgur.com/KpiOD0g.png',
         'tails': 'http://i.imgur.com/JAPYEsl.png'
@@ -31,4 +27,4 @@ async def coinflip(cmd, message, args):
             embed.set_footer(text='If you\'re going to guess, guess with Heads or Tails.')
     
     embed.set_image(url=urls[result])
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

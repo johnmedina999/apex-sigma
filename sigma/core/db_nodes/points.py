@@ -1,52 +1,55 @@
-def point_manipulation(db, server, user, points, point_type, add):
-    collection = 'PointSystem'
-    finddata = {
-        'UserID': user.id,
-        'ServerID': server.id
-    }
-    insert_data = {
-        'UserID': user.id,
-        'ServerID': server.id,
-        'Points': 0,
-        'XP': 0,
-        'Level': 0
-    }
-    updatetarget = {"UserID": user.id, "ServerID": server.id}
-    search_res = db[collection].find_one(finddata)
-    # Check Existence
-    if not search_res:
-        db[collection].insert_one(insert_data)
-    else:
-        for key in insert_data:
-            if key not in search_res:
-                db[collection].update_one(updatetarget, {'$set': {key: insert_data[key]}})
-            else:
-                pass
-    data = db[collection].find_one(finddata)
-    old = data[point_type]
+def default_data(server, user, points, add):
+    sid = str(server.id)
+    total_pts = 0
+    current_pts = 0
     if add:
-        new = old + points
-    else:
-        new = old - points
-    db[collection].update_one(updatetarget, {'$set': {point_type: new}})
+        total_pts = points
+        current_pts = points
+    data = {
+        'UserID': user.id,
+        'Total': total_pts,
+        'Current': current_pts,
+        'Servers': {sid: total_pts}
+    }
+    return data
 
 
-def point_grabber(db, server, user, point_type):
+def point_manipulation(db, server, user, points, add):
     collection = 'PointSystem'
-    finddata = {
-        'UserID': user.id,
-        'ServerID': server.id
-    }
-    insert_data = {
-        'UserID': user.id,
-        'ServerID': server.id,
-        'Points': 0,
-        'XP': 0,
-        'Level': 0
-    }
-    search_res = db[collection].find_one(finddata)
-    # Check Existence
-    if not search_res:
-        return insert_data[point_type]
+    sid = str(server.id)
+    data = db[collection].find_one({'UserID': user.id})
+    if not data:
+        data = default_data(server, user, points, add)
+        db[collection].insert_one(data)
+        data = db[collection].find_one({'UserID': user.id})
+    total_pts = data['Total']
+    servers = data['Servers']
+    cur_pts = data['Current']
+    if sid in servers:
+        srv_pts = servers[sid]
     else:
-        return search_res[point_type]
+        srv_pts = 0
+    if add:
+        total_pts += points
+        srv_pts += points
+        cur_pts += points
+    else:
+        cur_pts -= points
+    servers.update({sid: srv_pts})
+    db[collection].update_one({'UserID': user.id},
+                              {'$set': {'Servers': servers, 'Total': total_pts, 'Current': cur_pts}})
+
+
+def point_grabber(db, user):
+    collection = 'PointSystem'
+    data = db[collection].find_one({'UserID': user.id})
+    if data:
+        return data
+    else:
+        def_data = {
+            'UserID': user.id,
+            'Total': 0,
+            'Current': 0,
+            'Servers': {}
+        }
+        return def_data

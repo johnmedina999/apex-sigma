@@ -1,7 +1,7 @@
 from os import getenv, path
 
 # This always points to the directory of the application
-# where the config.py file is located
+# Where the config.py file is located, don't touch it unless you know what you're doing
 AppRoot = path.abspath(path.dirname(__file__))
 
 # Bot Token
@@ -13,6 +13,7 @@ MongoAuth = getenv('MongoAuth') or False
 MongoUser = getenv('MongoUser') or ''
 MongoPass = getenv('MongoPass') or ''
 DevMode = getenv('DevMode') or True
+PlayingStatusRotation = getenv('PlayingStatusRotation') or False
 DiscordListToken = getenv('DiscordListToken') or ''
 DarkSkySecretKey = getenv('DarkSkySecretKey') or ''
 MashapeKey = getenv('MashapeKey') or ''
@@ -44,10 +45,17 @@ TwitterConsumerKey = getenv('TwitterConsumerKey') or ''
 TwitterSecret = getenv('TwitterSecret') or ''
 TwitterToken = getenv('TwitterToken') or ''
 TwitterTokenSecret = getenv('TwitterTokenSecret') or ''
-mal_un = getenv('mal_un') or ''
-mal_pw = getenv('mal_pw') or ''
+ParagonAPIKey = getenv('ParagonAPIKey') or ''
+SoundCloudClientID = getenv('SoundCloudClientID') or ''
+MALUserName = getenv('MALUserName') or ''
+MALPassword = getenv('MALPassword') or ''
 # Bot Control Settings
 MainServerURL = getenv('MainServerURL') or 'http://localhost/'
+UseCachet = False
+CachetToken = getenv('CachetToken') or ''
+CachetURL = getenv('CachetURL') or ''
 Prefix = '>>'
-SlotWinChannelID = '12345679123456789'
-permitted_id = ['123456789123456789']
+Currency = 'Kud ⚜'
+SlotWinChannelID = 12345679123456789
+permitted_id = [123456789123456789]
+DefaultVolume = 100

@@ -1,0 +1,232 @@
+name: Other Utils
+
+categories:
+  - utility
+
+enabled: true
+
+commands:
+  - name:    help
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s} [command]"
+    description:
+      Returns the list of command modules or gives you the description
+      and usage for a selected command.
+
+  - name:    time
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    usage:   ">>time [UTC offset | timezone | City]"
+    description:
+      Converts UTC time into offset or timezone specified
+      Supports +/- offset, timezone abriviations, or Country/City format, or just City
+      Note that resolving city location may not always be accurate
+
+  - name:    remind
+    alts:
+      - "remindme"
+      - "setreminder"
+      - "alarm"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} 1:03:15 LEEEEROOOOY JEEEEEENKIIIIINS!"
+    description:
+      Sets a timer in seconds and displays the message inputted after it's done.
+
+  - name:    ping
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   ">>ping"
+    description:
+      just prints "pong!". Useful to know if the bot is up
+
+  - name:    reminders
+    alts:
+      - "reminder"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} 3"
+    description:
+      Shows you a list of up to five pending reminders that you made.
+      Input a number after the command to see more details about that reminder.
+
+  - name:    analyze
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} hello there"
+    description:
+      Sentimental analysis of the given text.
+
+  - name:    donors
+    alts:
+      - "dons"
+    global:  true
+    enabled: true
+    sfw:     true
+    description:
+      Shows the list of the lovely people who donated to the Aurora Project.
+
+  - name:    stats
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    description:
+      Shows the statistics of Sigma.
+
+  - name:    hashing
+    alts:
+      - 'hash'
+    global:  true
+    enabled: true
+    pmable:  true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} md5 I like cheese and spaghetti code!"
+    description:
+      Hashes whatever you input with the selected hashing algorithm.
+
+  - name:    qrcode
+    alts:
+      - 'qr'
+    global:  true
+    enabled: true
+    pmable:  true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} Gimme some fries!"
+    description:
+      Makes a 512x512 QR Code image of the inputed text.
+
+  - name:    weather
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} Melbourne Australia"
+    description:
+      Shows weather data for the selected location.
+      Visibility is capped at 10 miles and wind direction is in degrees, where 0 is pure North.
+
+  - name: invite
+    alts:
+      - "inv"
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Shows the OAuth2 URL for inviting Sigma to a server.
+
+  - name: choose
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} Pizza Burgers Both"
+    description:
+      The bot will select a thing from the inputed list.
+      Separate list items with a space.
+
+  - name: poll
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} Want to eat?; Yes; No; Hand me the cheese"
+    description:
+      Creates a poll with the items from the inputted list.
+      Separate list items with a semicolon and a space.
+
+  - name: wa
+    alts:
+      - "wolfram"
+      - "wolframalpha"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} 69+42"
+    description:
+      Makes a request to Wolfram Alpha and exports the result.
+
+  - name: translate
+    alts:
+      - "trans"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} EN>JA Give me the freaking cake!"
+    description:
+      Translates the given sentence from and to the inputted languages.
+      If you do not know your language code, search Google for ISO 639.1 Laguage Codes.
+
+  - name: modules
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Shows the list of all the module groups in Sigma.
+
+  - name: commands
+    alts:
+      - "cmds"
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s} Games"
+    description:
+      Shows the commands in a specific module group.
+
+  - name: color
+    alts:
+      - "colour"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} 1ABC9C"
+    description:
+      Generates a color from the given HEX code or provided RGB numbers.
+
+  - name: hextodecimal
+    alts:
+      - "h2d"
+      - "hex2dec"
+      - "htod"
+      - "hextodec"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} BEEEEF"
+    description:
+      Converts hex into a decimal number.
+
+  - name: decimaltohex
+    alts:
+      - "d2h"
+      - "dec2hex"
+      - "dtoh"
+      - "dectohex"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} BEEEEF"
+    description:
+      Converts a decimal number to hex.
+
+events:
+  - name:    reminder_clockwork
+    type:    ready
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  true
+    description:
+      Checks for reminders that need executing.

@@ -1,4 +1,4 @@
-import discord
+﻿import discord
 import aiohttp
 import lxml.html as l
 
@@ -6,7 +6,7 @@ import lxml.html as l
 async def osu(cmd, message, args):
 
     if not args:
-        await cmd.bot.send_message(message.channel, cmd.help())
+        await message.channel.send(cmd.help())
         return
 
     if len(args) < 2:
@@ -24,8 +24,8 @@ async def osu(cmd, message, args):
         root = l.fromstring(page)
         username = root.cssselect('.profile-username')[0].text[:-1]
     except:
-        embed = discord.Embed(color=0xDB0000, title=':exclamation: Unable to retrieve profile.')
-        await cmd.bot.send_message(message.channel, None, embed=embed)
+        embed = discord.Embed(color=0xDB0000, title='❗ Unable to retrieve profile.')
+        await message.channel.send(None, embed=embed)
         return
 
     user_color = str(message.author.color)[1:]
@@ -35,4 +35,4 @@ async def osu(cmd, message, args):
     embed.set_image(url=sig_url)
     embed.set_author(name=username + '\'s osu! Profile', url=profile_url, icon_url='http://w.ppy.sh/c/c9/Logo.png')
 
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

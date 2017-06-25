@@ -1,4 +1,4 @@
-from sigma.core.permission import check_man_msg
+'''from sigma.core.permission import check_man_msg
 from sigma.core.permission import check_man_roles
 from sigma.core.permission import check_write
 import discord
@@ -44,3 +44,4 @@ async def blind(cmd, message, args):
     else:
         out_content = discord.Embed(color=0xDB0000,title=':no_entry: Insufficient Permissions. Users with Ban permissions only.')
         await cmd.bot.send_message(message.channel, None, embed=out_content)
+'''

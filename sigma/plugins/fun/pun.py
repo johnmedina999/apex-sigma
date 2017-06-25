@@ -1,3 +1,4 @@
+﻿import ftfy
 import aiohttp
 import discord
 
@@ -9,12 +10,10 @@ async def pun(cmd, message, args):
     async with aiohttp.ClientSession() as session:
         async with session.get(pun_url) as data:
             pun_req = await data.text()
-
-    pun_text = str(pun_req)
-    pun_text = pun_text[pun_text.find('&quot;') + len('&quot;') : len(pun_text)]  # strip left side
-    pun_text = pun_text[0 : pun_text.find('&quot;')]                              # strip right side
-    pun_text = pun_text.replace('&rsquo;', '\'')                                  # Factor in apostrophe encoding
+            
+    pun_text = pun_req.split('&quot;')[1]
+    pun_text = ftfy.fix_text(pun_text)
 
     embed = discord.Embed(color=0x1abc9c)
     embed.add_field(name='😒 Have A Pun', value='```\n' + pun_text + '\n```')
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

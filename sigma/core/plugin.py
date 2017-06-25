@@ -25,13 +25,16 @@ class Plugin(object):
             'message': {},
             'member_join': {},
             'member_leave': {},
-            'ready': {}
+            'ready': {},
+            'voice_update': {},
+            'message_edit': {}
         }
         
         self.modules = []
         self.path    = path
         self.db      = bot.db
         self.music   = bot.music
+        self.cooldown = bot.cooldown
         self.bot     = bot
 
         try: self.load_info(bot)
@@ -99,5 +102,4 @@ class Plugin(object):
 
         for ev_type, events in self.events.items():
             if events:
-                self.log.info('Loaded {:s} events: [{:s}]'.format(
-                        ev_type, ', '.join(events.keys())))
+                self.log.info('Loaded {:s} events: [{:s}]'.format( ev_type, ', '.join(events.keys())))

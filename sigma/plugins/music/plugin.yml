@@ -12,12 +12,13 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Tells the bot to start playing the songs in the queue.
       You can also use this command instead of queue to add songs.
       As well as adding playlist, however playlists are limited to 200 items.
+      And only items under 10 minutes will be added.
       If nothing is playing, it will play that song.
       Note that currently only YouTube is supported.
 
@@ -25,7 +26,7 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Pauses a player instance.
@@ -35,7 +36,7 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Resumes a paused player instance.
@@ -46,17 +47,30 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s} Ryder or Riot"
     description:
       Adds a song or playlist to the playing queue either by URL or Name.
+      Only up to 200 items will be retrieved from a playlist.
+      And only items under 10 minutes will be added.
       Note that currently only YouTube is supported.
+
+  - name:    queuedeezerplaylist
+    alts:
+      - "qdp"
+    global:  true
+    enabled: true
+    sfw:     true
+    partner:   true
+    usage:   "{pfx:s}{cmd:s} 977228391"
+    description:
+      Queues an entire Deezer playlist.
 
   - name:    repeat
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Toggles if the queue should be repeated.
@@ -68,7 +82,7 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Skips the currently playing song.
@@ -79,22 +93,12 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
-      Skips the currently playing song.
-
-  - name:    volume
-    alts:
-      - "vol"
-    global:  true
-    enabled: true
-    sfw:     true
-    donor:   false
-    usage:   "{pfx:s}{cmd:s}"
-    description:
-      Sets the volume of the player.
-      The set volume will be remembered for the current server.
+      Stops the currently playing song.
+      Disconnects Sigma from the voice channel.
+      And purges the queue.
 
   - name:    nowplaying
     alts:
@@ -104,7 +108,7 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Displays information on the currently playing item.
@@ -113,7 +117,7 @@ commands:
     global:  true
     enabled: true
     sfw:     true
-    donor:   false
+    partner:   true
     usage:   "{pfx:s}{cmd:s}"
     description:
       Shuffles and mixes the current song queue.

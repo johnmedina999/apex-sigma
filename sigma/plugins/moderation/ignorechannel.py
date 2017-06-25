@@ -1,4 +1,4 @@
-import discord
+'''import discord
 from sigma.core.permission import check_man_chan
 from sigma.core.permission import check_man_msg
 
@@ -43,3 +43,4 @@ async def ignorechannel(cmd, message, args):
         embed = discord.Embed(type='rich', color=0xDB0000, title=':no_entry: Insufficient Permissions. Insufficient Permissions. Requires Manage Messages and Manage Channel Permissions(s).')
 
     await cmd.bot.send_message(message.channel, None, embed=embed)
+'''

@@ -1,4 +1,5 @@
-import os
+﻿import os
+import discord
 import datetime
 from PIL import Image
 from PIL import ImageFont
@@ -75,7 +76,7 @@ async def text_message(cmd, message, user):
             user['reviews']['next_hour'],
             user['reviews']['next_day'])
 
-    await cmd.bot.send_message(message.channel, '```json\n{:s}\n```'.format(out))
+    await message.channel.send('```json\n{:s}\n```'.format(out))
 
 
 async def draw_image(cmd, message, user, clr):
@@ -120,8 +121,8 @@ async def draw_image(cmd, message, user, clr):
         raise e
 
     try:
-        main_font = 'NotoSansCJKjp-Medium.otf'
-        japanese_font = 'NotoSansCJKjp-Medium.otf'
+        main_font = cmd.resource('fonts/NotoSansCJKjp-Medium.otf')
+        japanese_font = cmd.resource('fonts/NotoSansCJKjp-Medium.otf')
         font1 = ImageFont.truetype(main_font, 15)
         font2 = ImageFont.truetype(main_font, 13)
         font3 = ImageFont.truetype(japanese_font, 21)
@@ -197,7 +198,7 @@ async def draw_image(cmd, message, user, clr):
         imgdraw.text(review_pos, str(user['reviews'][
                                          'now']), review_color, font=review_font)
 
-    tmp_file = 'cache/wk_{:s}.png'.format(message.author.id)
+    tmp_file = f'cache/wk_{message.author.id}.png'
     base.save(tmp_file)
-    await cmd.bot.send_file(message.channel, tmp_file)
+    await message.channel.send(file=discord.File(tmp_file))
     os.remove(tmp_file)
