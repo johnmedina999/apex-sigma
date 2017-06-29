@@ -220,18 +220,18 @@ commands:
       Toggles automatic unfliping of tables
       Requires the user to be a server Administrator.
 
-  - name: chatterbot
-    alts:
-      - "cb"
-    global:  true
-    enabled: false
-    sfw:     true
-    usage:   "{pfx:s}{cmd:s}"
-    description:
-      Toggles the ChatterBot functionality of the bot on the server.
-      This is used by starting a message by mentioning a bot.
-      Example being [@Sigma how are you today?]
-      Requires the user to be a server Administrator.
+  # - name: chatterbot
+  #   alts:
+  #     - "cb"
+  #   global:  true
+  #   enabled: false
+  #   sfw:     true
+  #   usage:   "{pfx:s}{cmd:s}"
+  #   description:
+  #     Toggles the ChatterBot functionality of the bot on the server.
+  #     This is used by starting a message by mentioning a bot.
+  #     Example being [@Sigma how are you today?]
+  #     Requires the user to be a server Administrator.
 
 events:
   - name:    chatterbot_control
