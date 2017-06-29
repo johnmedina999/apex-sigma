@@ -47,15 +47,14 @@ async def anime(cmd, message, args):
         try: list_message = await message.channel.send(list_text + '\n```\nPlease type the number corresponding to the anime of your choice `(1 - ' + str(len(entries)) + ')`')
         except: await message.channel.send('The list is way too big, please be more specific...'); return
         
-        choice = await cmd.bot.wait_for(event='message', timeout=20)
-        
+        choice = await cmd.bot.wait_for(event='message', check=lambda m: m.author == message.author ,timeout=20)
+        if choice is None: await message.channel.send('timed out... Please start over'); return
+
         try: ani_no = int(choice.content) - 1
         except: await message.channel.send('Not a number or timed out... Please start over'); return
         
         if ani_no < 0 or ani_no > len(entries) - 1:
-            await message.channel.send('Invalid choice'); return
-
-        if choice is None: return
+            await message.channel.send('Invalid choice'); return        
     
     try:
         try: await cmd.bot.delete(list_message)
@@ -122,10 +121,8 @@ async def anime(cmd, message, args):
         await message.channel.send('```\n' + synopsis[:256] + '...\n```\nMore at: <https://myanimelist.net/anime/' + ani_id + '/>\n')
         os.remove('cache/anime_' + str(message.author.id) + '.png')
     
-    except IndexError:
-        await message.channel.send('Number out of range, please start over...')
-    except UnboundLocalError:
-        pass
+    except IndexError: await message.channel.send('Number out of range, please start over...')
+    except UnboundLocalError: pass
     except Exception as e:
         cmd.log.error(e)
         await message.channel.send('Not found or API dun goofed...')
