@@ -1,0 +1,17 @@
+name: Giphy
+
+categories:
+  - searches
+
+enabled: true
+
+commands:
+  - name:    giphy
+    alts:
+      - "giff"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} cool gifs"
+    description:
+      Searches Giphy for an image

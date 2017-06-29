@@ -49,6 +49,7 @@ ParagonAPIKey = getenv('ParagonAPIKey') or ''
 SoundCloudClientID = getenv('SoundCloudClientID') or ''
 MALUserName = getenv('MALUserName') or ''
 MALPassword = getenv('MALPassword') or ''
+GiphyAPIKey = getenv('GiphyAPIKey') or ''
 # Bot Control Settings
 MainServerURL = getenv('MainServerURL') or 'http://localhost/'
 UseCachet = False

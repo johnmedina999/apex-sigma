@@ -15,10 +15,7 @@ async def anime(cmd, message, args):
     choice = None
 
     mal_input = ''.join(args).strip()
-
-    if mal_input == '':
-        await message.channel.send(cmd.help())
-        return
+    if mal_input == '': await message.channel.send(cmd.help()); return
     
     mal_url = 'https://myanimelist.net/api/anime/search.xml?q=' + mal_input
     async with aiohttp.ClientSession() as session:
