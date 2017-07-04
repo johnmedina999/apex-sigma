@@ -15,7 +15,7 @@ async def manga(cmd, message, args):
     list_message = None
     choice = None
     
-    mal_input = ''.join(args)
+    mal_input = ' '.join(args)
     if mal_input == '': await message.channel.send(cmd.help()); return
     
     mal_url = 'https://myanimelist.net/api/manga/search.xml?q=' + mal_input
@@ -45,24 +45,28 @@ async def manga(cmd, message, args):
         try: list_message = await message.channel.send(list_text + '\n```\nPlease type the number corresponding to the manga of your choice `(1 - ' + str(len(entries)) + ')`')
         except: await message.channel.send('The list is way too big, please be more specific...'); return
 
-        choice = await cmd.bot.wait_for(event='message', check=lambda m: m.author == message.author ,timeout=20)
-        if choice is None: await message.channel.send('timed out... Please start over'); return
+        try: 
+            choice = await cmd.bot.wait_for(event='message', check=lambda m: m.author == message.author ,timeout=20)
+            
+            try: await list_message.delete()
+            except: pass
+
+            try: await choice.delete()
+            except: pass
+
+        except Exception: 
+            try: await list_message.delete()
+            except: pass
+
+            await message.channel.send('timed out... Please start over'); return
 
         try: ani_no = int(choice.content) - 1
-        except: await message.channel.send('Not a number or timed out... Please start over'); return
+        except: await message.channel.send('Not a number... Please start over'); return
 
         if ani_no < 0 or ani_no > len(entries) - 1:
             await message.channel.send('Invalid choice'); return   
         
     try:
-        try: await cmd.bot.delete(list_message)
-        except: pass
-    
-        try: await cmd.bot.delete(choice)
-        except: pass
-        
-        with message.channel.typing(): pass
-
         ani_id = entries[ani_no][0].text
         name = entries[ani_no][1].text
         chapters = entries[ani_no][4].text
