@@ -12,6 +12,7 @@ async def pmdetect(ev, message, args):
             cmd_name = message.content.split(' ')[0][len(Prefix):].lower()
             if cmd_name in ev.bot.alts:
                 cmd_name = ev.bot.alts[cmd_name]
+            
             if not cmd_name in ev.bot.plugin_manager.commands:
                 pm_response = discord.Embed(color=0x696969, title='🔍 Not A Recognized Command')
                 await message.channel.send(None, embed=pm_response)

@@ -5,11 +5,13 @@ import aiohttp
 cache = []
 
 async def bash(cmd, message, args):
+    
     if len(cache) == 0:
         async with aiohttp.ClientSession() as session:
             async with session.get('http://bash.org/?random1') as page:
                 page = await page.text()
                 quotes = l.fromstring(page).cssselect('body center table tr td[valign="top"]')[0]
+        
         for index in range(1, len(quotes), 2):
             qid = quotes[index - 1][0][0].text
             score = quotes[index - 1][2].text
@@ -20,6 +22,7 @@ async def bash(cmd, message, args):
                 'score': score,
                 'quote': quote
             }
+        
             cache.append(quote)
 
     quote = cache.pop()

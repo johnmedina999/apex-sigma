@@ -7,12 +7,9 @@ enabled: true
 
 commands:
   - name:    hearthstone
-    alts:
-      - "hs"
     global:  true
     enabled: true
     sfw:     true
-    usage:   "{pfx:s}{cmd:s} Murloc Raider"
+    usage:   "{pfx:s}{cmd:s} hearthstone"
     description:
-      Hearthstone card lookup.
-      Input the card name and after the list shows up, type the number corresponding to the card you were looking for.
+      Yell at the bot dev to put in the description

@@ -6,6 +6,7 @@ import discord
 import sys
 
 async def listplugins(cmd, message, args):
+    
     if not message.author.id in permitted_id:
         status = discord.Embed(type='rich', color=0xDB0000, title=':no_entry: Insufficient Permissions. Bot Owner or Server Admin Only.')
         await message.channel.send(None, embed=status)

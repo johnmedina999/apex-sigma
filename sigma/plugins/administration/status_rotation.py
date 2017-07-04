@@ -23,10 +23,11 @@ async def rotator(ev):
             'Scarlet Johanson', 'a new body', 'cameras', 'NSA\'s documents',
             'mobile suits', 'snakes', 'jelly', 'alcohol', 'the blue king'
         ]
+        
         status = f'with {random.choice(statuses)}'
         game = discord.Game(name=status)
-        try:
-            await ev.bot.change_presence(game=game)
-        except Exception as e:
-            ev.log.error(f'STATUS ROTATION FAILED: {e}')
+        
+        try: await ev.bot.change_presence(game=game)
+        except Exception as e: ev.log.error(f'STATUS ROTATION FAILED: {e}')
+        
         await asyncio.sleep(60)

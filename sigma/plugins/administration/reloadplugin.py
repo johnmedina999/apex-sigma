@@ -20,9 +20,7 @@ async def reloadplugin(cmd, message, args):
         print("".join(args))
         success = cmd.bot.plugin_manager.reload_plugin("".join(args).replace("/", " "))
 
-        if not success:
-            out_content = discord.Embed(type='rich', color=0x660000, title=':exclamation: Plugin failed to reload')
-        else:
-            out_content = discord.Embed(type='rich', color=0x66cc66, title=':white_check_mark: Plugin reloaded')
+        if not success: out_content = discord.Embed(type='rich', color=0x660000, title=':exclamation: Plugin failed to reload')
+        else: out_content = discord.Embed(type='rich', color=0x66cc66, title=':white_check_mark: Plugin reloaded')
 
         await message.channel.send(None, embed=out_content)

@@ -16,8 +16,7 @@ def get_voice_members_count(voice_channel):
     member_count = 0
     for member in voice_channel.members:
         if not member.bot:
-            if not member.voice.self_deaf:
-                 member_count += 1
+             member_count += 1
     return member_count
 
 
@@ -58,7 +57,7 @@ async def play(cmd, message, args):
             embed = discord.Embed(title='⚠ The queue is empty', color=0xFF9900)
             await message.channel.send(None, embed=embed)
             return
-        
+
         cmd.music.add_init(message.guild.id)
         cmd.bot.loop.create_task(init_clock(cmd.music, message.guild.id))
         
@@ -89,15 +88,16 @@ async def play(cmd, message, args):
                 embed.add_field(name='❗ I was unable to connect.', value='The most common cause is your server being too far or a poor connection.')
             
             await message.channel.send(None, embed=embed)
-        
+
         if bot_voice:
             if bot_voice.is_playing():
                 embed = discord.Embed(title=f'⚠ Already playing in {message.guild.get_member(cmd.bot.user.id).voice.channel.name}', color=0xFF9900)
                 await message.channel.send(None, embed=embed)
                 return
-        
+
         voice_member_count = get_voice_members_count(message.guild.me.voice.channel)
         deaf_member_count = get_deaf_members_count(message.guild.me.voice.channel)
+
         if voice_member_count == deaf_member_count and deaf_member_count != 0:
             embed = discord.Embed(title=f'⚠ Warning: All of you are deaf!', color=0xFF9900)
             await message.channel.send(None, embed=embed)

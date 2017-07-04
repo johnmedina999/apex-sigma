@@ -4,10 +4,12 @@ import discord
 
 
 async def dadjoke(cmd, message, args):
+    
     with open(cmd.resource('dadjokes.json'), 'r', encoding='utf-8') as dadjokes_file:
         jokes = dadjokes_file.read()
         jokes = json.loads(jokes)
         joke_list = jokes['JOKES']
+    
         end_joke_choice = random.choice(joke_list)
         end_joke = end_joke_choice['setup']
         punchline = end_joke_choice['punchline']

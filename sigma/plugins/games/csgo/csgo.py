@@ -5,7 +5,9 @@ import discord
 
 async def csgo(cmd, message, args):
     if not args:
+        await message.channel.send(cmd.help())
         return
+
     csgo_input = ' '.join(args)
 
     try:
@@ -59,10 +61,13 @@ async def csgo(cmd, message, args):
             'Matches Lost': str(total_matches_lost),
             'Win Percentage': "{0:.2f}".format(win_percent * 100) + '%'
         }
+        
         embed = discord.Embed(color=0x1ABC9C)
         embed.set_author(name=nickname, icon_url=avatar_url, url=avatar_url)
+        
         for unit in data:
             embed.add_field(name=unit, value=data[unit])
+        
         await message.channel.send(None, embed=embed)
 
     except Exception as e:

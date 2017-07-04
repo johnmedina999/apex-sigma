@@ -5,12 +5,8 @@ import lxml.html as l
 
 async def osu(cmd, message, args):
 
-    if not args:
-        await message.channel.send(cmd.help())
-        return
-
     if len(args) < 2:
-        await cmd.bot.send_message(message.channel, cmd.help())
+        await message.channel.send(cmd.help())
         return
 
     user_name = args[0]
@@ -21,8 +17,10 @@ async def osu(cmd, message, args):
         async with aiohttp.ClientSession() as session:
             async with session.get(profile_url) as data:
                 page = await data.text()
+        
         root = l.fromstring(page)
         username = root.cssselect('.profile-username')[0].text[:-1]
+    
     except:
         embed = discord.Embed(color=0xDB0000, title='❗ Unable to retrieve profile.')
         await message.channel.send(None, embed=embed)

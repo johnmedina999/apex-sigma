@@ -6,7 +6,7 @@ import discord
 import aiohttp
 import asyncio
 from config import SoundCloudClientID
-
+from discord import opus
 
 class Music(object):
     def __init__(self):
@@ -105,6 +105,12 @@ class Music(object):
             file_location = await self.download_sc_data(location)
         else:
             file_location = location
+
+        if not opus.is_loaded():
+            print("opus is not loaded")
+        else:
+            print("opus is loaded")
+
         source = discord.FFmpegPCMAudio(file_location, executable='ffmpeg')
         voice.play(source)
 

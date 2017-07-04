@@ -1,7 +1,4 @@
-import aiohttp
-import discord
 import giphypop
-import lxml.html as l
 from config import GiphyAPIKey
 
 async def giphy(cmd, message, args):
