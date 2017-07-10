@@ -54,6 +54,18 @@ commands:
     description:
       Outputs a random Ron Swanson quote.
 
+  - name:    roast
+    alts:
+      - "woast"
+      - "grill"
+      - "rst"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      The bot roasts you or someone to a chrisp charcoal black
+
   - name:    yomomma
     alts:
       - "yomama"
