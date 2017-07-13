@@ -5,10 +5,9 @@ import aiohttp
 import os
 
 async def avatar(cmd, message, args):
-    if message.mentions:
-        target = message.mentions[0]
-    else:
-        target = message.author
+    
+    if message.mentions: target = message.mentions[0]
+    else: target = message.author
     
     async with aiohttp.ClientSession() as session:
         async with session.get(target.avatar_url) as data:

@@ -13,10 +13,13 @@ async def roll(cmd, message, args):
             return
     else:
         endrange = 100
+    
     number = random.randint(1, endrange)
     num = str(number)
+    
     if len(num) > 1950:
         num = num[:1950] + '...'
+    
     embed = discord.Embed(color=0x1abc9c)
     embed.add_field(name='🎲 You Rolled', value='```\n' + num + '\n```')
     await message.channel.send(None, embed=embed)

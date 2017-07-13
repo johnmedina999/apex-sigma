@@ -82,27 +82,28 @@ async def queue(cmd, message, args):
         if q.empty():
            embed = discord.Embed(color=0x0099FF, title='ℹ The Queue Is Empty')
            await message.channel.send(None, embed=embed)
+           return
+
+        q_list = []
+        while not q.empty():
+            q_item = await q.get()
+            q_list.append(q_item)
+            await q_bup.put(q_item)
+                
+        cmd.music.queues.update({message.guild.id: q_bup})
+        embed = discord.Embed(color=0x0099FF, title=f'ℹ The {len(q_list)} Upcoming Songs (Total: {len(list(q_list))})')
+               
+        for item in q_list[:5]:
+            if item['type'] == 0:
+                information = f'Requested By: {item["requester"].name}\nDuration: {item["sound"].duration}'
+                embed.add_field(name=item['sound'].title, value=f'```\n{information}\n```', inline=False)
+            elif item['type'] == 1:
+                information = f'Requested By: {item["requester"].name}\nDuration: {time.strftime("%H:%M:%S", time.gmtime(item["sound"]["duration"]//1000))}'
+                embed.add_field(name=item['sound']['title'], value=f'```\n{information}\n```', inline=False)
+                
+        if message.guild.id in cmd.music.repeaters:
+            embed.set_footer(text='The current queue is set to repeat.')
         else:
-            q_list = []
-            while not q.empty():
-                q_item = await q.get()
-                q_list.append(q_item)
-                await q_bup.put(q_item)
+            embed.set_footer(text=f'To see the currently playing song type {Prefix}np')
                 
-            cmd.music.queues.update({message.guild.id: q_bup})
-            embed = discord.Embed(color=0x0099FF, title=f'ℹ The {len(q_list)} Upcoming Songs (Total: {len(list(q_list))})')
-                
-            for item in q_list[:5]:
-                if item['type'] == 0:
-                    information = f'Requested By: {item["requester"].name}\nDuration: {item["sound"].duration}'
-                    embed.add_field(name=item['sound'].title, value=f'```\n{information}\n```', inline=False)
-                elif item['type'] == 1:
-                    information = f'Requested By: {item["requester"].name}\nDuration: {time.strftime("%H:%M:%S", time.gmtime(item["sound"]["duration"]//1000))}'
-                    embed.add_field(name=item['sound']['title'], value=f'```\n{information}\n```', inline=False)
-                
-            if message.guild.id in cmd.music.repeaters:
-                embed.set_footer(text='The current queue is set to repeat.')
-            else:
-                embed.set_footer(text=f'To see the currently playing song type {Prefix}np')
-                
-            await message.channel.send(None, embed=embed)
+        await message.channel.send(None, embed=embed)

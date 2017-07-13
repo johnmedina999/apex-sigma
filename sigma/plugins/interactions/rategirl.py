@@ -82,7 +82,5 @@ async def rategirl(cmd, message, args):
         chart.save(output_location)
     
     with open(output_location, 'rb') as resp_img:
-        resp = discord.File(resp_img)
-        await message.channel.send(file=resp)
-    
+        await message.channel.send(file=discord.File(resp_img))
     os.remove(output_location)
