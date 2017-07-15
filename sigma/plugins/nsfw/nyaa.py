@@ -14,6 +14,7 @@ embed_titles = ['Nyaa~', 'Nyanpasu!', 'Mnya :3', 'Meow~', '(｡･ω･｡)', '�
                 '(○｀ω´○)', '(●ↀωↀ●)', '(｡･ω･｡)', '(*Φ皿Φ*)', '§ꊘ⃑٥ꊘ⃐§', ']*ΦωΦ)ノ']
 
 async def nyaa(cmd, message, args):
+    
     global links
     if not links:
         filler_message = discord.Embed(color=0xff6699, title='🐱 One moment, filling Sigma with catgirls...')
@@ -21,8 +22,10 @@ async def nyaa(cmd, message, args):
         links = await grab_post_list('cat_ears')
         filler_done = discord.Embed(color=0xff6699, title=f'🐱 We added {len(links)} catgirls!')
         await fill_notify.edit(embed=filler_done)
+    
     random.shuffle(links)
     post_choice = links.pop()
     icon = 'https://3.bp.blogspot.com/_SUox58HNUCI/SxtiKLuB7VI/AAAAAAAAA08/s_st-jZnavI/s400/Azunyan+fish.jpg'
+    
     response = generate_embed(post_choice, embed_titles, icon=icon)
     await message.channel.send(None, embed=response)
