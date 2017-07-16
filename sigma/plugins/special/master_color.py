@@ -5,11 +5,6 @@ import discord
 from sigma.core.permission import check_admin
 from config import permitted_id
 
-def color_func_sin(x, period):
-    return int((255.0*math.sin(((2.0*math.pi)/86400.0)*period*x)+255.0)/2.0)
-
-def color_func_cos(x, period):
-    return int((255.0*math.cos(((2.0*math.pi)/86400.0)*period*x)+255.0)/2.0)
 
 async def master_color(ev):
     
@@ -19,22 +14,23 @@ async def master_color(ev):
         return
 
     servers = ev.bot.guilds
-    red = 0; green = 0; blue = 0
+    tick = 0.0
 
     while True:
         
-        red = red + 1
-        green = green + 1
-        blue = blue + 1
+        tick = tick + 1.0
+        freq = (math.pi * 2.0) / 86400.0 * 10.0
 
-        red_out = color_func_sin(red, 24)
-        green_out = color_func_cos(red, 20)
-        blue_out = color_func_sin(red, 25)
+        try:
+            red_out = int((math.sin(freq*30.0*tick + 2.0) * 127.0 + 128.0))
+            green_out = int((math.sin(freq*23.0*tick + 0.0) * 127.0 + 128.0))
+            blue_out = int((math.sin(freq*7.0*tick + 4.0) * 127.0 + 128.0))
 
-        for server in servers:
-            if server.owner != bot_owner: continue
-            if len(server.owner.top_role.members) > 1: continue
+            for server in servers:
+                if server.owner != bot_owner: continue
+                if len(server.owner.top_role.members) > 1: continue
 
-            await server.owner.top_role.edit(colour=discord.Colour.from_rgb(red_out, green_out, blue_out))
+                await server.owner.top_role.edit(colour=discord.Colour.from_rgb(red_out, green_out, blue_out))
+        except: pass
 
         await asyncio.sleep(1)
