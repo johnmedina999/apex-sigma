@@ -6,7 +6,13 @@ from sigma.core.permission import check_admin
 from config import permitted_id
 
 
+
 async def master_color(ev):
+    ev.bot.loop.create_task(colorer(ev))
+
+
+
+async def colorer(ev):
     
     bot_owner = discord.utils.find(lambda x: x.id == permitted_id[0], ev.bot.get_all_members())
     if not bot_owner: 
