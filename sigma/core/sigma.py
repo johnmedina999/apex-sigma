@@ -218,14 +218,14 @@ class Sigma(discord.AutoShardedClient):
 
     async def on_member_join(self, member):
         if self.ready:
-            self.db.update_population_stats(self.servers, self.get_all_members())
+            self.db.update_population_stats(self.guilds, self.get_all_members())
             for ev_name, event in self.plugin_manager.events['member_join'].items():
                 task = event.call_sp(member)
                 self.loop.create_task(task)
 
     async def on_member_remove(self, member):
         if self.ready:
-            self.db.update_population_stats(self.servers, self.get_all_members())
+            self.db.update_population_stats(self.guilds, self.get_all_members())
             for ev_name, event in self.plugin_manager.events['member_leave'].items():
                 task = event.call_sp(member)
                 self.loop.create_task(task)
@@ -234,10 +234,10 @@ class Sigma(discord.AutoShardedClient):
         self.loop.create_task(self.update_discordlist())
         self.db.add_new_server_settings(server)
         # self.db.update_server_details(server)
-        self.db.update_population_stats(self.servers, self.get_all_members())
+        self.db.update_population_stats(self.guilds, self.get_all_members())
         msg = f'INV | SRV: {server.name} [{server.id}] | OWN: {server.owner.name} [{server.owner.id}]'
         self.log.info(msg)
-        self.db.init_server_settings(self.servers)
+        self.db.init_server_settings(self.guilds)
         if UseCachet:
             self.loop.create_task(self.cachet_stat_up(3, 1))
 
