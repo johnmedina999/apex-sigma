@@ -61,10 +61,10 @@ async def anime(cmd, message, args):
             await message.channel.send('timed out... Please start over'); return
 
         try: ani_no = int(choice.content) - 1
-        except: await message.channel.send('Not a number or timed out... Please start over'); return
+        except: await message.channel.send('Invalid choice... Please start over'); return
         
         if ani_no < 0 or ani_no > len(entries) - 1:
-            await message.channel.send('Invalid choice'); return        
+            await message.channel.send('Invalid choice... Please start over'); return        
     
     try:       
         ani_id = entries[ani_no][0].text
