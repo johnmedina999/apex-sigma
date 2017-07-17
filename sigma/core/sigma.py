@@ -4,6 +4,7 @@ import arrow
 import discord
 import yaml
 import aiohttp
+import asyncio
 
 from config import Prefix, MongoAddress, MongoPort, MongoAuth, MongoUser, MongoPass, DiscordListToken, DevMode
 from config import UseCachet, CachetToken, CachetURL
@@ -48,6 +49,7 @@ class Sigma(discord.AutoShardedClient):
         self.init_music()
         self.init_cooldown()
         self.init_plugins()
+        self.loop.create_task(self.init_ready())
         self.ready = False
         self.guild_count = 0
         self.member_count = 0
@@ -111,6 +113,19 @@ class Sigma(discord.AutoShardedClient):
     def init_plugins(self):
         self.plugin_manager = PluginManager(self)
 
+    async def init_ready(self):
+        while not self.ready:
+            await asyncio.sleep(5)
+
+        self.log.info('Launching On-Ready Plugins...')
+        for ev_name, event in self.plugin_manager.events['ready'].items():
+            try:
+                task = event.call_ready()
+                self.loop.create_task(task)
+            except Exception as e:
+                self.log.error(e)
+        
+
     def init_music(self):
         self.music = Music()
 
@@ -142,15 +157,6 @@ class Sigma(discord.AutoShardedClient):
         # self.loop.create_task(self.db.refactor_servers(self.guilds))
         self.log.info('Updating Bot Listing APIs...')
         self.loop.create_task(self.update_discordlist())
-        self.log.info('Launching On-Ready Plugins...')
-        
-        for ev_name, event in self.plugin_manager.events['ready'].items():
-            try:
-                task = event.call_ready()
-                self.loop.create_task(task)
-            except Exception as e:
-                self.log.error(e)
-        
         self.log.info('-----------------------------------')
         self.ready = True
         self.log.info('Finished Loading and Successfully Connected to Discord!')
