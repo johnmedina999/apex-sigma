@@ -15,3 +15,13 @@ commands:
     usage:   "{pfx:s}{cmd:s}"
     description:
       Shows the top League of Legends champion bans for each tier.
+
+  - name:    league
+    alts:
+      - "lol"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Shows player profile summary
