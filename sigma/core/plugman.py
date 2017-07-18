@@ -41,7 +41,6 @@ class PluginManager(object):
 
     def reload_plugin(self, pluginName):
         for plugin in self.plugins:
-            self.bot.log.info(plugin.name)
             if plugin.name == pluginName:
                 plugin.reload_commands()
                 return True

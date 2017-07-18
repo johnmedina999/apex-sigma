@@ -2,6 +2,7 @@
 
 
 async def blacksrv(cmd, message, args):
+    
     if not args:
         await message.channel.send(cmd.help())
         return

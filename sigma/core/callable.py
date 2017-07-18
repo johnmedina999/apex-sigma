@@ -6,10 +6,8 @@ from .formatting import codeblock
 from .resource import global_resource
 from .permission import check_permitted
 
-if DevMode:
-    exception = SyntaxError
-else:
-    exception = Exception
+if DevMode: exception = SyntaxError
+else: exception = Exception
 
 
 class NotEnabledError(RuntimeError):
@@ -89,8 +87,7 @@ class Callable(object):
             except: pass
             return
 
-        try:
-            msg = await getattr(self.module, self.name)(self, message, *args)
+        try: msg = await getattr(self.module, self.name)(self, message, *args)
         except exception as e:
             try:
                 title   = ':exclamation: An Error Occurred!'
@@ -102,8 +99,7 @@ class Callable(object):
                 error_embed.add_field(name=title, value=codeblock(f'Arguments: \"{e}\"\nTraceback: \"{e.with_traceback}\"'))
                 error_embed.set_footer(text=errmsg)
                 await channel.send(None, embed=error_embed)
-            except:
-                pass
+            except: pass
 
         if not self.perm['sfw']:
             self.db.add_stats('NSFWCount')
@@ -112,8 +108,7 @@ class Callable(object):
             await channel.send(msg)
 
     async def call_sp(self, member):
-        try:
-            await getattr(self.module, self.name)(self, member)
+        try: await getattr(self.module, self.name)(self, member)
         except exception as e:
             # ev_log_msg = f'SP_EV: {member.guild.name} [{member.guild.id}] | {self.name} |'
             # ev_log_msg += f'ERROR: {e} | TRACE: {e.with_traceback}'
@@ -121,14 +116,12 @@ class Callable(object):
             pass
 
     async def call_ready(self):
-        try:
-            await getattr(self.module, self.name)(self)
+        try: await getattr(self.module, self.name)(self)
         except exception as e:
             self.log.error(f'RD_EV: {self.name} | ERROR: {e} | TRACE: {e.with_traceback}')
 
     async def call_message_edit(self, before, after):
-        try:
-            await getattr(self.module, self.name)(self, before, after)
+        try: await getattr(self.module, self.name)(self, before, after)
         except exception as e:
             self.log.error(f'RD_EV: {self.name} | ERROR: {e} | TRACE: {e.with_traceback}')
 
