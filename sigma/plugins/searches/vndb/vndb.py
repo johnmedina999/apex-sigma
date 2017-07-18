@@ -16,7 +16,7 @@ async def vndb(cmd, message, args):
         async with session.get(vndb_url) as data:
             page = await data.read()
 
-    root = BeautifulSoup(page)
+    root = BeautifulSoup(page, "html")
     entries = root.find_all(class_='tc1')
     
     n = 0
@@ -66,7 +66,7 @@ async def vndb(cmd, message, args):
         async with session.get(vndb_url) as data:
             page = await data.read()
 
-    root = BeautifulSoup(page)
+    root = BeautifulSoup(page, "html")
 
     try:
         vn_title = root.find_all(class_='stripe')[0].find_all('td', string='Title')[0].nextSibling.text
