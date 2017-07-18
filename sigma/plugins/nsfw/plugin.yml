@@ -116,6 +116,14 @@ commands:
       Searches Yande.Re for the given tags.
       If not tag is given, it will display a random image.
 
+  - name:    hentai
+    global:  true
+    enabled: true
+    sfw:     false
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Searches nhentai for the given tags.
+
   - name:    boobs
     alts:
      - "tits"
