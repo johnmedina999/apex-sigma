@@ -19,4 +19,4 @@ install:
 
 test_script:
   - "copy config_example.py config.py"
-  - "%PYTHON%\\python.exe run.py"
+  - "%PYTHON%\\python.exe run.py dev"
