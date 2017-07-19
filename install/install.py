@@ -2,8 +2,8 @@ import pip
 import platform
 import os
 
-win_x86 = ["Shapely-1.5.17-cp36-cp36m-win32.whl",]
-win_x64 = ["Shapely-1.5.17-cp36-cp36m-win_amd64.whl",]
+win_x86 = ["install/Shapely-1.5.17-cp36-cp36m-win32.whl",]
+win_x64 = ["install/Shapely-1.5.17-cp36-cp36m-win_amd64.whl",]
 
 
 def install(packages):
