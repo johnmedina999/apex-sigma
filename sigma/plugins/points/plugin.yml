@@ -20,6 +20,15 @@ commands:
     description:
       Shows yours or a mentioned persons amount of Sigma currency.
 
+  - name:    give
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Give your points to someone
+  
+
 events:
   - name:    reward
     type:    message
