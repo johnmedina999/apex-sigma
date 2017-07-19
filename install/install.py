@@ -1,6 +1,6 @@
 import pip
 import platform
-
+import os
 
 win_x86 = ["Shapely-1.5.17-cp36-cp36m-win32.whl",]
 win_x64 = ["Shapely-1.5.17-cp36-cp36m-win_amd64.whl",]
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     else:
         install(win_x86)
 
-    with open('requirements.txt') as f:
+    with open(os.path.abspath("requirements.txt")) as f:
         packages = f.read().splitlines()
 
     install(packages)
