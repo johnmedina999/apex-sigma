@@ -24,4 +24,4 @@ soundcloud
 ftfy
 imageio
 giphypop
-nhentai-py
+https://pypi.python.org/packages/80/b6/9476cc9b1cd7c85ea713205f7a5b0818bc028903ab353b5ae592350c27a2/nhentai.py-0.0.3.tar.gz#md5=72dd2c59a7598ce616d5ed2e99f7b7d8
