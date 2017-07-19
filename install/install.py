@@ -13,6 +13,7 @@ def install(packages):
 
 if __name__ == '__main__':
 
+    print(platform.architecture())
     if platform.architecture() == '64bit':
         install(win_x64)
     else:
