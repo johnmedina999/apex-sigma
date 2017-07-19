@@ -22,6 +22,7 @@ def count_vc_members(vc):
 
 
 async def voice_clockwork(ev):
+    
     while True:
         members = ev.bot.get_all_members()
         for member in members:

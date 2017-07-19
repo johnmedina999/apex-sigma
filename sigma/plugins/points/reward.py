@@ -3,6 +3,7 @@ from config import Prefix
 
 
 async def reward(ev, message, args):
+    
     if message.author.bot: return
     if message.guild:
         if message.content.startswith(Prefix): return
