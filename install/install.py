@@ -15,11 +15,11 @@ if __name__ == '__main__':
 
     if platform.architecture()[0] == "64bit":
         install(win_x64)
-    elif if platform.architecture()[0] == "32bit":
+    elif platform.architecture()[0] == "32bit":
         install(win_x86)
     else:
         print("Unknown architecture \"" + platform.architecture() + "\"")
-        return 1
+        exit(1)
 
     with open("install/requirements.txt") as f:
         packages = f.read().splitlines()
