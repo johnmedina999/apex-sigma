@@ -24,3 +24,4 @@ soundcloud
 ftfy
 imageio
 giphypop
+nhentai-py
