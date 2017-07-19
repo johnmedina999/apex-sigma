@@ -89,6 +89,18 @@ commands:
     description:
       Outputs a random Chuck Norris joke. We use Chuck jokes instead of Bruce Lee cause obviously Bruce is no joke.
 
+  - name:    boom
+    alts:
+      - "bomb"
+      - "explode"
+      - "kaboom"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Sets off a bomb
+
   - name:    xkcd
     global:  true
     enabled: true
