@@ -18,7 +18,7 @@ if __name__ == '__main__':
     else:
         install(win_x86)
 
-    with open('../requirements.txt') as f:
+    with open('requirements.txt') as f:
         packages = f.read().splitlines()
 
     install(packages)
