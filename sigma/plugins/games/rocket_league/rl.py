@@ -7,13 +7,16 @@ from config import RLAPIKey
 
 
 async def rl(cmd, message, args):
+
     if not args:
+        await message.channel.send(cmd.help())
         return
+    
     try:
         platform = args[0]
         user = ' '.join(args[1:])
     except:
-        await cmd.bot.send_message(message.channel, 'Wrong input format!')
+        await message.channel.send('Wrong input format!')
         return
 
     if platform.lower() == 'steam':
@@ -23,11 +26,17 @@ async def rl(cmd, message, args):
     elif platform.lower() == 'xbox':
         platform = '3'
     else:
-        await cmd.bot.send_message(message.channel, 'Platform unrecognized.')
+        await message.channel.send('Platform unrecognized.')
         return
 
     url_base = 'http://rltracker.pro/api/profile/get?api_key=' + RLAPIKey + '&platform=' + platform + '&id=' + user
     rl_data = requests.get(url_base).json()
+
+    if rl_data['error']:
+        cmd.log.error(str(rl_data['error']))
+        await message.channel.send('Something went wrong! Contact the bot devs. :frowning2:')
+        return
+
     nick = rl_data['player']['nickname']
     avatar = rl_data['player']['avatar']
 
@@ -105,6 +114,6 @@ async def rl(cmd, message, args):
     imgdraw.text((394, 146), str(str_rn_rank), (255, 255, 255), font=font3)
 
     base.save('cache/rl_' + message.author.id + '.png')
-    await cmd.bot.send_file(message.channel, 'cache/rl_' + message.author.id + '.png')
-    await cmd.bot.send_message(message.channel, 'You can find more at:\n<' + profile_url + '>')
+    await message.channel.send('cache/rl_' + message.author.id + '.png')
+    await message.channel.send('You can find more at:\n<' + profile_url + '>')
     os.remove('cache/rl_' + message.author.id + '.png')
