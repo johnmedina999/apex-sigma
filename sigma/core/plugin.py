@@ -78,8 +78,20 @@ class Plugin(object):
                 self.events_info = yml['events']
 
     def reload_commands(self):
-       for cmd_info in self.commands_info:
-            self.commands[cmd_info['name']].reload_command()
+        if not self.loaded:
+            raise Exception("Plugin not enabled")
+
+        warn = ""
+        for cmd_info in self.commands_info:
+            if not cmd_info['enabled']:
+                warn += cmd_info['name'] + " "
+                continue
+
+            try: self.commands[cmd_info['name']].reload_command()
+            except: raise Exception("Invalid command: " + cmd_info['name'])
+
+        if len(warn) != 0:
+            raise Exception("[Warning] The following commands are disabled: " + warn)
                 
     def load_commands(self):
         for cmd_info in self.commands_info:

@@ -18,9 +18,17 @@ async def reloadplugin(cmd, message, args):
         await message.channel.send(None, embed=out_content)
         return
 
-    success = cmd.bot.plugin_manager.reload_plugin(" ".join(args))
+    try: cmd.bot.plugin_manager.reload_plugin(" ".join(args))
+    except Exception as e:
+        if str(e).find("[Warning]") != -1:
+            out_content = discord.Embed(type='rich', color=0x666600, title=':warning: Plugin reloaded')
+            out_content.add_field(name='\_\_\_\_\_\_\_\_\_\_\__', value=e)
+        else:
+            out_content = discord.Embed(type='rich', color=0x660000, title=':exclamation: Plugin failed to reload')
+            out_content.add_field(name='\_\_\_\_\_\_\_\_\_\_\__', value=e)
 
-    if not success: out_content = discord.Embed(type='rich', color=0x660000, title=':exclamation: Plugin failed to reload')
-    else: out_content = discord.Embed(type='rich', color=0x66cc66, title=':white_check_mark: Plugin reloaded')
+        await message.channel.send(None, embed=out_content)
+        return
 
+    out_content = discord.Embed(type='rich', color=0x66cc66, title=':white_check_mark: Plugin reloaded')
     await message.channel.send(None, embed=out_content)
