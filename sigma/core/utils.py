@@ -55,8 +55,7 @@ def load_module_list():
                         category = plugin_data['categories'][0]
                         if category.lower() not in module_list and category not in ['administration', 'special']:
                             module_list.append(category)
-                    except:
-                        pass
+                    except: pass
     return module_list
 
 

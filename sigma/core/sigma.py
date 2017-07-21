@@ -165,62 +165,71 @@ class Sigma(discord.AutoShardedClient):
             self.log.info('Testing Build Environment Detected\nExiting...')
             exit()
 
+
     async def on_message(self, message):
-        if self.ready:
-            self.db.add_stats('MSGCount')
-            self.message_count += 1
-            args = message.content.split(' ')
-            # handle mention events
-            if type(message.author) == discord.Member:
-                black = check_black(self.db, message)
-            else:
-                black = False
-            if self.user.mentioned_in(message):
-                if not black:
-                    for ev_name, event in self.plugin_manager.events['mention'].items():
-                        task = event.call(message, args)
-                        self.loop.create_task(task)
-                    
-            # handle raw message events
+
+        if not self.ready: 
+            return
+
+        self.db.add_stats('MSGCount')
+        self.message_count += 1
+        args = message.content.split(' ')
+            
+        # handle mention events
+        if type(message.author) == discord.Member:
+            black = check_black(self.db, message)
+        else:
+            black = False
+            
+        if self.user.mentioned_in(message):
             if not black:
-                for ev_name, event in self.plugin_manager.events['message'].items():
+                for ev_name, event in self.plugin_manager.events['mention'].items():
                     task = event.call(message, args)
                     self.loop.create_task(task)
+                    
+        # handle raw message events
+        if not black:
+            for ev_name, event in self.plugin_manager.events['message'].items():
+                task = event.call(message, args)
+                self.loop.create_task(task)
 
-            if message.content.startswith(Prefix):
-                cmd = args.pop(0).lstrip(Prefix).lower()
-                if cmd in self.alts:
-                    cmd = self.alts[cmd]
+        if not message.content.startswith(Prefix): 
+            return
+        
+        cmd = args.pop(0).lstrip(Prefix).lower()
+        if cmd in self.alts:
+            cmd = self.alts[cmd]
+        
+        try:
+            permed = check_perms(self.db, message, self.plugin_manager.commands[cmd])
+            if not black and permed:
                 try:
-                    permed = check_perms(self.db, message, self.plugin_manager.commands[cmd])
-                    if not black and permed:
-                        try:
-                            async with message.channel.typing():
-                                task = self.plugin_manager.commands[cmd].call(message, args)
-                                self.loop.create_task(task)
-                        except discord.Forbidden:
-                            pass
-                        self.db.add_stats(f'cmd_{cmd}_count')
-                        self.db.add_stats('CMDCount')
-                        self.command_count += 1
-                        if UseCachet:
-                            self.loop.create_task(self.cachet_stat_up(1, 1))
-                    athr = message.author
-                    msg = f'CMD: {cmd} | USR: {athr.name}#{athr.discriminator} [{athr.id}]'
-                    if message.guild:
-                        msg += f' | SRV: {message.guild.name} [{message.guild.id}]'
-                        msg += f' | CHN: #{message.channel.name} [{message.channel.id}]'
-                        if args:
-                            msg = f'{msg} | ARGS: {" ".join(args)}'
-
-                    else:
-                        msg += f' | PRIVATE MESSAGE'
-                        if args:
-                            msg += f' | ARGS: {" ".join(args)}'
-                    self.log.info(msg)
-                except KeyError:
-                    # no such command
+                    async with message.channel.typing():
+                        task = self.plugin_manager.commands[cmd].call(message, args)
+                        self.loop.create_task(task)
+                except discord.Forbidden:
                     pass
+                        
+                self.db.add_stats(f'cmd_{cmd}_count')
+                self.db.add_stats('CMDCount')
+                self.command_count += 1
+                if UseCachet:
+                    self.loop.create_task(self.cachet_stat_up(1, 1))
+            
+            athr = message.author
+            msg = f'CMD: {cmd} | USR: {athr.name}#{athr.discriminator} [{athr.id}]'
+            if message.guild:
+                msg += f' | SRV: {message.guild.name} [{message.guild.id}]'
+                msg += f' | CHN: #{message.channel.name} [{message.channel.id}]'
+                if args: msg = f'{msg} | ARGS: {" ".join(args)}'
+            else:
+                msg += f' | PRIVATE MESSAGE'
+                if args: msg += f' | ARGS: {" ".join(args)}'
+            
+            self.log.info(msg)
+        
+        except KeyError: pass  # no such command
+
 
     async def on_member_join(self, member):
         if self.ready:
