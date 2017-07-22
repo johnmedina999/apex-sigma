@@ -169,14 +169,18 @@ commands:
       Blacklists a connected server disallowing it to use any and all commands.
       
   - name:    reloadplugin
+    alts:
+      - reloadp
     global:  true
     enabled: true
     sfw:     true
     usage:   "{pfx:s}{cmd:s} fun"
     description:
-      Reloads the selected plugin. Use "/" for spaces
+      Reloads the selected plugin
       
   - name:  listplugins
+    alts:
+      - listp
     global:  true
     enabled: true
     sfw:     true
