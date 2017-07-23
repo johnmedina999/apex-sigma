@@ -1,9 +1,19 @@
-name: Moderation
+name: Invites
 
 categories:
   - moderation
 
 enabled: true
+
+commands:
+  - name:    blockinvites
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Toggles whether invites links get deleted on server
+
 
 events:
   - name:    sfiexec
