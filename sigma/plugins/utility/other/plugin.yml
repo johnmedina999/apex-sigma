@@ -220,6 +220,14 @@ commands:
     usage:   "{pfx:s}{cmd:s} BEEEEF"
     description:
       Converts a decimal number to hex.
+  
+  - name: define
+    global:  true
+    enabled: true
+    sfw:     true
+    usage: ">>define [word] <number>"
+    description:
+      Grabs the definition of the word given from the Merriam-Webster website. To get another definition for the same word, input a number for <number>.
 
 events:
   - name:    reminder_clockwork

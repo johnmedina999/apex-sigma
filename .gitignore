@@ -23,6 +23,7 @@ log.txt
 *.xml
 cache/*
 chains/*
+runSigma.bat
 
 # still required?
 avatar.png
