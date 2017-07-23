@@ -14,7 +14,7 @@ async def addcommand(cmd, message, args):
         await message.channel.send(embed=response)    
         return
 
-    if len(args) >= 2:
+    if len(args) < 2:
         response = discord.Embed(title='❗ Can\'t replace an existing core command', color=0xDB0000)
         await message.channel.send(embed=response)    
         return
