@@ -57,7 +57,7 @@ async def define(cmd, message, args):
         return
 
     definition.strip()
-    definition = definition.replace(":"," \n— ").replace("\n", "", 1)
+    definition = definition.replace(":","\n— ").replace("\n", "", 1)
 
     if "The word you've entered" in definition:
         embed = discord.Embed(title=":smile: That definition doesn't exist, silly!", color=0xFF8EE6)
