@@ -1,4 +1,4 @@
-import discord
+﻿import discord
 import aiohttp
 from humanfriendly.tables import format_pretty_table as boop
 from .hirez_api import get_session, make_signature, smite_base_url, make_timestamp
@@ -9,7 +9,7 @@ async def smite(cmd, message, args):
     if not args:
         return
     username = ' '.join(args)
-    session_id = get_session()
+    session_id = await get_session()
     hr_ts = make_timestamp()
     signature = make_signature('getplayer')
     data_url = smite_base_url + 'getplayerJson/' + HiRezDevID + '/' + signature + '/' + session_id + '/' + hr_ts + '/' + username
@@ -17,8 +17,8 @@ async def smite(cmd, message, args):
         async with session.get(data_url) as data:
             data = await data.json()
     if len(data) == 0:
-        embed = discord.Embed(color=0xDB0000, title=':exclamation: Player ' + username + ' was not found.')
-        await cmd.bot.send_message(message.channel, None, embed=embed)
+        embed = discord.Embed(color=0xDB0000, title='❗ Player ' + username + ' was not found.')
+        await message.channel.send(None, embed=embed)
         return
     data = data[0]
     avatar = message.author.default_avatar_url
@@ -71,4 +71,4 @@ async def smite(cmd, message, args):
     embed.set_author(name=player_name, icon_url=avatar, url=avatar)
     embed.add_field(name='General Statistics', value=smite_general_stats, inline=False)
     embed.add_field(name='Ranked Statistics', value=smite_ranked_stats, inline=False)
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

@@ -165,33 +165,84 @@ commands:
     sfw:     true
     usage:   "{pfx:s}{cmd:s} 02/29 Date"
     description:
-      Shows a fact for the inputted number and type, if no arguments are inputed, the number and type will be random.
+      Shows a fact for the inputted number and type, if no arguments are inputted, the number and type will be random.
       If no type is inputted, the type will be random.
       The accepted types are trivia, date, math and year.
       The date system is the US Month/Day ordering system.
 
-  - name:     nyaa
+  - name: fortune
     alts:
-      - "neko"
-      - "nekomimi"
+      - "fortune-mod"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Outputs a UNIX fortune string.
+
+  - name:     impersonate
     global:   true
     enabled:  true
     sfw:      true
-    usage:    "{pfx:s}{cmd:s}"
+    usage:    "{pfx:s}{cmd:s} @person"
     description:
-      Provides a random Nekomimi image.
-      They might be borderline NSFW, a warning just in case.
+      Tries to impersonate the mentioned user if a chain file for them exists.
+      Most people will not have a chain file.
+      The makers select those.
 
-events:
-  - name:    cleverbot_control
-    type:    mention
+  - name:    collectchain
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Collects messages sent by the mentioned user and saves it as a chain.
+      Only one person can use the command at the time due to the processing load it takes.
+
+  - name:    csshumor
+    alts:
+      - "csshumour"
+      - "cssjoke"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Outputs a random CSS Humor codeblock.
+      Frontend devs love this stuff.
+
+  - name: unflip
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Toggles automatic unfliping of tables
+      Requires the user to be a server Administrator.
+
+  - name: chatterbot
+    alts:
+      - "cb"
     global:  true
     enabled: false
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Toggles the ChatterBot functionality of the bot on the server.
+      This is used by starting a message by mentioning a bot.
+      Example being [@Sigma how are you today?]
+      Requires the user to be a server Administrator.
+
+events:
+  - name:    chatterbot_control
+    type:    mention
+    global:  true
+    enabled: true
     sfw:     true
     pmable:  false
     usage:   "@bot message"
     description:
-      Interact with cleverbot.
+      Interact with chatterbot.
 
   - name:    unflip_control
     type:    message

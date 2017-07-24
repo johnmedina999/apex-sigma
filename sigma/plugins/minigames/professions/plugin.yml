@@ -1,0 +1,68 @@
+name: Professions
+
+categories:
+  - minigames
+
+enabled: true
+
+commands:
+  - name: inventory
+    alts:
+     - "bag"
+     - "storage"
+     - "backpack"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Shows your current inventory.
+      The inventory has unlimited slots.
+
+  - name: inspect
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} Nabfischz"
+    description:
+      Inspects an item that is in your inventory.
+
+  - name: finditem
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} fish Nabfischz"
+    description:
+      Looks up information about an item.
+      The first argument needs to be the item type.
+      For example if it is a fish, meat, plant or material.
+      And the rest is the name of the item.
+
+  - name: sell
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} Nabfish"
+    description:
+      Sells an item from your inventory.
+      Input all instead of the item name to sell your entire inventory.
+
+  - name: fish
+    global:   true
+    enabled:  true
+    sfw:      true
+    usage:    "{pfx:s}{cmd:s}"
+    description:
+      Cast a lure and try to catch some fish.
+      Each cast costs 20 Kud to cover the expenses of your bait and rod usage.
+      You can fish once every 60 seconds, better not scare the fish away.
+
+  - name: forage
+    global:   true
+    enabled:  true
+    sfw:      true
+    usage:    "{pfx:s}{cmd:s}"
+    description:
+      Go and look for some plants in the forest.
+      Each expedition costs 20 Kud to cover your food and water expenses.
+      You can forage once each 60 seconds, you have to grab a break, naturally.

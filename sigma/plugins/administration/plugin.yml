@@ -28,7 +28,7 @@ commands:
     description:
       Takes away the inputted amount of minigame points from the mentioned user.
 
-  - name: announce
+  - name: announceglobal
     alts:
       - "ann"
     global:  true
@@ -78,18 +78,6 @@ commands:
       User, Channel and Server.
       If the server type is used, it will send a message to that server's default channel.
 
-  - name: inviteowner
-    alts:
-      - "invown"
-    global:  true
-    enabled: true
-    admin:   true
-    sfw:     true
-    usage:   "{pfx:s}{cmd:s} 200751504175398912"
-    description:
-      Creates a one-use invite link to a server the bot is a part of by inputted ID.
-      The purpose of this command is to investigate possibly abusive servers and quickly troubleshoot possible issues.
-
   - name: searchid
     alts:
       - "srchid"
@@ -104,13 +92,13 @@ commands:
   - name:    echo
     global:  true
     enabled: true
-    admin:   true
+    admin:   false
     sfw:     true
     usage:   "{pfx:s}{cmd:s} Hello world!"
     description:
       Repeats the given text.
 
-  - name:    kill
+  - name:    shutdown
     global:  true
     admin:   true
     enabled: true
@@ -167,25 +155,27 @@ commands:
     usage:   "{pfx:s}{cmd:s} 123456789123456789"
     description:
       Blacklists a connected server disallowing it to use any and all commands.
-      
-  - name:    reloadplugin
+
+  - name:    blackusr
     global:  true
     enabled: true
+    admin:   true
     sfw:     true
-    usage:   "{pfx:s}{cmd:s} fun"
+    usage:   "{pfx:s}{cmd:s} 123456789123456789"
     description:
-      Reloads the selected plugin
-      
-  - name:  listplugins
+      Blacklists a user disallowing them to use any and all commands.
+
+  - name:    togglepartner
     global:  true
     enabled: true
+    admin:   true
     sfw:     true
-    pmable:  true
+    usage:   "{pfx:s}{cmd:s} 123456789123456789"
     description:
-      Lists server plugins
+      Toggles if a server by the given ID is or is not an Aurora Project partner.
 
 events:
-  - name:    pmredirect
+  - name:    pmdetect
     type:    message
     global:  true
     enabled: true
@@ -193,15 +183,6 @@ events:
     pmable:  true
     description:
       Redirects PM info to the bot owner.
-      
-  - name:    cmd_count_filler
-    type:    message
-    global:  true
-    enabled: true
-    sfw:     true
-    pmable:  true
-    description:
-      Fills the command counter statistics.
 
   - name:    version_updater
     type:    ready
@@ -220,12 +201,3 @@ events:
     pmable:  true
     description:
       Sets the now playing status on launch.
-
-  - name:    markov_collector
-    type:    message
-    global:  true
-    enabled: true
-    sfw:     true
-    pmable:  true
-    description:
-      Collects markov chains for enabled servers.

@@ -12,30 +12,34 @@ class PluginNotEnabled(RuntimeError):
 
 
 class Plugin(object):
-
     def __init__(self, bot, path):
-        self.loaded        = False
-        self.help          = 'No help available, sorry :('
+        self.loaded = False
+        self.help = 'No help available, sorry :('
         self.commands_info = []
-        self.events_info   = []
-        self.commands      = {}
-        
+        self.events_info = []
+
+        self.commands = {}
         self.events = {
             'mention': {},
             'message': {},
             'member_join': {},
             'member_leave': {},
-            'ready': {}
+            'ready': {},
+            'voice_update': {},
+            'message_edit': {}
         }
-        
         self.modules = []
-        self.path    = path
-        self.db      = bot.db
-        self.music   = bot.music
-        self.bot     = bot
+        self.path = path
 
-        try: self.load_info(bot)
-        except PluginNotEnabled: return
+        self.db = bot.db
+        self.music = bot.music
+        self.cooldown = bot.cooldown
+        self.bot = bot
+
+        try:
+            self.load_info(bot)
+        except PluginNotEnabled:
+            return
 
         self.load_events()
         self.load_commands()
@@ -43,10 +47,10 @@ class Plugin(object):
         self.log.info('Loaded plugin {:s}'.format(self.name))
 
     def load_info(self, bot):
-        with open(os.path.join(self.path, 'plugin.yml')) as yml_file: 
+        with open(os.path.join(self.path, 'plugin.yml')) as yml_file:
             yml = yaml.safe_load(yml_file)
 
-            if 'enabled' not in yml or not yml['enabled']: 
+            if 'enabled' not in yml or not yml['enabled']:
                 raise PluginNotEnabled
 
             path = self.path.split('/')
@@ -57,7 +61,8 @@ class Plugin(object):
                 yml['name'] = name
 
             self.name = yml['name']
-            self.log  = create_logger(self.name)
+
+            self.log = create_logger(self.name)
             self.log.info('Loading plugin {:s}'.format(self.name))
 
             # set categories from rest of pathname
@@ -74,10 +79,6 @@ class Plugin(object):
             if 'events' in yml:
                 self.events_info = yml['events']
 
-    def reload_commands(self):
-       for cmd_info in self.commands_info:
-            self.commands[cmd_info['name']].reload_command()
-                
     def load_commands(self):
         for cmd_info in self.commands_info:
             cmd = Command(self, cmd_info)
@@ -87,7 +88,8 @@ class Plugin(object):
                 self.modules.append(cmd.module)
 
         if self.commands:
-            self.log.info('Loaded commands: [{:s}]'.format(', '.join(self.commands.keys())))
+            self.log.info('Loaded commands: [{:s}]'.format(
+                ', '.join(self.commands.keys())))
 
     def load_events(self):
         for ev_info in self.events_info:

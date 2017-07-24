@@ -1,3 +1,5 @@
+import os
+import yaml
 from config import permitted_id
 
 
@@ -36,5 +38,29 @@ def user_avatar(user):
         user_ava = '.'.join(user.avatar_url.split('.')[:-1])
     else:
         user_ava = user.default_avatar_url
+    user_ava += '.png'
     return user_ava
 
+
+def load_module_list():
+    directory = 'sigma/plugins'
+    module_list = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file == 'plugin.yml':
+                file_path = (os.path.join(root, file))
+                with open(file_path) as plugin_file:
+                    plugin_data = yaml.safe_load(plugin_file)
+                    try:
+                        category = plugin_data['categories'][0]
+                        if category.lower() not in module_list and category not in ['administration', 'special']:
+                            module_list.append(category)
+                    except:
+                        pass
+    return module_list
+
+
+def convert_hms(hms):
+    hrs, mns, secs = hms.split(':')
+    out_time = (int(hrs) * 3600) + (int(mns) * 60) + int(secs)
+    return out_time

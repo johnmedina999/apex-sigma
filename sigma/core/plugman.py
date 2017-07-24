@@ -6,20 +6,25 @@ from .plugin import Plugin
 
 class PluginManager(object):
     def __init__(self, bot):
-        self.bot         = bot
-        self.client      = self.bot
-        self.db          = bot.db
-        self.music       = bot.music
-        self.log         = create_logger('Plugin Manager')
+        self.bot = bot
+        self.client = self.bot
+
+        self.db = bot.db
+        self.music = bot.music
+        self.cooldown = bot.cooldown
+        self.log = create_logger('Plugin Manager')
+
         self.plugin_dirs = []
-        self.plugins     = []
-        self.commands    = {}
+        self.plugins = []
+        self.commands = {}
         self.events = {
             'mention': {},
             'message': {},
             'member_join': {},
             'member_leave': {},
-            'ready': {}
+            'ready': {},
+            'voice_update': {},
+            'message_edit': {}
         }
 
         self.get_plugin_dirs()
@@ -34,20 +39,6 @@ class PluginManager(object):
 
             for ev_type, events in self.events.items():
                 events.update(plugin.events[ev_type])
-
-    def reload_plugin(self, pluginName):
-        for plugin in self.plugins:
-            self.bot.log.info(plugin.name);
-            if plugin.name == pluginName:
-                plugin.reload_commands()
-                return True
-        return False
-
-    def get_plugins(self):
-        list = ""
-        for plugin in self.plugins:
-            list += plugin.name + ", "
-        return list
 
     def load_all(self):
         for path in self.plugin_dirs:
