@@ -23,12 +23,11 @@ log.txt
 *.xml
 cache/*
 chains/*
-*.ttf
-*.ttc
-*.otf
+runSigma.bat
 
 # still required?
 avatar.png
 border.png
 profile.png
 lolsig.png
+/.vscode/launch.json

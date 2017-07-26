@@ -1,17 +1,19 @@
-import discord
+﻿import discord
 from sigma.core.permission import check_admin, set_channel_nsfw
 
 
 async def nsfwpermit(cmd, message, args):
+    
     channel = message.channel
 
-    if check_admin(message.author, channel):
-        if set_channel_nsfw(cmd.db, channel.id):
-            embed = discord.Embed(color=0x9933FF,
-                                  title=':eggplant: The NSFW Module has been Enabled for ' + channel.name)
-        else:
-            embed = discord.Embed(color=0xFF9900, title=':fire: The NSFW Module has been Disabled for ' + channel.name)
+    if not check_admin(message.author, channel):
+        embed = discord.Embed(type='rich', color=0xDB0000, title='⛔ Insufficient Permissions. Server Admin Only.')
+        await message.channel.send(None, embed=embed)
+        return
+    
+    if set_channel_nsfw(cmd.db, channel.id):
+        embed = discord.Embed(color=0x9933FF, title=':eggplant: The NSFW Module has been Enabled for ' + channel.name)
     else:
-        embed = discord.Embed(type='rich', color=0xDB0000,
-                               title=':no_entry: Insufficient Permissions. Server Admin Only.')
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+        embed = discord.Embed(color=0xFF9900, title=':fire: The NSFW Module has been Disabled for ' + channel.name)
+        
+    await message.channel.send(None, embed=embed)

@@ -1,9 +1,11 @@
-import aiohttp
+﻿import aiohttp
 import discord
 
 
 async def imdb(cmd, message, args):
+    
     if not args:
+        await message.channel.send(cmd.help())
         return
 
     imdb_imput = ' '.join(args)
@@ -11,6 +13,7 @@ async def imdb(cmd, message, args):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as data:
             request = await data.json()
+    
     title = request['Title']
     rated = request['Rated']
     released = request['Released']
@@ -38,7 +41,8 @@ async def imdb(cmd, message, args):
                   '\nActors: ' + actors +
                   '\nMetascore: ' + score +
                   '\nIMDB Rating: ' + rating + '```')
+    
     embed = discord.Embed(color=0x1abc9c)
     embed.add_field(name='🎥 Movie Details', value=movie_text)
     embed.add_field(name='📑 Plot', value='```\n' + plot + '\n```')
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

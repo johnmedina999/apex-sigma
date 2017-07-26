@@ -1,13 +1,13 @@
 import pymongo
 
 from .logger import create_logger
-from .db_nodes.cooldown import get_cooldown_node, on_cooldown_node, set_cooldown_node
 from .db_nodes.stats import add_stats_node, update_population_stats_node, init_stats_table_node
 from .db_nodes.points import point_manipulation, point_grabber
 from .db_nodes.refactor import refactor_servers_node, refactor_users_node
 from .db_nodes.details import update_details
 from .db_nodes.settings import set_settings_node, add_new_server_settings_node
 from .db_nodes.settings import get_settings_node, init_server_settings_node, check_for_missing_settings_node
+from .db_nodes.inventory import get_inventory, add_to_inventory, del_from_inventory
 
 
 class DatabaseError(Exception):
@@ -21,7 +21,7 @@ class IntegrityError(DatabaseError):
 class Database(object):
     def __init__(self, db_addr, port, auth, unam, pwd):
         self.db = None
-        self.log = create_logger('database')
+        self.log = create_logger('Database')
 
         if db_addr:
             self.connect(db_addr, port, auth, unam, pwd)
@@ -35,6 +35,7 @@ class Database(object):
             mongo_address = 'mongodb://{:s}:{:s}@{:s}:{:s}/'.format(unam, pwd, db_addr, str(port))
             self.moncli = pymongo.MongoClient(mongo_address)
         self.db = self.moncli.aurora
+        self.db.log = self.log
 
     # Core Control Nodes
     def insert_one(self, collection, data):
@@ -64,38 +65,29 @@ class Database(object):
     def update_population_stats(self, servers, members):
         update_population_stats_node(self.db, servers, members)
 
-    def set_cooldown(self, sid, uid, command):
-        set_cooldown_node(self.db, sid, uid, command)
-
-    def on_cooldown(self, sid, uid, command, cooldown):
-        on_cooldown_node(self.db, sid, uid, command, cooldown)
-
-    def get_cooldown(self, sid, uid, command, cooldown):
-        return get_cooldown_node(self.db, sid, uid, command, cooldown)
-
     def add_points(self, server, user, points):
-        point_manipulation(self.db, server, user, points, 'Points', True)
+        point_manipulation(self.db, server, user, points, True)
 
     def take_points(self, server, user, points):
-        point_manipulation(self.db, server, user, points, 'Points', False)
+        point_manipulation(self.db, server, user, points, False)
 
-    def get_points(self, server, user):
-        return point_grabber(self.db, server, user, 'Points')
+    def get_points(self, user):
+        return point_grabber(self.db, user)
 
-    def add_act_points(self, server, user, points):
-        point_manipulation(self.db, server, user, points, 'XP', True)
+    def get_inv(self, user):
+        return get_inventory(self.db, user)
 
-    def take_act_points(self, server, user, points):
-        point_manipulation(self.db, server, user, points, 'XP', False)
+    def inv_add(self, user, item):
+        add_to_inventory(self.db, user, item)
 
-    def get_act_points(self, server, user):
-        return point_grabber(self.db, server, user, 'XP')
+    def inv_del(self, user, item_id):
+        del_from_inventory(self.db, user, item_id)
 
-    def refactor_users(self, usrgen):
-        refactor_users_node(self.db, usrgen)
+    async def refactor_users(self, usrgen):
+        await refactor_users_node(self.db, usrgen)
 
-    def refactor_servers(self, servers):
-        refactor_servers_node(self.db, servers)
+    async def refactor_servers(self, servers):
+        await refactor_servers_node(self.db, servers)
 
     def update_server_details(self, server):
         update_details(self.db, server=server)

@@ -5,6 +5,7 @@ from .callable import NotEnabledError
 
 
 class Event(Callable):
+
     def __init__(self, plugin, info):
         try:
             super().__init__(plugin, info)

@@ -10,13 +10,17 @@ from config import RiotAPIKey
 
 # League of Legends API
 async def league(cmd, message, args):
+        
     lol_input = ' '.join(args)
+    if lol_input == '': await message.channel.send(cmd.help()); return
 
-    try:
-        region, smnr_name = lol_input.lower().split(maxsplit=1)
+    await message.channel.send("This command is currently unsuppported. Bug the bot devs if you want this supported")
+
+    '''
+    try: region, smnr_name = lol_input.lower().split(maxsplit=1)
     except Exception as e:
         cmd.log.error(e)
-        await cmd.bot.send_message(message.channel, str(e))
+        await message.channel.send(str(e))
         return
 
     smnr_name_table = smnr_name.replace(' ', '')
@@ -25,20 +29,24 @@ async def league(cmd, message, args):
     async with aiohttp.ClientSession() as session:
         async with session.get(version_url) as data:
             version_json = await data.json()
+    
     version = str(version_json[0])
 
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(smnr_by_name_url) as data:
                 smnr_by_name = await data.json()
+        
         smnr_id = str(smnr_by_name[smnr_name_table]['id'])
         smnr_icon = str(smnr_by_name[smnr_name_table]['profileIconId'])
         icon_url = 'http://ddragon.leagueoflegends.com/cdn/' + version + '/img/profileicon/' + smnr_icon + '.png'
         smnr_lvl = str(smnr_by_name[smnr_name_table]['summonerLevel'])
+        
         summary_url = 'https://' + region + '.api.pvp.net/api/lol/' + region + '/v1.3/stats/by-summoner/' + smnr_id + '/summary?season=SEASON2016&api_key=' + RiotAPIKey
         async with aiohttp.ClientSession() as session:
             async with session.get(summary_url) as data:
                 summary = await data.json()
+        
         league_url = 'https://' + region + '.api.pvp.net/api/lol/' + region + '/v2.5/league/by-summoner/' + smnr_id + '?api_key=' + RiotAPIKey
         try:
             async with aiohttp.ClientSession() as session:
@@ -49,22 +57,28 @@ async def league(cmd, message, args):
         except:
             league_name = 'No League'
             league_tier = 'No Rank'
+        
         # Image Start
         async with aiohttp.ClientSession() as session:
             async with session.get(icon_url) as data:
                 avatar = await data.read()
+        
         base = Image.open(cmd.resource('img/base.png'))
         overlay = Image.open(cmd.resource('img/overlay_lol.png'))
+        
         background = Image.open(BytesIO(avatar))
         background_res = background.resize((72, 72), Image.ANTIALIAS)
         foreground = Image.open(cmd.resource('img/border_lol.png'))
         foreground_res = foreground.resize((64, 64), Image.ANTIALIAS)
+        
         base.paste(background_res, (28, 28))
         base.paste(overlay, (0, 0), overlay)
         base.paste(foreground_res, (32, 32), foreground_res)
+        
         font = ImageFont.truetype("big_noodle_titling_oblique.ttf", 32)
         font2 = ImageFont.truetype("big_noodle_titling_oblique.ttf", 16)
         font3 = ImageFont.truetype("big_noodle_titling_oblique.ttf", 48)
+        
         imgdraw = ImageDraw.Draw(base)
         imgdraw.text((130, 38), smnr_name, (255, 255, 255), font=font)
         imgdraw.text((130, 70), league_name + ' - ' + league_tier, (255, 255, 255), font=font2)
@@ -73,9 +87,7 @@ async def league(cmd, message, args):
         # Image End
 
         try:
-            item = next(
-                (item for item in summary['playerStatSummaries'] if item['playerStatSummaryType'] == 'RankedSolo5x5'),
-                None)
+            item = next((item for item in summary['playerStatSummaries'] if item['playerStatSummaryType'] == 'RankedSolo5x5'), None)
             if item:
                 ranked = item
                 ranked_wins = str(ranked['wins'])
@@ -96,9 +108,9 @@ async def league(cmd, message, args):
                 ranked_text = 'None'
         except:
             ranked_text = 'None'
+        
         try:
-            item = next(
-                (item for item in summary['playerStatSummaries'] if item['playerStatSummaryType'] == 'Unranked'), None)
+            item = next((item for item in summary['playerStatSummaries'] if item['playerStatSummaryType'] == 'Unranked'), None)
             if item:
                 normal = item
                 normal_wins = str(normal['wins'])
@@ -117,14 +129,14 @@ async def league(cmd, message, args):
                 normal_text = 'None'
         except SyntaxError:
             normal_text = 'None'
+        
         if ranked_text == 'None' and normal_text == 'None':
-            await cmd.bot.send_message(message.channel, 'No stats found.')
+            await message.channel.send('No stats found.')
         else:
-            await cmd.bot.send_file(message.channel, 'cache/lol_profile_' + message.author.id + '.png')
+            await message.channel.send('cache/lol_profile_' + message.author.id + '.png')
             os.remove('cache/lol_profile_' + message.author.id + '.png')
-            await cmd.bot.send_message(message.channel,
-                                       'Normal Stats:\n```' + normal_text + '\n```\nRanked Stats:\n```' + ranked_text + '\n```')
-    # except Exception as e:
+            await message.channel.send('Normal Stats:\n```' + normal_text + '\n```\nRanked Stats:\n```' + ranked_text + '\n```')
+    
     except SyntaxError:
-        # `cmd.log.error(e)
-        await cmd.bot.send_message(message.channel, 'Something went wrong, PANIC!')
+        await message.channel.send('Something went wrong, PANIC!')
+    '''

@@ -6,6 +6,7 @@ environment:
   matrix:
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python36-x64"
+    
 services:
   - mongodb
 
@@ -15,8 +16,8 @@ init:
 
 install:
   - "%PYTHON%\\python.exe -m pip install wheel"
-  - "%PYTHON%\\python.exe -m pip install -U -r requirements.txt"
+  - "%PYTHON%\\python.exe install/install.py"
 
 test_script:
   - "copy config_example.py config.py"
-  - "%PYTHON%\\python.exe run.py"
+  - "%PYTHON%\\python.exe run.py dev"

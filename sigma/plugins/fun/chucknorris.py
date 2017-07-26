@@ -1,17 +1,19 @@
-import aiohttp
+﻿import aiohttp
 import discord
 
 
 async def chucknorris(cmd, message, args):
+    
     embed = discord.Embed(color=0x1abc9c)
     cmd.db.add_stats('CancerCount')
     joke_url = 'https://api.chucknorris.io/jokes/random'
+    
     async with aiohttp.ClientSession() as session:
         async with session.get(joke_url) as data:
             joke_json = await data.json()
+    
     joke = joke_json['value']
-    out = '```\n'
-    out += joke
-    out += '\n```'
+    out = '```\n' + joke + '\n```'
+    
     embed.add_field(name='💪 A Chuck Norris Joke', value=out)
-    await cmd.bot.send_message(message.channel, None, embed=embed)
+    await message.channel.send(None, embed=embed)

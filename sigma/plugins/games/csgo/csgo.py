@@ -1,11 +1,13 @@
-from steam import WebAPI
+﻿from steam import WebAPI
 from config import SteamAPI
 import discord
 
 
 async def csgo(cmd, message, args):
     if not args:
+        await message.channel.send(cmd.help())
         return
+
     csgo_input = ' '.join(args)
 
     try:
@@ -59,12 +61,15 @@ async def csgo(cmd, message, args):
             'Matches Lost': str(total_matches_lost),
             'Win Percentage': "{0:.2f}".format(win_percent * 100) + '%'
         }
+        
         embed = discord.Embed(color=0x1ABC9C)
         embed.set_author(name=nickname, icon_url=avatar_url, url=avatar_url)
+        
         for unit in data:
             embed.add_field(name=unit, value=data[unit])
-        await cmd.bot.send_message(message.channel, None, embed=embed)
+        
+        await message.channel.send(None, embed=embed)
 
     except Exception as e:
         cmd.log.error(e)
-        await cmd.bot.send_message(message.channel, 'Something went wrong or the user was not found.')
+        await message.channel.send('Something went wrong or the user was not found.')

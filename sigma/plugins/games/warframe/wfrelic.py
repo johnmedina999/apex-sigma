@@ -11,31 +11,45 @@ relic_images = {
 
 
 async def wfrelic(cmd, message, args):
-    if args:
-        if len(args) == 2:
-            relic_tier = args[0].upper()
-            relic_type = args[1].upper()
-            relic_url = 'http://warframe.wikia.com/wiki/Void_Relic'
-            async with aiohttp.ClientSession() as session:
-                async with session.get(relic_url) as data:
-                    page = await data.text()
-            root = l.fromstring(page)
-            table = root.cssselect('.article-table')
-            my_table = table[12]
-            parts_list = ''
-            for row in my_table:
-                if len(row) == 4:
-                    part = row[0].text
-                    tier = row[1].text
-                    rl_type = row[2].text
-                    odds = row[3].text.strip('\n')
-                    if tier == relic_tier:
-                        if rl_type == relic_type:
-                            parts_list += f'\n{part.title()} ({odds.title()[:1]})'
-            if parts_list != '':
-                embed = discord.Embed(color=0x0066CC)
-                embed.set_thumbnail(url=relic_images[relic_tier.lower()])
-                embed.add_field(name=f'{relic_tier.title()} {relic_type}', value=f'```\n{parts_list}\n```', inline=False)
-            else:
-                embed = discord.Embed(color=0x696969, title=':mag: Nothing Found')
-            await cmd.bot.send_message(message.channel, None, embed=embed)
+    
+    if not args:
+        message.channel.send(cmd.help())
+        return
+
+    if len(args) != 2:
+        message.channel.send(cmd.help())
+        return
+        
+    relic_tier = args[0].upper()
+    relic_type = args[1].upper()
+    relic_url = 'http://warframe.wikia.com/wiki/Void_Relic'
+    
+    async with aiohttp.ClientSession() as session:
+        async with session.get(relic_url) as data:
+            page = await data.text()
+    
+    root = l.fromstring(page)
+    table = root.cssselect('.article-table')
+    my_table = table[12]
+    parts_list = ''
+    
+    for row in my_table:
+        if len(row) == 4:
+            part = row[0].text
+            tier = row[1].text
+            rl_type = row[2].text
+            odds = row[3].text.strip('\n')
+    
+            if tier == relic_tier:
+                if rl_type == relic_type:
+                    parts_list += f'\n{part.title()} ({odds.title()[:1]})'
+    
+    if parts_list == '':
+        embed = discord.Embed(color=0x696969, title=':mag: Nothing Found')
+        await message.channel.send(None, embed=embed)    
+        return
+
+    embed = discord.Embed(color=0x0066CC)
+    embed.set_thumbnail(url=relic_images[relic_tier.lower()])
+    embed.add_field(name=f'{relic_tier.title()} {relic_type}', value=f'```\n{parts_list}\n```', inline=False)
+    await message.channel.send(None, embed=embed)

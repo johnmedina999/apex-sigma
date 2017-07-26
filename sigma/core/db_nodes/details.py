@@ -2,6 +2,7 @@ from sigma.core.utils import user_avatar
 
 
 def update_details(db, server=None, user=None):
+    
     if server:
         location = 'ServerList'
         exists = db[location].find_one({'ServerID': server.id})
@@ -24,11 +25,10 @@ def update_details(db, server=None, user=None):
             'Avatar': user_ava,
             'Discriminator': user.discriminator
         }
-    else:
+    else: 
         raise TypeError
+    
     updatedata = {'$set': data}
-    if exists:
-        db[location].update_one(updatetarget, updatedata)
-    else:
-        db[location].insert_one(data)
+    if exists: db[location].update_one(updatetarget, updatedata)
+    else: db[location].insert_one(data)
 

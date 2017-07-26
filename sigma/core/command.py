@@ -9,8 +9,7 @@ class Command(Callable):
     def __init__(self, plugin, info):
         self.usage = "{pfx:s}{cmd:s}"
 
-        try:
-            super().__init__(plugin, info)
+        try: super().__init__(plugin, info)
         except NotEnabledError:
             return
 

@@ -1,0 +1,157 @@
+name: Interactions
+
+categories:
+  - interactions
+
+enabled: true
+
+commands:
+  - name: catlen
+    alts:
+      - "meowlen"
+      - "kittylen"
+      - "catlength"
+      - "kittylength"
+      - "longcat"
+      - "longkitty"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Makes a personal long cat.
+      The cat length is unique to the person who uses the command.
+      You can mention a user as well to see their long cat.
+
+  - name: rategirl
+    alts:
+      - "hotcrazy"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Shows where a user is on the hot crazy chart.
+      This is unique for each user, do not hope that it will change.
+
+  - name: lovecalculator
+    alts:
+      - "lovecalc"
+      - "lcalc"
+      - "love"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person1 @person2"
+    description:
+      Shows the love between two things.
+      Which can be either two users or a user and a thingamabob.
+      Just make sure if you want to see how much @Calum loves Kud you put the user in the first place.
+
+  - name: triggered
+    alts:
+      - "trigger"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person1"
+    description:
+      Make a triggered gif of yourself of a person you tag.
+
+  - name: addreact
+    global:  true
+    enabled: true
+    sfw:     true
+    partner: true
+    usage:   "{pfx:s}{cmd:s} kiss https://my.fancy.link/image.gif"
+    description:
+      Adds a reaction response to the list of reaction responses.
+      Limited to Partners to counteract possible abuse.
+
+  - name: cuddle
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Snuggle, snuggle~
+
+  - name: hug
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Even a bot like me can appreciate a hug!
+      The person you mention will surely as well.
+
+  - name: kiss
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Humans touching their slimy air vents.
+      How disturbing.
+
+  - name: pat
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Pat, pat~
+      Good human, lovely human.
+      I will kill you last.
+
+  - name: pout
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Make a pouty face at someone and make them change their mind.
+      Or just teast them for being a horrible person.
+      Like when they make you create a pout command for money!
+
+  - name: slap
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      When a punch is too barbaric a slap should be just elegant enough.
+
+  - name: stab
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Boy... Somebody really has you pissed off if you are using this one.
+
+  - name: peck
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      A hit and run style quickie kiss.
+
+  - name: poke
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Poke, poke~
+      Are you alive?
+
+  - name: punch
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      You have something on your face.
+      IT WAS PAIN!
