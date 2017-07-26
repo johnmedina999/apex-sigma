@@ -223,7 +223,7 @@ commands:
   
   - name: define
     global:  true
-    enabled: true
+    enabled: false
     sfw:     true
     usage: ">>define [word] <number>"
     description:
