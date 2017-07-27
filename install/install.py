@@ -28,7 +28,7 @@ if __name__ == '__main__':
     elif platform.architecture()[1] == "ELF":
         if platform.architecture()[0] == "64bit":
             print("Installing for elf_x64...")
-            install(win_x64)
+            install(elf_x64)
         elif platform.architecture()[0] == "32bit":
             print("elf_x86 is unsupported")
             exit(0)
