@@ -36,9 +36,9 @@ async def shopadd(cmd, message, args):
         'Price': price
     }
     
-    shop_list = cmd.db.get_settings(message.guild.id, 'ShopItems')
+    shop_list = cmd.db.get_settings(str(message.guild.id), 'ShopItems')
     if not shop_list:
-        cmd.db.set_settings(message.guild.id, 'ShopItems', [])
+        cmd.db.set_settings(str(message.guild.id), 'ShopItems', [])
         shop_list = []
     
     found = False
@@ -51,6 +51,6 @@ async def shopadd(cmd, message, args):
     
     if found == 0:
         shop_list.append(role_data)
-        cmd.db.set_settings(message.guild.id, 'ShopItems', shop_list)
+        cmd.db.set_settings(str(message.guild.id), 'ShopItems', shop_list)
         status = discord.Embed(type='rich', color=0x66CC66, title='✅ ' + rtrl.name + ' has been added to the shop.')
         await message.channel.send(None, embed=status)

@@ -9,13 +9,13 @@ async def toggleshop(cmd, message, args):
         await message.channel.send(None, embed=status)
         return
 
-    shop_enabled = cmd.db.get_settings(message.guild.id, 'ShopEnabled')
+    shop_enabled = cmd.db.get_settings(str(message.guild.id), 'ShopEnabled')
         
     if shop_enabled:
-        cmd.db.set_settings(message.guild.id, 'ShopEnabled', False)
+        cmd.db.set_settings(str(message.guild.id), 'ShopEnabled', False)
         status = discord.Embed(type='rich', color=0x66CC66, title='✅ The shop has been Disabled.')
     else:
-        cmd.db.set_settings(message.guild.id, 'ShopEnabled', True)
+        cmd.db.set_settings(str(message.guild.id), 'ShopEnabled', True)
         status = discord.Embed(type='rich', color=0x66CC66, title='✅ The shop has been Enabled.')
     
     await message.channel.send(None, embed=status)

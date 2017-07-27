@@ -3,10 +3,10 @@
 
 async def shoplist(cmd, message, args):
     
-    shop_list = cmd.db.get_settings(message.guild.id, 'ShopItems')
+    shop_list = cmd.db.get_settings(str(message.guild.id), 'ShopItems')
     
     if not shop_list:
-        cmd.db.set_settings(message.guild.id, 'ShopItems', [])
+        cmd.db.set_settings(str(message.guild.id), 'ShopItems', [])
         shop_list = []
         
     if len(shop_list) == 0:

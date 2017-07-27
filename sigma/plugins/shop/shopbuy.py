@@ -10,7 +10,7 @@ async def shopbuy(cmd, message, args):
         return
     
     role_name = ' '.join(args)
-    item_list = cmd.db.get_settings(message.guild.id, 'ShopItems')
+    item_list = cmd.db.get_settings(str(message.guild.id), 'ShopItems')
     
     for item in item_list:
         if item['RoleName'].lower() != role_name.lower(): continue

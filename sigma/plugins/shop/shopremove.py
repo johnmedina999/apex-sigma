@@ -17,7 +17,7 @@ async def shopremove(cmd, message, args):
     
     role_name = ' '.join(args)
     rtrl = matching_role(message.guild, role_name)
-    shop_list = cmd.db.get_settings(message.guild.id, 'ShopItems')
+    shop_list = cmd.db.get_settings(str(message.guild.id), 'ShopItems')
     
     if not rtrl:
         for item in shop_list:
@@ -25,7 +25,7 @@ async def shopremove(cmd, message, args):
             
             shop_list.remove(item)
             status.set_footer(text='It was found in the shop however, and removed.')
-            cmd.db.set_settings(message.guild.id, 'ShopItems', shop_list)
+            cmd.db.set_settings(str(message.guild.id), 'ShopItems', shop_list)
             break
         
         status = discord.Embed(type='rich', color=0xDB0000, title='❗ The Role ' + role_name + ' was not found on the server.')
@@ -35,7 +35,7 @@ async def shopremove(cmd, message, args):
     for item in shop_list:
         if item['RoleID'] != rtrl.id: continue
         shop_list.remove(item)
-        cmd.db.set_settings(message.guild.id, 'ShopItems', shop_list)
+        cmd.db.set_settings(str(message.guild.id), 'ShopItems', shop_list)
             
         status = discord.Embed(type='rich', color=0x66CC66, title='✅ ' + rtrl.name + ' has been removed from the shop.')
         await message.channel.send(None, embed=status)
