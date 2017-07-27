@@ -20,6 +20,17 @@ commands:
     description:
       Shows yours or a mentioned persons amount of Sigma currency.
 
+  - name:    ranking
+    alts:
+      - "leaderboard"
+      - "ranks"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person"
+    description:
+      Shows the server's ranking
+
   - name:    give
     global:  true
     enabled: true

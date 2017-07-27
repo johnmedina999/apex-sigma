@@ -3,7 +3,7 @@ import discord
 async def ranking(cmd, message, args):
 
     query = {
-        'ServerID': message.server.id
+        'ServerID': str(message.server.id)
     }
 
     embed = discord.Embed(title=':gem: ' + message.server.name + ' Ranking Top 10', color=0x0099FF)
