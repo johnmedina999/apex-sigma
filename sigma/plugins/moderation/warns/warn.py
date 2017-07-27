@@ -21,29 +21,29 @@ async def warn(cmd, message, args):
     if not warning_text or warning_text == '':
         warning_text = 'No Reason Given'
     
-    try: warned_users = cmd.db.get_settings(message.guild.id, 'WarnedUsers')
+    try: warned_users = cmd.db.get_settings(str(message.guild.id), 'WarnedUsers')
     except KeyError:
-        cmd.db.set_settings(message.guild.id, 'WarnedUsers', {})
+        cmd.db.set_settings(str(message.guild.id), 'WarnedUsers', {})
         warned_users = {}
 
     target_id = str(target.id)
     if target_id in warned_users:
         warn_data = {
-            'UserID': warned_users[target_id]['UserID'],
+            'UserID': str(warned_users[target_id]['UserID']),
             'Warns': warned_users[target_id]['Warns'] + 1,
             'Reasons': warned_users[target_id]['Reasons'] + [warning_text],
             'Timestamp': arrow.utcnow().timestamp
         }
     else:
         warn_data = {
-            'UserID': target.id,
+            'UserID': str(target.id),
             'Warns': 1,
             'Reasons': [warning_text],
             'Timestamp': arrow.utcnow().timestamp
         }
     
     warned_users.update({target_id: warn_data})
-    cmd.db.set_settings(message.guild.id, 'WarnedUsers', warned_users)
+    cmd.db.set_settings(str(message.guild.id), 'WarnedUsers', warned_users)
 
     out_content_to_user = discord.Embed(color=0xFF9900)
     out_content_to_user.add_field(name=f'⚠ Warning on {message.guild.name}', value=f'Reason:\n```\n{warning_text}\n```')
@@ -52,7 +52,7 @@ async def warn(cmd, message, args):
     except: pass    
     
     # Logging Part
-    try: log_channel_id = cmd.db.get_settings(message.guild.id, 'LoggingChannel')
+    try: log_channel_id = cmd.db.get_settings(str(message.guild.id), 'LoggingChannel')
     except: log_channel_id = None
     
     if log_channel_id:
