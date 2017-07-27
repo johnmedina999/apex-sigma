@@ -14,8 +14,10 @@ def install(packages):
 if __name__ == '__main__':
 
     if platform.architecture()[0] == "64bit":
+        print("Installing for win_x64...")
         install(win_x64)
     elif platform.architecture()[0] == "32bit":
+        print("Installing for win_x86...")
         install(win_x86)
     else:
         print("Unknown architecture \"" + platform.architecture() + "\"")
