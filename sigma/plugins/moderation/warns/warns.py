@@ -4,7 +4,7 @@ from sigma.core.permission import check_man_msg
 
 async def warns(cmd, message, args):
     
-    try: warned_users = cmd.db.get_settings(message.guild.id, 'WarnedUsers')
+    try: warned_users = cmd.db.get_settings(str(message.guild.id), 'WarnedUsers')
     except KeyError:
         cmd.db.set_settings(str(message.guild.id), 'WarnedUsers', {})
         warned_users = {}
