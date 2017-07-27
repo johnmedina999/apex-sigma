@@ -1,4 +1,5 @@
 ﻿import discord
+import arrow
 from sigma.core.permission import check_man_msg
 
 
@@ -48,6 +49,8 @@ async def warns(cmd, message, args):
         await message.channel.send(None, embed=embed)
         return
 
-    embed = discord.Embed(color=0x0099FF)
-    embed.add_field(name='ℹ ' + target.name + ' Was Warned For...', value='```\n- ' + '\n- '.join(warned_users[target_id]['Reasons']) + '\n```')    
+    warns_data = [str(arrow.get(timestamp))+":  "+reason for timestamp,reason in zip(warned_users[target_id]['Timestamp'], warned_users[target_id]['Reasons'])]
+    
+    embed = discord.Embed(color=0x0099FF)    
+    embed.add_field(name='ℹ ' + target.name + ' Was Warned For...', value='\n- ' + '\n- '.join(warns_data) + '\n')    
     await message.channel.send(None, embed=embed)
