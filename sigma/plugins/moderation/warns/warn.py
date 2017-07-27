@@ -32,14 +32,14 @@ async def warn(cmd, message, args):
             'UserID': str(warned_users[target_id]['UserID']),
             'Warns': warned_users[target_id]['Warns'] + 1,
             'Reasons': warned_users[target_id]['Reasons'] + [warning_text],
-            'Timestamp': arrow.utcnow().timestamp
+            'Timestamp': warned_users[target_id]['Timestamp'] + [str(arrow.utcnow().timestamp)]
         }
     else:
         warn_data = {
             'UserID': str(target.id),
             'Warns': 1,
             'Reasons': [warning_text],
-            'Timestamp': arrow.utcnow().timestamp
+            'Timestamp': [str(arrow.utcnow().timestamp)]
         }
     
     warned_users.update({target_id: warn_data})
