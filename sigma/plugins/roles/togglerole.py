@@ -11,7 +11,7 @@ async def togglerole(cmd, message, args):
         return
     
     role_qry = ' '.join(args).replace('"', '')
-    self_roles = cmd.db.get_settings(message.guild.id, 'SelfRoles')
+    self_roles = cmd.db.get_settings(str(message.guild.id), 'SelfRoles')
     self_role_id = None
     target_role = discord.utils.find(lambda x: x.name.lower() == role_qry.lower(), message.guild.roles)
 
@@ -21,7 +21,7 @@ async def togglerole(cmd, message, args):
         await message.channel.send(None, embed=out_content)
     
     for self_role in self_roles:
-        if self_role == target_role.id:
+        if self_role == target_role.id or self_role == target_role.name:
             self_role_id = target_role.id
             break
         
