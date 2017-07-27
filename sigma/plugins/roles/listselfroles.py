@@ -8,7 +8,7 @@ async def listselfroles(cmd, message, args):
     
     for srv_role in message.guild.roles:
         for role in self_roles:
-            if role == srv_role.id:
+            if role == srv_role.id or role == srv_role.name:
                 role_list.append(srv_role.name)
     
     if role_list == '':
