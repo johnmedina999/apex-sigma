@@ -30,7 +30,7 @@ async def delselfrole(cmd, message, args):
         cmd.db.set_settings(str(message.guild.id), 'SelfRoles', [])
         self_roles = []
     
-    if target_role.id not in self_roles and target_role.id not in self_roles:
+    if target_role.id not in self_roles and target_role.name not in self_roles:
         out_content = discord.Embed(type='rich', color=0xFF9900, title='⚠ Error')
         out_content.add_field(name='Role Not Self Assignable', value='I was unable to find **' + role_qry + '** in the list of self assignable roles.')
         await message.channel.send(None, embed=out_content)
