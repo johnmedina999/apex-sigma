@@ -6,7 +6,7 @@ async def warns(cmd, message, args):
     
     try: warned_users = cmd.db.get_settings(message.guild.id, 'WarnedUsers')
     except KeyError:
-        cmd.db.set_settings(message.guild.id, 'WarnedUsers', {})
+        cmd.db.set_settings(str(message.guild.id), 'WarnedUsers', {})
         warned_users = {}
     
     if not check_man_msg(message.author, message.channel):

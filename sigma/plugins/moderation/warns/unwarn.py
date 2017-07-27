@@ -18,9 +18,9 @@ async def unwarn(cmd, message, args):
     target = message.mentions[0]
     target_id = str(target.id)
     
-    try: warned_users = cmd.db.get_settings(message.guild.id, 'WarnedUsers')
+    try: warned_users = cmd.db.get_settings(str(message.guild.id), 'WarnedUsers')
     except KeyError:
-        cmd.db.set_settings(message.guild.id, 'WarnedUsers', {})
+        cmd.db.set_settings(str(message.guild.id), 'WarnedUsers', {})
         warned_users = {}
     
     if target_id not in warned_users:
@@ -29,10 +29,10 @@ async def unwarn(cmd, message, args):
         return
 
     del warned_users[target_id]
-    cmd.db.set_settings(message.guild.id, 'WarnedUsers', warned_users)
+    cmd.db.set_settings(str(message.guild.id), 'WarnedUsers', warned_users)
        
     # Logging Part
-    try: log_channel_id = cmd.db.get_settings(message.guild.id, 'LoggingChannel')
+    try: log_channel_id = cmd.db.get_settings(str(message.guild.id), 'LoggingChannel')
     except: log_channel_id = None
     
     if log_channel_id:
