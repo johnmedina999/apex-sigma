@@ -7,6 +7,7 @@ Requires=mongod.service
 User=root
 Environment=LOGTARGET_JOURNAL=1
 Environment=SIGMA_HOME=/srv/apex-sigma
+Environment="PATH=/home/server/bin:/usr/local/bin:/usr/bin:/bin"
 WorkingDirectory=/srv/apex-sigma
 ExecStart=/srv/apex-sigma/run.sh
 Restart=always
