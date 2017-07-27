@@ -3,7 +3,7 @@
 
 async def listselfroles(cmd, message, args):
     
-    self_roles = cmd.db.get_settings(message.guild.id, 'SelfRoles')
+    self_roles = cmd.db.get_settings(str(message.guild.id), 'SelfRoles')
     role_list = []
     
     for srv_role in message.guild.roles:
