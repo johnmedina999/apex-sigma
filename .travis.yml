@@ -4,7 +4,7 @@ python:
   - "3.6-dev"
   - "nightly"
 
-install: pip install -r requirements.txt
+install: python install/install.py
 script: .ci/run_tests.sh
 services:
   - mongodb
