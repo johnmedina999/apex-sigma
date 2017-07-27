@@ -25,19 +25,23 @@ async def delselfrole(cmd, message, args):
         await message.channel.send(None, embed=out_content)
         return
 
-    try: self_roles = cmd.db.get_settings(message.guild.id, 'SelfRoles')
+    try: self_roles = cmd.db.get_settings(str(message.guild.id), 'SelfRoles')
     except:
-        cmd.db.set_settings(message.guild.id, 'SelfRoles', [])
+        cmd.db.set_settings(str(message.guild.id), 'SelfRoles', [])
         self_roles = []
     
-    if target_role.id not in self_roles:
+    if target_role.id not in self_roles and target_role.id not in self_roles:
         out_content = discord.Embed(type='rich', color=0xFF9900, title='⚠ Error')
         out_content.add_field(name='Role Not Self Assignable', value='I was unable to find **' + role_qry + '** in the list of self assignable roles.')
         await message.channel.send(None, embed=out_content)
         return
 
-    self_roles.remove(target_role.id)
-    cmd.db.set_settings(message.guild.id, 'SelfRoles', self_roles)
-        
+    if target_role.id in self_roles:
+        self_roles.remove(target_role.id)
+        cmd.db.set_settings(str(message.guild.id), 'SelfRoles', self_roles)
+    elif target_role.name in self_roles:
+        self_roles.remove(target_role.name)
+        cmd.db.set_settings(str(message.guild.id), 'SelfRoles', self_roles)
+
     out_content = discord.Embed(type='rich', color=0x66cc66, title='✅ Role **' + target_role.name + '** removed from the self assignable roles list.')
     await message.channel.send(None, embed=out_content)
