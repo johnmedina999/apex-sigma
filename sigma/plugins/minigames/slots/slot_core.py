@@ -19,10 +19,10 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
 
     # Spinnage
     if not_on_cd:
-        player_points = cmd.db.get_points(message.server, message.author)
-        if player_points < bet_amt:
+        player_points = cmd.db.get_points(message.author)
+        if player_points['Current'] < bet_amt:
             embed = discord.Embed(color=0xDB0000, title=':exclamation: Not Enough Points')
-            await cmd.bot.send_message(message.channel, None, embed=embed)
+            await message.channel.send(None, embed=embed)
             return
 
         cmd.db.add_stats('SlotsCount')
@@ -47,7 +47,7 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
         slot_view += '\n:arrow_forward: ' + res_1 + ' ' + res_2 + ' ' + res_3 + ' :arrow_backward:'
         slot_view += '\n:pause_button: ' + res_7 + ' ' + res_8 + ' ' + res_9 + ' :pause_button:'
         slot_embed.add_field(name='🎰 Slots are spinning...', value=slot_view)
-        slot_spinner = await cmd.bot.send_message(message.channel, None, embed=slot_embed)
+        slot_spinner = await message.channel.send(None, embed=slot_embed)
 
         spin_amt = random.randint(min_spins, max_spins)
         while rand_done < spin_amt:
@@ -67,7 +67,7 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
             slot_view += '\n:arrow_forward: ' + res_1 + ' ' + res_2 + ' ' + res_3 + ' :arrow_backward:'
             slot_view += '\n:pause_button: ' + res_7 + ' ' + res_8 + ' ' + res_9 + ' :pause_button:'
             slot_embed.set_field_at(0, name='🎰 Slots are spinning...', value=slot_view)
-            await cmd.bot.edit_message(slot_spinner, None, embed=slot_embed)
+            await slot_spinner.edit(embed=slot_embed)
 
         # Result Response
         if res_1 == res_2 == res_3:
@@ -78,20 +78,20 @@ async def spin_slots(cmd, message, bet_amt, symbols, min_spins=4, max_spins=8, s
             pts = 0
 
         if win:
-            cmd.db.add_points(message.server, message.author, pts)
+            cmd.db.add_points(message.guild, message.author, pts)
             slot_embed.set_field_at(0, name=':gem: You Won!', value=slot_view)
             slot_embed.set_footer(text='You won ' + str(pts) + ' points.')
-            await cmd.bot.edit_message(slot_spinner, None, embed=slot_embed)
+            await slot_spinner.edit(embed=slot_embed)
         else:
-            cmd.db.take_points(message.server, message.author, bet_amt)
+            cmd.db.take_points(message.guild, message.author, bet_amt)
             slot_embed.set_field_at(0, name=':bomb: You Lost...', value=slot_view)
             slot_embed.set_footer(text='You lost the ' + str(bet_amt) + ' points')
-            await cmd.bot.edit_message(slot_spinner, None, embed=slot_embed)
+            await slot_spinner.edit(embed=slot_embed)
     else:
         cd_timestamp = slot_back_data[message.author.id]
         current_time = arrow.utcnow().timestamp
         timeout_amt = cd_timestamp + 20 - current_time
 
         embed = discord.Embed(color=0xDB0000, title=':exclamation: You can\'t spin for another ' + str(timeout_amt) + ' seconds!')
-        await cmd.bot.send_message(message.channel, None, embed=embed)
+        await message.channel.send(None, embed=embed)
         return
