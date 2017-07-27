@@ -28,12 +28,20 @@ async def warn(cmd, message, args):
 
     target_id = str(target.id)
     if target_id in warned_users:
-        warn_data = {
-            'UserID': str(warned_users[target_id]['UserID']),
-            'Warns': warned_users[target_id]['Warns'] + 1,
-            'Reasons': warned_users[target_id]['Reasons'] + [warning_text],
-            'Timestamp': warned_users[target_id]['Timestamp'] + [str(arrow.utcnow().timestamp)]
-        }
+        try:
+            warn_data = {
+                'UserID': str(warned_users[target_id]['UserID']),
+                'Warns': warned_users[target_id]['Warns'] + 1,
+                'Reasons': warned_users[target_id]['Reasons'] + [warning_text],
+                'Timestamp': warned_users[target_id]['Timestamp'] + [str(arrow.utcnow().timestamp)]
+            }
+        except:
+            warn_data = {
+                'UserID': str(warned_users[target_id]['UserID']),
+                'Warns': warned_users[target_id]['Warns'] + 1,
+                'Reasons': warned_users[target_id]['Reasons'] + [warning_text],
+                'Timestamp': [str(warned_users[target_id]['Timestamp'])] + [str(arrow.utcnow().timestamp)]
+            }
     else:
         warn_data = {
             'UserID': str(target.id),

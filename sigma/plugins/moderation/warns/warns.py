@@ -49,7 +49,10 @@ async def warns(cmd, message, args):
         await message.channel.send(None, embed=embed)
         return
 
-    warns_data = [str(arrow.get(timestamp))+":  "+reason for timestamp,reason in zip(warned_users[target_id]['Timestamp'], warned_users[target_id]['Reasons'])]
+    try:
+        warns_data = [str(arrow.get(timestamp))+":  "+reason for timestamp,reason in zip(warned_users[target_id]['Timestamp'], warned_users[target_id]['Reasons'])]
+    except:
+        warns_data = [reason for reason in warned_users[target_id]['Reasons']]
     
     embed = discord.Embed(color=0x0099FF)    
     embed.add_field(name='ℹ ' + target.name + ' Was Warned For...', value='\n- ' + '\n- '.join(warns_data) + '\n')    
