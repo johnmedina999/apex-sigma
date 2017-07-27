@@ -10,9 +10,9 @@ async def autorole(cmd, message, args):
         await message.channel.send(None, embed=out_content)
         return
     
-    try: current_role = cmd.db.get_settings(message.guild.id, 'AutoRole')
+    try: current_role = cmd.db.get_settings(str(message.guild.id), 'AutoRole')
     except KeyError:
-        cmd.db.set_settings(message.guild.id, 'AutoRole', None)
+        cmd.db.set_settings(str(message.guild.id), 'AutoRole', None)
         current_role = None
     
     if not args:
@@ -31,7 +31,7 @@ async def autorole(cmd, message, args):
     role_qry = ' '.join(args)
     role_qry_low = role_qry.lower()
     if role_qry_low == 'disable':
-        cmd.db.set_settings(message.guild.id, 'AutoRole', None)
+        cmd.db.set_settings(str(message.guild.id), 'AutoRole', None)
         out_content = discord.Embed(type='rich', color=0x66CC66, title='✅ Auto Role Disabled and Cleaned.')
         await message.channel.send(None, embed=out_content)
         return
@@ -43,13 +43,13 @@ async def autorole(cmd, message, args):
         await message.channel.send(None, embed=out_content)
         return
 
-    if current_role == target_role.id:
+    if current_role == target_role.id or current_role == target_role.name:
         out_content = discord.Embed(type='rich', color=0xFF9900, title='⚠ Error')
         out_content.add_field(name='Present Role', value='This Role is already the Auto Role for this server.')
         await message.channel.send(None, embed=out_content)
         return
     
-    cmd.db.set_settings(message.guild.id, 'AutoRole', target_role.id)
+    cmd.db.set_settings(str(message.guild.id), 'AutoRole', target_role.id)
     out_content = discord.Embed(type='rich', color=0x33CC33)
     out_content.add_field(name='✅ Success', value='The role **' + role_qry + '** has been set as the Auto Role.')
     await message.channel.send(None, embed=out_content)
