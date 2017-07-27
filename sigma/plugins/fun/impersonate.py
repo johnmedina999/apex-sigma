@@ -41,6 +41,8 @@ async def impersonate(cmd, message, args):
     if not sentence: response = discord.Embed(color=0xDB0000, title='😖 I Couldn\'t think of anything...')
     else:
         sentence = ftfy.fix_text(sentence)
+        sentence = sentence.replace(".", ". ")
+
         response = discord.Embed(color=0x1ABC9C)
         response.set_author(name=target.name, icon_url=user_avatar(target))
         response.add_field(name='🤔 Something like...', value=f'```\n{sentence}\n```')
