@@ -13,3 +13,30 @@ commands:
     usage:   "{pfx:s}{cmd:s} AXAz0r 3"
     description:
       Generates a signature image with the users stats for osu.
+
+  - name:    listsubforum
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} 52"
+    description:
+      Lists topics in an osu! subforum
+
+  - name:    get_thread
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} 622834 4"
+    description:
+      Displays thread's OP or the post if specified
+
+events:
+  - name:    ot_feed
+    type:    ready
+    global:  true
+    enabled: true
+    pmable:  true
+    sfw:     true
+    description:
+      Tells when there is a new thread in osu's Off-Topic subforum
+
