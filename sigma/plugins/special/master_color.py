@@ -21,4 +21,4 @@ async def master_color(ev):
                 await master_color_role.edit(colour=discord.Colour.from_rgb(red, green, blue))
             except: pass
 
-        await asyncio.sleep(60000)
+        await asyncio.sleep(60)
