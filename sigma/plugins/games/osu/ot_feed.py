@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 async def ot_feed(ev):
 
     forum_id = "52"
-    check_topic_ids = [623174]
-    latest_topic_id = 623174
+    check_topic_ids = [623207]
+    latest_topic_id = 623207
 
     while True:
         for check_topic_id in check_topic_ids:

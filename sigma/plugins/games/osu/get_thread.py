@@ -17,7 +17,7 @@ async def display_thread(channel, args):
         await channel.send("Topic does not exist!")
         return
 
-    root = BeautifulSoup(page)
+    root = BeautifulSoup(page, "lxml")
 
     try:
         # Get relevant sections of the HTML
@@ -53,7 +53,7 @@ async def display_thread(channel, args):
     post_contents = [str(data).replace('\n','') for data in post_contents][0]
 
     post_contents = ''.join(post_contents)
-    root = BeautifulSoup(post_contents)
+    root = BeautifulSoup(post_contents, "lxml")
 
     # Process data
     root.div.unwrap()
@@ -125,7 +125,7 @@ async def display_thread(channel, args):
             root.select_one("div.bbcode-spoilerbox__body").unwrap()
         except: break
 
-    print(root)
+    #print(root)
    
     post_contents = root.text
     post_contents = post_contents[:1024]
