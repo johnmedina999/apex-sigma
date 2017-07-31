@@ -103,7 +103,7 @@ async def display_thread(channel, args):
 
     while True:
         try:
-            #root.img.insert_before(root.img['data-normal'])
+            root.img.insert_before(root.img['data-normal'] + " ")
             root.img.unwrap()
         except: break
 
