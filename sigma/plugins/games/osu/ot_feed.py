@@ -45,4 +45,4 @@ async def ot_feed(ev):
                         await channel.send("New topic id: " + str(check_topic_id))
                         await display_thread(channel, [str(check_topic_id)])
                 except:
-                    print("ERROR displaying post! Topic id: " + str(check_topic_id))
+                   ev.log("[ ot_feed ] ERROR displaying post! Topic id: " + str(check_topic_id))
