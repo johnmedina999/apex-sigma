@@ -17,10 +17,15 @@ async def ot_feed(ev):
             await asyncio.sleep(5) 
             
             # Request website data
-            subforum_url = "https://osu.ppy.sh/community/forums/topics/" + str(check_topic_id)
-            async with aiohttp.ClientSession() as session:
-                async with session.get(subforum_url) as data:
-                    page = await data.text()
+            try:
+                subforum_url = "https://osu.ppy.sh/community/forums/topics/" + str(check_topic_id)
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(subforum_url) as data:
+                        page = await data.text()
+            except asyncio.TimeoutError:
+                ev.log("[ ot_feed ] Timeout error: " + subforum_url)
+            except aiohttp.client_exceptions.ClientConnectorError:
+                ev.log("[ ot_feed ] Connect error: " + subforum_url)
         
             # If page is not found, the topic is either removed or not yet made
             # Add to the topic ids to check for in case it is not yet made and start over from the beggining of the last
