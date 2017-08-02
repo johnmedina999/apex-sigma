@@ -22,10 +22,8 @@ async def ot_feed(ev):
                 async with aiohttp.ClientSession() as session:
                     async with session.get(subforum_url) as data:
                         page = await data.text()
-            except asyncio.TimeoutError:
-                ev.log("[ ot_feed ] Timeout error: " + subforum_url)
-            except aiohttp.client_exceptions.ClientConnectorError:
-                ev.log("[ ot_feed ] Connect error: " + subforum_url)
+            except Exception as e:
+                ev.log.error("[ ot_feed ] Exception: " + str(e))
         
             # If page is not found, the topic is either removed or not yet made
             # Add to the topic ids to check for in case it is not yet made and start over from the beggining of the last
@@ -45,4 +43,4 @@ async def ot_feed(ev):
                         await channel.send("New topic id: " + str(check_topic_id))
                         await display_thread(channel, [str(check_topic_id)])
                 except:
-                   ev.log("[ ot_feed ] ERROR displaying post! Topic id: " + str(check_topic_id))
+                   ev.log.error("[ ot_feed ] ERROR displaying post! Topic id: " + str(check_topic_id))
