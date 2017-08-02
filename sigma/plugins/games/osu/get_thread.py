@@ -133,7 +133,8 @@ async def display_thread(channel, args):
     # Post data
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
     embed.set_author(name=post_authors[0], icon_url=post_avatars[0], url=post_ath_urls[0])
-    embed.add_field(name='___________', value=post_contents, inline=True)
+    if len(post_contents) != 0: 
+        embed.add_field(name='___________', value=post_contents, inline=True)
     embed.set_footer(text=post_dates[0])
     await channel.send(None, embed=embed)
 
