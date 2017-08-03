@@ -111,6 +111,18 @@ async def display_thread(cmd, channel, args):
             emoji.unwrap()
         except: break
 
+    while True:
+        try:
+            
+            try: # For any missed emoji
+                if root.img['class'] == ['smiley']: 
+                    cmd.log.warning("[ get_thread ] Smiley not handled: " + root.img)
+                    root.img.unwrap()
+                    continue
+            except: pass
+
+            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'] + " ")
+            elif root.img['src']:       root.img.insert_before(root.img['src'] + " ")
             root.img.unwrap()
         except: break
 
