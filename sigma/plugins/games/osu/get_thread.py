@@ -103,7 +103,14 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try:
-            root.img.insert_before(root.img['data-normal'] + " ")
+            emoji = root.select_one("img.smiley")
+            if emoji['title'] == 'smile': emoji.insert_after(':smile:')
+            if emoji['title'] == 'wink': emoji.insert_after(':wink:')
+            if emoji['title'] == 'Grin': emoji.insert_after(':grin:')
+            if emoji['title'] == 'cry': emoji.insert_after(':cry:')
+            emoji.unwrap()
+        except: break
+
             root.img.unwrap()
         except: break
 
