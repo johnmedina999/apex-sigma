@@ -3,7 +3,7 @@ import aiohttp
 import re
 from bs4 import BeautifulSoup
 
-async def display_thread(channel, args):
+async def display_thread(cmd, channel, args):
 
     thread_id = args[0]
 
@@ -42,7 +42,7 @@ async def display_thread(channel, args):
 
     except:
         await channel.send("Something went wrong! Contact one of the bot devs.")
-        print(topic_url + " is no longer parsable :(")
+        cmd.log.error("[ get_thread ] " + topic_url + " is no longer parsable :(")
         return
 
     # Sanitize data
@@ -147,5 +147,5 @@ async def get_thread(cmd, message, args):
         await message.channel.send(cmd.help())
         return
 
-    await display_thread(message.channel, args)
+    await display_thread(cmd, message.channel, args)
 
