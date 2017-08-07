@@ -120,8 +120,10 @@ async def display_thread(cmd, channel, args):
                     continue
             except: pass
 
-            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'] + " ")
-            elif root.img['src']:       root.img.insert_before(root.img['src'] + " ")
+            # Replace https with img so we can easily identify image links later on
+            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'].replace('https','img') + " ")
+            elif root.img['src']:       root.img.insert_before(root.img['src'].replace('https','img') + " ")
+
             root.img.unwrap()
         except: break
 
@@ -144,20 +146,49 @@ async def display_thread(cmd, channel, args):
         except: break
 
     #print(root)
-   
-    # TODO: An algorithm that doesn't chop up urls
-    post_contents = root.text
-    post_contents = [post_contents [part:part+1024] for part in range(0, len(post_contents ), 1024)]
 
-    # Post data
+    post_contents = root.text
+    links = [match.start() for match in re.finditer(re.escape("img://"), post_contents)]
+    link_end = 0
+    posts = []
+
+    # Compile embed contents
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
     embed.set_author(name=post_authors[0], icon_url=post_avatars[0], url=post_ath_urls[0])
-    for part in post_contents:
-        embed.add_field(name='___________', value=part, inline=False)
+    posts.append(embed)
+   
+    for link in links:
+        if len(post_contents[link_end:link].strip()) != 0:
+            embed = discord.Embed(type='rich', color=0x66CC66)
+            embed.description += post_contents[link_end:link]
+            posts.append(embed)
+
+        link_end = post_contents[link:].find(' ') + link
+        embed = discord.Embed(type='rich', color=0x66CC66)
+        embed.set_image(url=post_contents[link:link_end].replace('img','https'))
+        posts.append(embed)
+
+    embed = discord.Embed(type='rich', color=0x66CC66)
+    if len(post_contents[link_end:len(post_contents)].strip()) != 0:
+        embed.add_field(name='___________', value=post_contents[link_end:len(post_contents)], inline=False)
     embed.set_footer(text=post_dates[0])
-    await channel.send(None, embed=embed)
+    posts.append(embed)
+
+    # Split up fields in embed contents that are too long
+    for post in posts:
+        if len(post.fields) > 0:
+            if len(post.fields[0].value) > 1024:
+                split_posts = [post.fields[0].value[part:part+1024] for part in range(0, len(post.fields[0].value), 1024)]
+                post.remove_field(0)
+                for split in split_posts:
+                    post.add_field(name='___________', value=split, inline=False)
 
 
+    # TODO: Make sure links are intact during the splitting process
+
+    for post in posts:
+         await channel.send(None, embed=post)
+         await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
 
 async def get_thread(cmd, message, args):
