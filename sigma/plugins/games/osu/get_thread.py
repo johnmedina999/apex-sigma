@@ -47,7 +47,8 @@ async def display_thread(cmd, channel, args):
 
     # Sanitize data
     subforum_name = subforum_name.replace('\n', '')
-    topic_name    = topic_name.replace('\n', '')
+    topic_name    = topic_name.replace('\n', '').replace(']', '\]')
+    topic_url     = topic_url.replace(')', '\)')
 
     post_authors = [auth.replace('\n', '') for auth in post_authors]
     post_contents = [str(data).replace('\n','') for data in post_contents][0]
