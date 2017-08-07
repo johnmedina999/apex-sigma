@@ -129,6 +129,15 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try:
+            try: root.a.insert_before('[' + root.a.text.replace(']', '\]') + ']' + '(' + root.a['href'].replace(')', '\)') + ')')
+            except: pass
+
+            root.a.clear()
+            root.a.unwrap()
+        except: break
+
+    while True:
+        try:
             root.select_one("div.well").unwrap()
         except: break
 
