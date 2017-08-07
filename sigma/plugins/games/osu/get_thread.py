@@ -38,7 +38,6 @@ async def display_thread(cmd, channel, args):
         post_authors  = [auth.text for auth in post_authors]
         post_avatars  = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in post_avatars]
         post_dates    = [date.text for date in post_dates]
-        #post_contents = [data.text for data in post_contents]
 
     except:
         await channel.send("Something went wrong! Contact one of the bot devs.")
