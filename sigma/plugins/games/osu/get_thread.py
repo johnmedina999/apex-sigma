@@ -34,8 +34,8 @@ async def display_thread(cmd, channel, args):
 
         # Extract data from HTML
         subforum_name = [name.text for name in subforum_name][0]
+        topic_url     = [name['href'] for name in topic_name][0]
         topic_name    = [name.text for name in topic_name][0]
-
         post_authors  = [auth.text for auth in post_authors]
         post_avatars  = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in post_avatars]
         post_dates    = [date.text for date in post_dates]
@@ -164,6 +164,7 @@ async def display_thread(cmd, channel, args):
 
     # Compile embed contents
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
+    embed.url = topic_url
     embed.set_author(name=post_authors[0], icon_url=post_avatars[0], url=post_ath_urls[0])
     posts.append(embed)
    
