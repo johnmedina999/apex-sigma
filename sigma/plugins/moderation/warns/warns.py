@@ -33,7 +33,7 @@ async def warns(cmd, message, args):
         warn_user_list = []
         for key in warned_users:
             for member in message.guild.members:
-                if member.id == warned_users[key]['UserID']:
+                if str(member.id) == warned_users[key]['UserID']:
                     warn_user_list.append(f'{member.name}#{member.discriminator}')
         
         embed = discord.Embed(color=0x0099FF)
