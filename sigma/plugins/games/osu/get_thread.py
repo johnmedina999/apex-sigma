@@ -192,12 +192,22 @@ async def display_thread(cmd, channel, args):
 
     # Split up fields in embed contents that are too long
     for post in posts:
-        if len(post.fields) > 0:
-            if len(post.fields[0].value) > 1024:
-                split_posts = [post.fields[0].value[part:part+1024] for part in range(0, len(post.fields[0].value), 1024)]
-                post.remove_field(0)
-                for split in split_posts:
-                    post.add_field(name='___________', value=split, inline=False)
+        if len(post.fields) <= 0: continue
+        if len(post.fields[0].value) <= 1024: continue
+
+        split_posts = []
+        link_start = post.fields[0].value.find('http')
+        if link_start > 4:
+            valid_link_code = post.fields[0].value[link_start-1] == '(' and post.fields[0].value[link_start-2] == ']'
+            if valid_link_code:
+                link_end = post.fields[0].value[link_start:].find(')')
+
+            
+
+        split_posts = [post.fields[0].value[part:part+1024] for part in range(0, len(post.fields[0].value), 1024)]
+        post.remove_field(0)
+        for split in split_posts:
+            post.add_field(name='___________', value=split, inline=False)
 
 
     # TODO: Make sure links are intact during the splitting process
