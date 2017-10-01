@@ -194,6 +194,34 @@ async def display_thread(cmd, channel, args):
     for post in posts:
         if len(post.fields) <= 0: continue
         if len(post.fields[0].value) <= 1024: continue
+        
+
+        '''
+        1) Find next link:
+            Find "http"
+            valid if:
+                http_index - 1 = '[' and there is no '\' http_index - 2, 
+                http_index - 2 = ')' and there is no '\' http_index - 3, 
+                there is a '(' before http_index - 2 that doesn't have '\' before it, and
+                there is a ']' after http_index - 1  that doesn't have '\' before it:
+                    ???
+            start_of_link index = '(' before http_index - 2
+            end_of_link index = ']' after http_index - 1
+
+        2) If start_of_link index > 1024:
+                Add 0:1024 to new post
+                Substr original 0:1024
+                goto 1)
+            Else If end_of_link index > 1024:
+                If end_of_link - start_of_link > 1024: 
+                    Uh Oh!
+                Else: 
+                    Add 0:start_of_link to new post
+                    Substr original 0:start_of_link
+                    goto 1)
+            Else:
+                goto 1)
+        '''
 
         split_posts = []
         link_start = post.fields[0].value.find('http')
@@ -210,12 +238,44 @@ async def display_thread(cmd, channel, args):
             post.add_field(name='___________', value=split, inline=False)
 
 
+    # TODO: Post body now has bbcode class, so I can use that instead to get post contents
+    # TODO: img tags now just have img with no attributes
+    # TODO: forum links now are wrapped in "postlink" class
+
     # TODO: Make sure links are intact during the splitting process
+
+    # TODO: Threads to fix:
+    #   626754 - Error displaying post (due to change in HTML relating to forum links)
+    #   626684 - Chopped off formatted link
+    #   626705 - Random ** bold formatting markers
+    #   626710 - Collapsed text spoiler shows
+    #   626725 - Chopped off formatted link
+    #   627136 - Formatting error with URL
+    #   629614 - Token parser messes up link
+    #   629936 - markdown formatting error
 
     for post in posts:
          await channel.send(None, embed=post)
          await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
+    '''
+    post_list = []
+    new_lines = [match.start() for match in re.finditer(re.escape("\n"), post_contents)]
+
+    prev_new_line = 0
+    for new_line in new_lines:
+        if new_line - prev_new_line > 900:
+            post_list.append(post_contents[prev_new_line:new_line])
+            prev_new_line = new_line
+
+    post_contents = []
+    for post in post_list:            
+        if len(post) >= 1024: 
+            post_contents.append(post[0:512])
+            post_contents.append(post[512:len(post)])
+        else: 
+            post_contents.append(post)
+    '''
 
 async def get_thread(cmd, message, args):
 

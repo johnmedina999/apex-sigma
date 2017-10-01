@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 async def ot_feed(ev):
 
     forum_id = "52"
-    check_topic_ids = [623207]
-    latest_topic_id = 623207
+    check_topic_ids = [626754]
+    latest_topic_id = 626754
 
     while True:
         for check_topic_id in check_topic_ids:
@@ -38,10 +38,10 @@ async def ot_feed(ev):
 
                 OT_channels = [[channel for channel in guild.channels if channel.name == "ot-feed"][0] for guild in ev.bot.guilds]
 
-                try:
-                    for channel in OT_channels:
-                        await channel.send("New topic id: " + str(check_topic_id))
-                        await display_thread(ev, channel, [str(check_topic_id)])
-                        await channel.send("____________")
-                except:
-                   ev.log.error("[ ot_feed ] ERROR displaying post! Topic id: " + str(check_topic_id))
+                #try:
+                for channel in OT_channels:
+                    await channel.send("New topic id: " + str(check_topic_id))
+                    await display_thread(ev, channel, [str(check_topic_id)])
+                    await channel.send("____________")
+                #except:
+                #   ev.log.error("[ ot_feed ] ERROR displaying post! Topic id: " + str(check_topic_id))
