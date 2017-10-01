@@ -41,10 +41,12 @@ class PluginManager(object):
 
     def reload_plugin(self, pluginName):
         for plugin in self.plugins:
-            if plugin.name != pluginName: continue
-            try: plugin.reload_commands()
-            except Exception as e:
-                raise Exception(e)
+            if plugin.name == pluginName:
+                try: plugin.reload_commands()
+                except Exception as e:
+                    raise Exception(e)
+                return
+        raise Exception("Plugin not found")
 
     def get_plugins(self):
         pluginList = ""
