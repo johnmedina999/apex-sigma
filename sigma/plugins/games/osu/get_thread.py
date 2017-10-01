@@ -24,7 +24,7 @@ async def display_thread(cmd, channel, args):
         # Get relevant sections of the HTML
         subforum_name  = root.find_all(class_='page-mode-link--is-active')
         topic_name     = root.find_all(class_='link--white link--no-underline')
-        topic_contents = root.find_all(class_='forum-post')
+        topic_contents = root.find_all(class_='forum-post') # TODO: Use bbcode class instead
 
         post_authors  = [entry.find_all(class_='forum-post__username js-usercard')[0] for entry in topic_contents]
         post_ath_urls = [[avtr.get('href') for avtr in entry.find_all(class_='forum-post__username js-usercard')][0] for entry in topic_contents]
@@ -61,49 +61,49 @@ async def display_thread(cmd, channel, args):
     root.div.unwrap()
 
     while True:
-        try:
+        try: # Bold text
             root.strong.insert_before("**")
             root.strong.insert_after("**")
             root.strong.unwrap()
         except: break
 
     while True:
-        try:
+        try: # Next lines
             root.br.insert_before("\n")
             root.br.unwrap()
         except: break
 
     while True:
-        try:
+        try: # List indicator; ignore
             root.ol.unwrap0()
         except: break
 
     while True:
-        try:
+        try: # Can't do centered text in discord well; ignore
             root.center.unwrap()
         except: break
    
     while True:
-        try:
+        try: # List bullets
             root.li.insert_before("\n    ● ")
             root.li.unwrap()
         except: break
 
     while True:
-        try:
+        try: # Youtube video; Consider making this its own post if it's possible to embed like pictures
             root.iframe.insert_before(root.iframe['src'])
             root.iframe.unwrap()
         except: break
 
     while True:
-        try:
+        try: # Italic text
             root.em.insert_before('*')
             root.em.insert_after('*')
             root.em.unwrap()
         except: break
 
     while True:
-        try:
+        try: # Spoiler box arrow
             emoji = root.select_one("img.smiley")
             if emoji['title'] == 'smile': emoji.insert_after(':smile:')
             if emoji['title'] == 'wink': emoji.insert_after(':wink:')
@@ -113,7 +113,7 @@ async def display_thread(cmd, channel, args):
         except: break
 
     while True:
-        try:
+        try: # Images
             
             try: # For any missed emoji
                 if root.img['class'] == ['smiley']: 
@@ -130,7 +130,7 @@ async def display_thread(cmd, channel, args):
         except: break
 
     while True:
-        try:
+        try: # Add markdown for it to be a hyperlink
             try: root.a.insert_before('[' + root.a.text.replace(']', '\]') + ']' + '(' + root.a['href'].replace(')', '\)') + ')')
             except: pass
 
@@ -175,6 +175,7 @@ async def display_thread(cmd, channel, args):
             embed.description += post_contents[link_end:link]
             posts.append(embed)
 
+        # Images are their own post
         link_end = post_contents[link:].find(' ') + link
         embed = discord.Embed(type='rich', color=0x66CC66)
         embed.set_image(url=post_contents[link:link_end].replace('img','https'))
