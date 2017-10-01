@@ -104,6 +104,19 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Spoiler box arrow
+            root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").insert_after('\n')
+            root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").unwrap()
+        except: break
+
+    while True:
+        try: # Spoiler box open/close thingy
+            root.select_one("div.bbcode-spoilerbox__body").insert_before(':\n ')
+            root.select_one("div.bbcode-spoilerbox__body").insert_after('\n')
+            root.select_one("div.bbcode-spoilerbox__body").unwrap()
+        except: break
+
+    while True:
+        try: # Emojis
             emoji = root.select_one("img.smiley")
             if emoji['title'] == 'smile': emoji.insert_after(':smile:')
             if emoji['title'] == 'wink': emoji.insert_after(':wink:')
@@ -143,18 +156,8 @@ async def display_thread(cmd, channel, args):
             root.select_one("div.well").unwrap()
         except: break
 
-    while True:
-        try:
-            root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").insert_after('\n\n')
-            root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").unwrap()
-        except: break
+    # TODO: Consider doing user quotes in code blocks. Not sure how nested quotes will do though
 
-    while True:
-        try:
-            root.select_one("div.bbcode-spoilerbox__body").insert_before(': ')
-            root.select_one("div.bbcode-spoilerbox__body").insert_after('\n')
-            root.select_one("div.bbcode-spoilerbox__body").unwrap()
-        except: break
 
     #print(root)
 
