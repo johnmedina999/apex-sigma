@@ -5,7 +5,6 @@ import discord
 async def chucknorris(cmd, message, args):
     
     embed = discord.Embed(color=0x1abc9c)
-    cmd.db.add_stats('CancerCount')
     joke_url = 'https://api.chucknorris.io/jokes/random'
     
     async with aiohttp.ClientSession() as session:
