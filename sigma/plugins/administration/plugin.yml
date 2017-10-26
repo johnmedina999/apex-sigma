@@ -101,15 +101,6 @@ commands:
     description:
       Searches for a persons User ID and lists all servers that Sigma can see them on.
 
-  - name:    echo
-    global:  true
-    enabled: true
-    admin:   false
-    sfw:     true
-    usage:   "{pfx:s}{cmd:s} Hello world!"
-    description:
-      Repeats the given text.
-
   - name:    kill
     global:  true
     admin:   true
