@@ -28,7 +28,7 @@ commands:
     description:
       Takes away the inputted amount of minigame points from the mentioned user.
 
-  - name: announce
+  - name: announceglobal
     alts:
       - "ann"
     global:  true
