@@ -37,8 +37,8 @@ async def warn(cmd, message, args):
 
     target_id = str(target.id)
     if target_id in warned_users:
-        if warned_users[target_id]['Warns'] > 2:
-            out_content_local = discord.Embed(color=0xFF4400, title=f'⚠ {target.name} had 2 warnings.')
+        if warned_users[target_id]['Warns'] >= 2:
+            out_content_local = discord.Embed(color=0xFF4400, title=f'⚠ {target.name} had 3 warnings.')
             await message.channel.send(None, embed=out_content_local)
             await target.kick(reason=f'Kicked by {message.author.name}#{message.author.discriminator}.\n Has 3 or more warnings')
             return
