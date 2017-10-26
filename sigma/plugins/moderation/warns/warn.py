@@ -10,8 +10,13 @@ async def warn(cmd, message, args):
         out_content = discord.Embed(color=0xDB0000, title=':no_entry: Users With Kick Permissions Only.')
         await message.channel.send(None, embed=out_content)
         return
+
+    if not message.mentions:
+        response = discord.Embed(title='❗ No user targeted.', color=0xDB0000)
+        await message.channel.send(embed=response)
+        return
     
-    if not args or not message.mentions:
+    if not args:
         await message.channel.send(cmd.help()); 
         return
     
