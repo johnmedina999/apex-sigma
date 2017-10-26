@@ -101,6 +101,9 @@ def check_man_chan(user, channel):
 def check_man_srv(user, channel):
     return user.permissions_in(channel).manage_guild
 
+def check_mention_everyone(user, channel):
+    return user.permissions_in(channel).mention_everyone
+
 
 def check_permitted(self, user, channel, server):
     if not self.perm['sfw'] and not check_channel_nsfw(self.db, channel.id):
