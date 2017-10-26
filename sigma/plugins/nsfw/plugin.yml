@@ -118,7 +118,7 @@ commands:
 
   - name:    hentai
     global:  true
-    enabled: true
+    enabled: false
     sfw:     false
     usage:   "{pfx:s}{cmd:s}"
     description:
