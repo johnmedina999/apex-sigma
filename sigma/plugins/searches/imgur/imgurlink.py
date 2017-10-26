@@ -2,10 +2,17 @@ import discord
 import imgurpython
 
 from config import ImgurClientID, ImgurClientSecret
-
-imgur_client = imgurpython.ImgurClient(ImgurClientID, ImgurClientSecret)
+imgur_client = None
 
 async def imgurlink(cmd, message, args):
+    
+    try:
+        imgur_client = imgurpython.ImgurClient(ImgurClientID, ImgurClientSecret)
+    except Exception as e:
+        cmd.log.error(e)
+        await message.channel.send('Something went wrong! Contact the bot dev.')
+        return
+
     if message.attachments or args:
         if message.attachments:
             img_url = message.attachments[0].url
