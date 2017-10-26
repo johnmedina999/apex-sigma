@@ -10,14 +10,23 @@ async def warn(cmd, message, args):
         out_content = discord.Embed(color=0xDB0000, title=':no_entry: Users With Kick Permissions Only.')
         await message.channel.send(None, embed=out_content)
         return
+
+    if not message.mentions:
+        response = discord.Embed(title='❗ No user targeted.', color=0xDB0000)
+        await message.channel.send(embed=response)
+        return
     
-    if not args or not message.mentions:
+    if not args:
         await message.channel.send(cmd.help()); 
         return
     
     target = message.mentions[0]
+    if target.id == message.author.id:
+        response = discord.Embed(title='⛔ You can\'t warn yourself.', color=0xDB0000)
+        await message.channel.send(embed=response)
+        return
+
     warning_text = ' '.join(args).replace(target.mention, '')[1:]
-    
     if not warning_text or warning_text == '':
         warning_text = 'No Reason Given'
     
@@ -28,6 +37,12 @@ async def warn(cmd, message, args):
 
     target_id = str(target.id)
     if target_id in warned_users:
+        if warned_users[target_id]['Warns'] >= 2:
+            out_content_local = discord.Embed(color=0xFF4400, title=f'⚠ {target.name} had 3 warnings.')
+            await message.channel.send(None, embed=out_content_local)
+            await target.kick(reason=f'Kicked by {message.author.name}#{message.author.discriminator}.\n Has 3 or more warnings')
+            return
+
         try:
             warn_data = {
                 'UserID': str(warned_users[target_id]['UserID']),

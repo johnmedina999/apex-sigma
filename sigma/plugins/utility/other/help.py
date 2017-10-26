@@ -1,25 +1,44 @@
-﻿import discord
+import discord
 from config import Prefix, MainServerURL
 from sigma.core.command_alts import load_alternate_command_names
+import os
+import yaml
 
 alts = load_alternate_command_names()
 
 
 async def help(cmd, message, args):
-    
+
     cmd.db.add_stats('HelpCount')
     
     if not args:
-        help_out = discord.Embed(type='rich', title='❔ Help', color=0x1B6F5F)
-        help_out.set_author(name='Apex Sigma', url=MainServerURL, icon_url='https://i.imgur.com/WQbzk9y.png')
-        help_out.add_field(name='Website', value='[**LINK**](' + MainServerURL + ')')
-        help_out.add_field(name='Commands', value='[**LINK**](' + MainServerURL + 'commands)')
-        help_out.add_field(name='GitHub', value='[**LINK**](https://github.com/aurora-pro/apex-sigma)')
-        help_out.add_field(name='Official Server', value='[**LINK**](https://discordapp.com/invite/Ze9EfTd)')
-        help_out.add_field(name='Add Me', value=f'[**LINK**](https://discordapp.com/oauth2/authorize?client_id={cmd.bot.user.id}&scope=bot&permissions=8)')
-        help_out.set_footer(text=f'Example: {Prefix}help greetmsg', icon_url='https://i.imgur.com/f4TyYMr.png')
-        help_out.set_image(url='https://i.imgur.com/TRSdGni.png')
+        directory = 'sigma/plugins'
+        module_list = []
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file == 'plugin.yml':
+                    file_path = (os.path.join(root, file))
+                    with open(file_path) as plugin_file:
+                        plugin_data = yaml.safe_load(plugin_file)
+                        try:
+                            category = plugin_data['categories'][0]
+                            if category.title() not in module_list and category not in ['administration', 'special']:
+                                module_list.append(category.title())
+                        except:
+                            pass
+
+        help_out = discord.Embed(type='rich', title='❔Help❔', color=0x2cefe5)
+        
+        help_out.add_field(name=' Sickle\'s Module List', value='```yaml\n' + '\n'.join(module_list) + '\n```', inline=True)
+        help_out.add_field(name='Please submit bugs, issues, or suggestions here.', value='[**LINK**](https://github.com/abraker95/apex-sigma/issues)', inline=True)
+        help_out.add_field(name='Add me to your server!', value='[**LINK**](https://discordapp.com/oauth2/authorize?&client_id=290355925317976074&scope=bot&permissions=0)', inline=True)
+        
+        help_out.add_field(name='Sickle in its natural habitat', value='⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿\n'+'⠀⠀⠀⠀⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⣄ ⣠⠀⠀⠀⠀⠀⣿⣿⣿⣿\n'+'⠀⠀⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣿⣿⣿⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿\n'+'⣿⠋⠀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⣿⣿⠋⠈⠀⠀⠀⠀⠀⠀⠀⠙⣿\n'+'⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈\n'+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠈', inline=True)
+        help_out.set_footer(text=f'Use {Prefix}commands <module> to get a list of commands available in that module.\n Use {Prefix}help <command> to get a description about the command usage.')
+        help_out.set_image(url='https://i.imgur.com/UOzJ31H.png')
+        
         await message.channel.send(None, embed=help_out)
+    
     else:
         qry = args[0].lower()
         if qry in alts:
