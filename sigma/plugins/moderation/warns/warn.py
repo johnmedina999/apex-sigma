@@ -21,8 +21,12 @@ async def warn(cmd, message, args):
         return
     
     target = message.mentions[0]
+    if target.id == message.author.id:
+        response = discord.Embed(title='⛔ You can\'t warn yourself.', color=0xDB0000)
+        await message.channel.send(embed=response)
+        return
+
     warning_text = ' '.join(args).replace(target.mention, '')[1:]
-    
     if not warning_text or warning_text == '':
         warning_text = 'No Reason Given'
     
