@@ -4,7 +4,6 @@
 async def echo(cmd, message, args):
     msg = ' '.join(args)
 
-    print(check_mention_everyone(message.author, message.channel))
     if not check_mention_everyone(message.author, message.channel):
         msg = msg.replace('@everyone', 'everyone')
 
