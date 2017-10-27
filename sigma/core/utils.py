@@ -63,3 +63,11 @@ def convert_hms(hms):
     hrs, mns, secs = hms.split(':')
     out_time = (int(hrs) * 3600) + (int(mns) * 60) + int(secs)
     return out_time
+
+
+def is_num(str):
+    try:
+        int(str)
+        return True
+    except:
+        return False

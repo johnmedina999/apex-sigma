@@ -32,3 +32,27 @@ def create_logger(name):
     logger.setLevel(logging.INFO)
 
     return logger
+
+def get_logs(last_amount):
+    with open(log_file) as fp:
+        return tail(fp, last_amount)
+
+# Thanks https://stackoverflow.com/a/13790289
+"""Tail a file and get X lines from the end"""
+def tail(f, lines=1, _buffer=4098):    
+    lines_found = []         # place holder for the lines found   
+    block_counter = -1       # block counter will be multiplied by buffer to get the block size from the end
+
+    # loop until we find X lines
+    while len(lines_found) < lines:
+        try:
+            f.seek(block_counter * _buffer, os.SEEK_END)
+        except IOError:      # either file is too small, or too many lines requested
+            f.seek(0)
+            lines_found = f.readlines()
+            break
+
+        lines_found = f.readlines()
+        block_counter -= 1   # decrement the block counter to get the next X bytes
+    
+    return lines_found[-lines:]
