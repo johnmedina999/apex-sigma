@@ -188,17 +188,6 @@ commands:
     description:
       Toggles if a server by the given ID is or is not an Aurora Project partner.
 
-  - name: logs
-    alts:
-      - "tpts"
-    global:  true
-    enabled: true
-    sfw:     true
-    admin:   true
-    usage:   "{pfx:s}{cmd:s} 15 4234235253232"
-    description:
-      Prints recent logs for the bot
-
 
 events:
   - name:    pmdetect
