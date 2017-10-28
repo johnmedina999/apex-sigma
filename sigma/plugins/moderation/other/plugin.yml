@@ -33,6 +33,18 @@ commands:
       Removes a custom command trigger used for custom commands from the server.
       Command requires the Manage Server permission.
 
+  - name: logs
+    alts:
+      - "bot_history"
+    global:  true
+    enabled: true
+    sfw:     true
+    admin:   true
+    usage:   "{pfx:s}{cmd:s} number back"
+    description:
+      Prints a number of logs for the bot starting from the amount going back
+      
+
 events:
   - name:    custom_command_detection
     type:    message
