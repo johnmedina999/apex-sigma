@@ -1,6 +1,7 @@
 import os
 from time import time
 from datetime import datetime as date
+from file_read_backwards import FileReadBackwards
 import logging
 
 log_fmt = '%(levelname)-8s %(asctime)s %(name)-20s %(message)s'
@@ -33,26 +34,16 @@ def create_logger(name):
 
     return logger
 
-def get_logs(last_amount):
-    with open(log_file) as fp:
-        return tail(fp, last_amount)
 
-# Thanks https://stackoverflow.com/a/13790289
-"""Tail a file and get X lines from the end"""
-def tail(f, lines=1, _buffer=4098):    
-    lines_found = []         # place holder for the lines found   
-    block_counter = -1       # block counter will be multiplied by buffer to get the block size from the end
+def get_logs(amount, offset=0, match=""):
+    lines = []
+    with FileReadBackwards(log_file, encoding="utf-8") as fp:
+        for line in fp:
+            offset -= 1
+            if(offset > 0): continue
 
-    # loop until we find X lines
-    while len(lines_found) < lines:
-        try:
-            f.seek(block_counter * _buffer, os.SEEK_END)
-        except IOError:      # either file is too small, or too many lines requested
-            f.seek(0)
-            lines_found = f.readlines()
-            break
+            if len(lines) >= amount: return lines
+            if match == "": lines.append(line)
+            elif line.find(match) != -1: lines.append(line)
 
-        lines_found = f.readlines()
-        block_counter -= 1   # decrement the block counter to get the next X bytes
-    
-    return lines_found[-lines:]
+    return lines

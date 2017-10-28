@@ -35,14 +35,14 @@ commands:
 
   - name: logs
     alts:
-      - "tpts"
+      - "bot_history"
     global:  true
     enabled: true
     sfw:     true
     admin:   true
-    usage:   "{pfx:s}{cmd:s} 15 4234235253232"
+    usage:   "{pfx:s}{cmd:s} number back"
     description:
-      Prints recent logs for the bot
+      Prints a number of logs for the bot starting from the amount going back
       
 
 events:
