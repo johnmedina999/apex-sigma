@@ -7,7 +7,7 @@ from config import permitted_id
 async def logs(cmd, message, args):
 
     bot_owner = message.author.id in permitted_id
-    if not check_admin(message.author, message.channel) or not bot_owner:
+    if not check_admin(message.author, message.channel) and not bot_owner:
         response = discord.Embed(title='⛔ Unpermitted. Server Admin or Bot Owner Only.', color=0xDB0000)
         await message.channel.send(embed=response)
         return
