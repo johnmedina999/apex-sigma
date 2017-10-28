@@ -1,6 +1,7 @@
 import os
 from time import time
 from datetime import datetime as date
+from file_read_backwards import FileReadBackwards
 import logging
 
 log_fmt = '%(levelname)-8s %(asctime)s %(name)-20s %(message)s'
@@ -32,3 +33,17 @@ def create_logger(name):
     logger.setLevel(logging.INFO)
 
     return logger
+
+
+def get_logs(amount, offset=0, match=""):
+    lines = []
+    with FileReadBackwards(log_file, encoding="utf-8") as fp:
+        for line in fp:
+            offset -= 1
+            if(offset > 0): continue
+
+            if len(lines) >= amount: return lines
+            if match == "": lines.append(line)
+            elif line.find(match) != -1: lines.append(line)
+
+    return lines
