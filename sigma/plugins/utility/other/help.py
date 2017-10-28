@@ -1,8 +1,6 @@
 import discord
 from config import Prefix, MainServerURL
 from sigma.core.command_alts import load_alternate_command_names
-import os
-import yaml
 
 alts = load_alternate_command_names()
 
