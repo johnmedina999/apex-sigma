@@ -24,5 +24,5 @@ async def commands(cmd, message, args):
         return
     
     embed_to_channel = discord.Embed(color=0x1abc9c)
-    embed_to_channel.add_field(name='Sickle\'s Commands In ' + module_group.title(), value='```yaml\n' + ', '.join(command_list) + '\n```')
+    embed_to_channel.add_field(name='Sickle\'s commands in ' + module_group.title(), value='```yaml\n' + ', '.join(command_list) + '\n```')
     await message.channel.send(None, embed=embed_to_channel)
