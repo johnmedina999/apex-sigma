@@ -237,15 +237,14 @@ async def display_thread(cmd, channel, args):
     # TODO: forum links now are wrapped in "postlink" class
 
     # TODO: Threads to fix:
-    #   626754 - Error displaying post (due to change in HTML relating to forum links)
-    #   626684 - Chopped off formatted link
-    #   626705 - Random ** bold formatting markers
+    #   626816 - Got stuck
+    #   626799 - Something wrong with this
+    #   626763 - Exceeded discord length limit
+    #   626684 - Can maybe be split up less
     #   626710 - Collapsed text spoiler shows
-    #   626725 - Chopped off formatted link
-    #   627136 - Formatting error with URL
-    #   629614 - Token parser messes up link
-    #   629936 - markdown formatting error
+    #   627136 - Formatting error with URL; Got stuck
 
+    # Post everything to discord
     for post in posts:
          await channel.send(None, embed=post)
          await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
