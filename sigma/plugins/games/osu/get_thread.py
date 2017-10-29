@@ -132,15 +132,15 @@ async def display_thread(cmd, channel, args):
             except: pass
 
             # Replace https with img so we can easily identify image links later on
-            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'].replace('https','img') + " ")
-            elif root.img['src']:       root.img.insert_before(root.img['src'].replace('https','img') + " ")
+            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'].replace('http','img') + "\x03")
+            elif root.img['src']:       root.img.insert_before(root.img['src'].replace('http','img') + "\x03")
 
             root.img.unwrap()
         except: break
 
     while True:
         try: # Add markdown for it to be a hyperlink
-            try: root.a.insert_before('[' + root.a.text.replace(']', '\]') + ']' + '(' + root.a['href'].replace(')', '\)') + ')')
+            try: root.a.insert_before('[' + root.a.text.replace(']', '\]') + ']' + '(' + root.a['href'].replace(')', '\)') + ')\x03')
             except: pass
 
             root.a.clear()
@@ -154,91 +154,87 @@ async def display_thread(cmd, channel, args):
 
     # TODO: Consider doing user quotes in code blocks. Not sure how nested quotes will do though
 
-
-    #print(root)
-
-    post_contents = root.text
-    links = [match.start() for match in re.finditer(re.escape("img://"), post_contents)]
-    link_end = 0
-    posts = []
-
     # Compile embed contents
+    post_contents = root.text
+    posts = []; beg = 0; end = min(len(post_contents), beg + 1900)
+
+    # Topic Header
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
     embed.url = topic_url
     embed.set_author(name=post_authors[0], icon_url=post_avatars[0], url=post_ath_urls[0])
     posts.append(embed)
-   
-    for link in links:
-        if len(post_contents[link_end:link].strip()) != 0:
-            embed = discord.Embed(type='rich', color=0x66CC66)
-            embed.description += post_contents[link_end:link]
-            posts.append(embed)
 
-        # Images are their own post
-        link_end = post_contents[link:].find(' ') + link
+    '''
+    # TODO: The special searches look for last thing within range and split posts regardless of whether more can fit
+    '''
+    # Split up fields in embed contents that are too long
+    while True:
+        idx = -1; state = 7
+
+        if idx == -1:   # find first img
+            idx = post_contents.find('img://', beg, end)    
+            state = 1
+
+        if idx == -1:   # find first img
+            idx = post_contents.find('imgs://', beg, end)   
+            state = 2
+
+        if idx == -1:   # find last link
+            idx = post_contents.rfind('http://', beg, end)  
+            state = 3
+
+        if idx == -1:   # find last link
+            idx = post_contents.rfind('https://', beg, end) 
+            state = 4
+
+        if idx == -1:   # find last newline
+            idx = post_contents.rfind('\n', beg, end)      
+            state = 5
+
+        if idx == -1:   # find last space
+            idx = post_contents.rfind(' ', beg, end)        
+            state = 6
+
+#        print("state: " + str(state) + "  beg: " + str(beg) + "  idx: " + str(idx) + "  end: " + str(end) + "  len: " +  str(len(post_contents)) + "  thread: " + str(thread_id))
+#        input()
+
+        # if it's an image, get everything prior first to then get just the image
+        if state <= 2 and beg != idx: 
+            end = idx; continue
+
+        # The \x03 is used to indicate the end of a link. If link is too big, get everything prior to it first
+        if state <= 4:
+            end_link = post_contents.find('\x03', idx, end)
+            if end_link >= 2000: end = idx; continue
+            idx = end_link
+
         embed = discord.Embed(type='rich', color=0x66CC66)
-        embed.set_image(url=post_contents[link:link_end].replace('img','https'))
+        
+        if state <= 2: embed.set_image(url=post_contents[beg:idx].replace('img','http'))  # process img
+        elif state <= 4: embed.description = post_contents[beg:idx]                       # process link
+        else: embed.description = post_contents[beg:end]                                  # process normal text
+        
         posts.append(embed)
 
-    embed = discord.Embed(type='rich', color=0x66CC66)
-    if len(post_contents[link_end:len(post_contents)].strip()) != 0:
-        embed.add_field(name='___________', value=post_contents[link_end:len(post_contents)], inline=False)
-    embed.set_footer(text=post_dates[0])
-    posts.append(embed)
-
-    # Split up fields in embed contents that are too long
-    for post in posts:
-        if len(post.fields) <= 0: continue
-        if len(post.fields[0].value) <= 1024: continue
+#        print("beg: " + str(beg) + " -> " + str(idx))
+#        print("end: " + str(end) + " -> " + str(min(len(post_contents), beg + 1900)))
         
+        # If search found nothing of interest, then we can take the rest of the post
+        # Otherwise, continue off from the end of the previous point of interest
+        if idx == -1: beg = end
+        else: beg = idx + 1
 
-        '''
-        1) Find next link:
-            Find "http"
-            valid if:
-                http_index - 1 = '[' and there is no '\' http_index - 2, 
-                http_index - 2 = ')' and there is no '\' http_index - 3, 
-                there is a '(' before http_index - 2 that doesn't have '\' before it, and
-                there is a ']' after http_index - 1  that doesn't have '\' before it:
-                    ???
-            start_of_link index = '(' before http_index - 2
-            end_of_link index = ']' after http_index - 1
+        # if this is true, then it printed the rest of the stuff
+        if state >= 5 and end == len(post_contents): break
+        
+        # update the end; split it up by 1900 characters or the size of the post, whatev is smaller
+        end = min(len(post_contents), beg + 1900)
 
-        2) If start_of_link index > 1024:
-                Add 0:1024 to new post
-                Substr original 0:1024
-                goto 1)
-            Else If end_of_link index > 1024:
-                If end_of_link - start_of_link > 1024: 
-                    Uh Oh!
-                Else: 
-                    Add 0:start_of_link to new post
-                    Substr original 0:start_of_link
-                    goto 1)
-            Else:
-                goto 1)
-        '''
-
-        split_posts = []
-        link_start = post.fields[0].value.find('http')
-        if link_start > 4:
-            valid_link_code = post.fields[0].value[link_start-1] == '(' and post.fields[0].value[link_start-2] == ']'
-            if valid_link_code:
-                link_end = post.fields[0].value[link_start:].find(')')
-
-            
-
-        split_posts = [post.fields[0].value[part:part+1024] for part in range(0, len(post.fields[0].value), 1024)]
-        post.remove_field(0)
-        for split in split_posts:
-            post.add_field(name='___________', value=split, inline=False)
-
-
-    # TODO: Post body now has bbcode class, so I can use that instead to get post contents
+        # Nothing to do if we are going to search an empty string
+        if beg == end: break
+        
     # TODO: img tags now just have img with no attributes
     # TODO: forum links now are wrapped in "postlink" class
-
-    # TODO: Make sure links are intact during the splitting process
 
     # TODO: Threads to fix:
     #   626754 - Error displaying post (due to change in HTML relating to forum links)
@@ -254,24 +250,6 @@ async def display_thread(cmd, channel, args):
          await channel.send(None, embed=post)
          await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
-    '''
-    post_list = []
-    new_lines = [match.start() for match in re.finditer(re.escape("\n"), post_contents)]
-
-    prev_new_line = 0
-    for new_line in new_lines:
-        if new_line - prev_new_line > 900:
-            post_list.append(post_contents[prev_new_line:new_line])
-            prev_new_line = new_line
-
-    post_contents = []
-    for post in post_list:            
-        if len(post) >= 1024: 
-            post_contents.append(post[0:512])
-            post_contents.append(post[512:len(post)])
-        else: 
-            post_contents.append(post)
-    '''
 
 async def get_thread(cmd, message, args):
 
