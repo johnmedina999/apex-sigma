@@ -51,11 +51,10 @@ async def display_thread(cmd, channel, args):
     topic_name    = topic_name.replace('\n', '').replace(']', '\]')
     topic_url     = topic_url.replace(')', '\)')
     post_authors = [auth.replace('\n', '') for auth in post_authors]
-
-    post_contents = ''.join(post_contents)
-    root = BeautifulSoup(post_contents, "lxml")
+    post_contents = str(post_contents).replace("*", "\*")
 
     # Process data
+    root = BeautifulSoup(post_contents, "lxml")
 
     while True:
         try: # Bold text
