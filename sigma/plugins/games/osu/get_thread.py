@@ -23,14 +23,14 @@ async def display_thread(cmd, channel, args):
     try:
         # Get relevant sections of the HTML
         subforum_name  = root.find_all(class_='page-mode-link--is-active')
-        topic_name     = root.find_all(class_='link--white link--no-underline')
+        topic_name     = root.find_all(class_='js-forum-topic-title--title')
         topic_contents = root.find_all(class_='forum-post') # TODO: Use bbcode class instead
 
         post_authors  = [entry.find_all(class_='forum-post__username js-usercard')[0] for entry in topic_contents]
         post_ath_urls = [[avtr.get('href') for avtr in entry.find_all(class_='forum-post__username js-usercard')][0] for entry in topic_contents]
         post_avatars  = [[avtr.get('style') for avtr in entry.find_all(class_='avatar avatar--forum')][0] for entry in topic_contents]
         post_dates    = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
-        post_contents = [entry.find_all(class_='forum-post-content')[0] for entry in topic_contents]
+        post_contents = root.find_all(class_='bbcode')[0]
 
         # Extract data from HTML
         subforum_name = [name.text for name in subforum_name][0]
@@ -45,20 +45,17 @@ async def display_thread(cmd, channel, args):
         cmd.log.error("[ get_thread ] " + topic_url + " is no longer parsable :(")
         return
 
+
     # Sanitize data
     subforum_name = subforum_name.replace('\n', '')
     topic_name    = topic_name.replace('\n', '').replace(']', '\]')
     topic_url     = topic_url.replace(')', '\)')
-
     post_authors = [auth.replace('\n', '') for auth in post_authors]
-    post_contents = [str(data).replace('\n','') for data in post_contents][0]
 
     post_contents = ''.join(post_contents)
     root = BeautifulSoup(post_contents, "lxml")
 
     # Process data
-    root.div.unwrap()
-    root.div.unwrap()
 
     while True:
         try: # Bold text
