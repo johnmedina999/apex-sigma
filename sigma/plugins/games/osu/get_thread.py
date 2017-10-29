@@ -71,7 +71,7 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # List indicator; ignore
-            root.ol.unwrap0()
+            root.ol.unwrap()
         except: break
 
     while True:
