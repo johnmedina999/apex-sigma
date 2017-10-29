@@ -34,7 +34,7 @@ async def listsubforum(cmd, message, args):
         topic_lastTime = [time.text for time in topic_lastTime]
     except:
          await message.channel.send("Something went wrong! Contact one of the bot devs.")
-         print(subforum_url + " is no longer parsable :(")
+         cmd.log.error("[ ot_feed ] " + subforum_url + " is no longer parsable :(")
          return
 
     # Validate to make sure everything matches up as expected
