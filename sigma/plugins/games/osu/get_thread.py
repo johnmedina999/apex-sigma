@@ -156,7 +156,8 @@ async def display_thread(cmd, channel, args):
 
     # Compile embed contents
     post_contents = root.text
-    posts = []; beg = 0; end = min(len(post_contents), beg + 1900)
+    buffer_size = 2048
+    posts = []; beg = 0
 
     # Topic Header
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
@@ -164,74 +165,105 @@ async def display_thread(cmd, channel, args):
     embed.set_author(name=post_authors[0], icon_url=post_avatars[0], url=post_ath_urls[0])
     posts.append(embed)
 
-    '''
-    # TODO: The special searches look for last thing within range and split posts regardless of whether more can fit
-    '''
-    # Split up fields in embed contents that are too long
+    # Process posts. Need to split them up due to discord lenth limits
     while True:
-        idx = -1; state = 7
-
-        if idx == -1:   # find first img
-            idx = post_contents.find('img://', beg, end)    
-            state = 1
-
-        if idx == -1:   # find first img
-            idx = post_contents.find('imgs://', beg, end)   
-            state = 2
-
-        if idx == -1:   # find last link
-            idx = post_contents.rfind('http://', beg, end)  
-            state = 3
-
-        if idx == -1:   # find last link
-            idx = post_contents.rfind('https://', beg, end) 
-            state = 4
-
-        if idx == -1:   # find last newline
-            idx = post_contents.rfind('\n', beg, end)      
-            state = 5
-
-        if idx == -1:   # find last space
-            idx = post_contents.rfind(' ', beg, end)        
-            state = 6
-
-#        print("state: " + str(state) + "  beg: " + str(beg) + "  idx: " + str(idx) + "  end: " + str(end) + "  len: " +  str(len(post_contents)) + "  thread: " + str(thread_id))
-#        input()
-
-        # if it's an image, get everything prior first to then get just the image
-        if state <= 2 and beg != idx: 
-            end = idx; continue
-
-        # The \x03 is used to indicate the end of a link. If link is too big, get everything prior to it first
-        if state <= 4:
-            end_link = post_contents.find('\x03', idx, end)
-            if end_link >= 2000: end = idx; continue
-            idx = end_link
+               
+        end = min(len(post_contents), beg + buffer_size)
+        if beg >= end: break
 
         embed = discord.Embed(type='rich', color=0x66CC66)
+        buffer = post_contents[beg:end]
+
+        #input()
+        #print("beg: " + str(beg) + "  end: " + str(end) + "  len: " +  str(len(post_contents)) + "  thread: " + str(thread_id))
         
-        if state <= 2: embed.set_image(url=post_contents[beg:idx].replace('img','http'))  # process img
-        elif state <= 4: embed.description = post_contents[beg:idx]                       # process link
-        else: embed.description = post_contents[beg:end]                                  # process normal text
-        
+        # If found, then check if there is something to record before that
+        idx = buffer.find('img://', 0, len(buffer))
+        if idx != -1:
+            #print("img")
+            if idx == 0:
+                idx = buffer.find('\x03', 0, end)
+                embed.set_image(url=buffer[0:idx].replace('img','http'))
+            else:
+                embed.description = buffer[0:idx]
+                posts.append(embed)
+
+            beg += idx
+            continue
+
+        # If found, then check if there is something to record before that
+        idx = buffer.find('imgs://', 0, len(buffer))
+        if idx != -1: 
+            #print("imgs")
+            if idx == 0: # Record img
+                idx = buffer.find('\x03', 0, end)
+                embed.set_image(url=buffer[0:idx].replace('imgs','https'))
+                #print(buffer[0:idx])
+                posts.append(embed)
+            else:
+                embed.description = buffer[0:idx]
+                posts.append(embed)
+            
+            beg += idx
+            continue
+
+        # If the post fits well below the lenth, just record it. 
+        # Otherwise, start looking at the best way to split it up
+        if len(buffer) < (buffer_size - 200):
+            #print("just recorded")
+            embed.description = buffer[0:len(buffer)]
+            posts.append(embed)
+            beg += len(buffer)
+            continue
+
+        # If found, then see if we can get the link's end. If not, get everything prior
+        idx = buffer.rfind('http://', 0, len(buffer))
+        if idx != -1: 
+            #print("http")
+            link_end = buffer.rfind('\x03', 0, end)
+            if link_end != -1: idx = link_end
+
+            embed.description = buffer[0:idx]
+            posts.append(embed)
+            beg += idx
+            continue
+
+        # If found, then see if we can get the link's end. If not, get everything prior
+        idx = buffer.rfind('https://', 0, len(buffer))
+        if idx != -1:
+            #print("https")
+            link_end = buffer.rfind('\x03', 0, end)
+            if link_end != -1: idx = link_end
+
+            embed.description = buffer[0:idx]
+            posts.append(embed)
+            beg += idx
+            continue
+
+        # If found, then record the range
+        idx = buffer.rfind('\n', 0, len(buffer))
+        if idx != -1:
+            #print("NL")
+            embed.description = buffer[0:idx]
+            posts.append(embed)
+            beg += idx + 1
+            continue
+
+        # If found, then record the range
+        idx = buffer.rfind(' ', 0, len(buffer))
+        if idx != -1: 
+            #print("space")
+            embed.description = buffer[0:idx]
+            posts.append(embed)
+            beg += idx + 1
+            continue
+
+        # If all else fails
+        #print("any")
+        embed.description = buffer
         posts.append(embed)
+        beg += len(buffer)
 
-#        print("beg: " + str(beg) + " -> " + str(idx))
-#        print("end: " + str(end) + " -> " + str(min(len(post_contents), beg + 1900)))
-        
-        # If search found nothing of interest, then we can take the rest of the post
-        # Otherwise, continue off from the end of the previous point of interest
-        if idx == -1: beg = end
-        else: beg = idx + 1
-
-        # if this is true, then it printed the rest of the stuff
-        if state >= 5 and end == len(post_contents): break
-        
-        # update the end; split it up by 1900 characters or the size of the post, whatev is smaller
-        end = min(len(post_contents), beg + 1900)
-
-        # Nothing to do if we are going to search an empty string
-        if beg == end: break
         
     # TODO: img tags now just have img with no attributes
     # TODO: forum links now are wrapped in "postlink" class
