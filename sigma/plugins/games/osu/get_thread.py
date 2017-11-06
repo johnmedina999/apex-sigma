@@ -30,21 +30,24 @@ async def display_thread(cmd, channel, args):
         posters        = root.find_all(class_='forum-post__info-panel')
 
         # Not all users have urls, avatars, etc in their profile (restricted users)
-        poster_ath_urls = []; poster_avatars = []; poster_names = []
+        poster_urls = []; poster_avatars = []; poster_names = []
         
         for poster in posters:
             try: poster_name = poster.find_all(class_='forum-post__username')[0]
-            except: pass
+            except: poster_name = ""
+            if not poster_name: poster_name = ""
 
             try: poster_url = poster.find_all(class_='forum-post__username')[0].get('href')
-            except: pass
+            except: poster_url = "https://osu.ppy.sh/users/-1"
+            if not poster_url: poster_url = "https://osu.ppy.sh/users/-1"
             
             try: poster_avatar = poster.find_all(class_='avatar avatar--forum')[0].get('style')
-            except: pass
+            except: poster_avatar = ""
+            if not poster_avatar: poster_avatar = ""
 
-            poster_names.append(poster_name) if poster_name else ""
-            poster_ath_urls.append(poster_url) if poster_url else poster_ath_urls.append("https://osu.ppy.sh/users/-1")
-            poster_avatars.append(poster_avatar) if poster_avatar else ""
+            poster_names.append(poster_name)
+            poster_urls.append(poster_url)
+            poster_avatars.append(poster_avatar)
 
         # Extract data from HTML
         post_contents = post_contents[0]
@@ -179,7 +182,7 @@ async def display_thread(cmd, channel, args):
     # Topic Header
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
     embed.url = topic_url
-    embed.set_author(name=poster_names[0], icon_url=poster_avatars[0], url=poster_ath_urls[0])
+    embed.set_author(name=poster_names[0], icon_url=poster_avatars[0], url=poster_urls[0])
     posts.append(embed)
 
     # Process posts. Need to split them up due to discord lenth limits
