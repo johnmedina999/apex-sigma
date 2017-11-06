@@ -28,7 +28,7 @@ async def display_thread(cmd, channel, args):
         post_authors  = [entry.find_all(class_='forum-post__username')[0] for entry in topic_contents]
         post_ath_urls = [[avtr.get('href') for avtr in entry.find_all(class_='forum-post__username')][0] for entry in topic_contents]
         post_dates    = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
-        post_contents = root.find_all(class_='bbcode')[0]
+        post_contents = root.find_all(class_='bbcode')
 
         # Not all users have avatars
         try: post_avatars  = [[avtr.get('style') for avtr in entry.find_all(class_='avatar avatar--forum')][0] for entry in topic_contents]
