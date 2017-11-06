@@ -25,11 +25,17 @@ async def display_thread(cmd, channel, args):
         subforum_name  = root.find_all(class_='page-mode-link--is-active')
         topic_name     = root.find_all(class_='js-forum-topic-title--title')
         topic_contents = root.find_all(class_='forum-post')
-        post_authors  = [entry.find_all(class_='forum-post__username')[0] for entry in topic_contents]
-        post_ath_urls = [[avtr.get('href') for avtr in entry.find_all(class_='forum-post__username')][0] for entry in topic_contents]
         post_dates    = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
         post_contents = root.find_all(class_='bbcode')
+        post_authors  = [entry.find_all(class_='forum-post__username')[0] for entry in topic_contents]
 
+        # Not all users have urls to their profile (restricted users)
+        post_ath_urls = []
+        for post in post_authors:
+            url = post.get('href')
+            post_ath_urls.append(url) if url else post_ath_urls.append("https://osu.ppy.sh/users/-1")
+
+        # TODO: If topic poster doesnt have avatar but next poster has, it might cause a mismatch
         # Not all users have avatars
         try: post_avatars  = [[avtr.get('style') for avtr in entry.find_all(class_='avatar avatar--forum')][0] for entry in topic_contents]
         except: post_avatars = [""]
