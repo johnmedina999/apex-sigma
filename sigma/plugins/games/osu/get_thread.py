@@ -24,21 +24,26 @@ async def display_thread(cmd, channel, args):
         # Get relevant sections of the HTML
         subforum_name  = root.find_all(class_='page-mode-link--is-active')
         topic_name     = root.find_all(class_='js-forum-topic-title--title')
-        topic_contents = root.find_all(class_='forum-post') # TODO: Use bbcode class instead
-
-        post_authors  = [entry.find_all(class_='forum-post__username js-usercard')[0] for entry in topic_contents]
-        post_ath_urls = [[avtr.get('href') for avtr in entry.find_all(class_='forum-post__username js-usercard')][0] for entry in topic_contents]
-        post_avatars  = [[avtr.get('style') for avtr in entry.find_all(class_='avatar avatar--forum')][0] for entry in topic_contents]
+        topic_contents = root.find_all(class_='forum-post')
+        post_authors  = [entry.find_all(class_='forum-post__username')[0] for entry in topic_contents]
+        post_ath_urls = [[avtr.get('href') for avtr in entry.find_all(class_='forum-post__username')][0] for entry in topic_contents]
         post_dates    = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
         post_contents = root.find_all(class_='bbcode')[0]
 
+        # Not all users have avatars
+        try: post_avatars  = [[avtr.get('style') for avtr in entry.find_all(class_='avatar avatar--forum')][0] for entry in topic_contents]
+        except: post_avatars = [""]
+        
         # Extract data from HTML
+        post_contents = post_contents[0]
         subforum_name = [name.text for name in subforum_name][0]
         topic_url     = [name['href'] for name in topic_name][0]
         topic_name    = [name.text for name in topic_name][0]
         post_authors  = [auth.text for auth in post_authors]
-        post_avatars  = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in post_avatars]
         post_dates    = [date.text for date in post_dates]
+
+        try: post_avatars  = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in post_avatars]
+        except: pass
 
     except:
         await channel.send("Something went wrong! Contact one of the bot devs.")
