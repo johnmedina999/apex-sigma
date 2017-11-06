@@ -25,30 +25,36 @@ async def display_thread(cmd, channel, args):
         subforum_name  = root.find_all(class_='page-mode-link--is-active')
         topic_name     = root.find_all(class_='js-forum-topic-title--title')
         topic_contents = root.find_all(class_='forum-post')
-        post_dates    = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
-        post_contents = root.find_all(class_='bbcode')
-        post_authors  = [entry.find_all(class_='forum-post__username')[0] for entry in topic_contents]
+        post_dates     = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
+        post_contents  = root.find_all(class_='forum-post-content ')
+        posters        = root.find_all(class_='forum-post__info-panel')
 
-        # Not all users have urls to their profile (restricted users)
-        post_ath_urls = []
-        for post in post_authors:
-            url = post.get('href')
-            post_ath_urls.append(url) if url else post_ath_urls.append("https://osu.ppy.sh/users/-1")
-
-        # TODO: If topic poster doesnt have avatar but next poster has, it might cause a mismatch
-        # Not all users have avatars
-        try: post_avatars  = [[avtr.get('style') for avtr in entry.find_all(class_='avatar avatar--forum')][0] for entry in topic_contents]
-        except: post_avatars = [""]
+        # Not all users have urls, avatars, etc in their profile (restricted users)
+        poster_ath_urls = []; poster_avatars = []; poster_names = []
         
+        for poster in posters:
+            try: poster_name = poster.find_all(class_='forum-post__username')[0]
+            except: pass
+
+            try: poster_url = poster.find_all(class_='forum-post__username')[0].get('href')
+            except: pass
+            
+            try: poster_avatar = poster.find_all(class_='avatar avatar--forum')[0].get('style')
+            except: pass
+
+            poster_names.append(poster_name) if poster_name else ""
+            poster_ath_urls.append(poster_url) if poster_url else poster_ath_urls.append("https://osu.ppy.sh/users/-1")
+            poster_avatars.append(poster_avatar) if poster_avatar else ""
+
         # Extract data from HTML
         post_contents = post_contents[0]
         subforum_name = [name.text for name in subforum_name][0]
         topic_url     = [name['href'] for name in topic_name][0]
         topic_name    = [name.text for name in topic_name][0]
-        post_authors  = [auth.text for auth in post_authors]
         post_dates    = [date.text for date in post_dates]
+        poster_names  = [auth.text for auth in poster_names]
 
-        try: post_avatars  = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in post_avatars]
+        try: poster_avatars = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in poster_avatars]
         except: pass
 
     except:
@@ -61,7 +67,7 @@ async def display_thread(cmd, channel, args):
     subforum_name = subforum_name.replace('\n', '')
     topic_name    = topic_name.replace('\n', '').replace(']', '\]')
     topic_url     = topic_url.replace(')', '\)')
-    post_authors = [auth.replace('\n', '') for auth in post_authors]
+    poster_names = [auth.replace('\n', '') for auth in poster_names]
     post_contents = str(post_contents).replace("*", "\*")
 
     # Process data
@@ -173,7 +179,7 @@ async def display_thread(cmd, channel, args):
     # Topic Header
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
     embed.url = topic_url
-    embed.set_author(name=post_authors[0], icon_url=post_avatars[0], url=post_ath_urls[0])
+    embed.set_author(name=poster_names[0], icon_url=poster_avatars[0], url=poster_ath_urls[0])
     posts.append(embed)
 
     # Process posts. Need to split them up due to discord lenth limits
