@@ -42,23 +42,21 @@ async def display_thread(cmd, channel, args):
             if not poster_url: poster_url = "https://osu.ppy.sh/users/-1"
             
             try: poster_avatar = poster.find_all(class_='avatar avatar--forum')[0].get('style')
-            except: poster_avatar = ""
-            if not poster_avatar: poster_avatar = ""
+            except: poster_avatar = "background-image: url('');"
+            if not poster_avatar: poster_avatar = "background-image: url('');"
 
             poster_names.append(poster_name)
             poster_urls.append(poster_url)
             poster_avatars.append(poster_avatar)
 
         # Extract data from HTML
-        post_contents = post_contents[0]
-        subforum_name = [name.text for name in subforum_name][0]
-        topic_url     = [name['href'] for name in topic_name][0]
-        topic_name    = [name.text for name in topic_name][0]
-        post_dates    = [date.text for date in post_dates]
-        poster_names  = [auth.text for auth in poster_names]
-
-        try: poster_avatars = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in poster_avatars]
-        except: pass
+        post_contents  = post_contents[0]
+        subforum_name  = [name.text for name in subforum_name][0]
+        topic_url      = [name['href'] for name in topic_name][0]
+        topic_name     = [name.text for name in topic_name][0]
+        post_dates     = [date.text for date in post_dates]
+        poster_names   = [auth.text for auth in poster_names]
+        poster_avatars = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in poster_avatars]
 
     except:
         await channel.send("Something went wrong! Contact one of the bot devs.")
