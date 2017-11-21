@@ -97,6 +97,13 @@ async def display_thread(cmd, channel, args):
         except: break
 
     while True:
+        try: # Heading 2
+            root.h2.insert_before('\n\n')
+            root.h2.insert_after('\n')
+            root.h2.unwrap()
+        except: break
+
+    while True:
         try: # List indicator; ignore
             root.ol.unwrap()
         except: break
