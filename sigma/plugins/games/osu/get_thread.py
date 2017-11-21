@@ -170,6 +170,7 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try:
+            root.select_one("div.well").insert_before('\n\n')
             root.select_one("div.well").unwrap()
         except: break
 
