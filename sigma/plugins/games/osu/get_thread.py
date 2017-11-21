@@ -111,7 +111,7 @@ async def display_thread(cmd, channel, args):
    
     while True:
         try: # List bullets
-            if root.strong.get_text():
+            if root.li.get_text():
                 root.li.insert_before('\n    ● ')
             root.li.unwrap()
         except: break
