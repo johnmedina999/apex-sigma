@@ -251,7 +251,7 @@ async def display_thread(cmd, channel, args):
                 embed.set_image(url=buffer[0:idx].replace('img','http'))
             else:
                 embed.description = buffer[0:idx].replace('\x03','').strip()
-                posts.append(embed)
+                if embed.description: posts.append(embed)
 
             beg += idx
             continue
@@ -267,7 +267,7 @@ async def display_thread(cmd, channel, args):
                 posts.append(embed)
             else:
                 embed.description = buffer[0:idx].replace('\x03','').strip()
-                posts.append(embed)
+                if embed.description: posts.append(embed)
             
             beg += idx
             continue
@@ -280,7 +280,7 @@ async def display_thread(cmd, channel, args):
             if link_end != -1: idx = link_end
 
             embed.description = buffer[0:idx].replace('vids','https').replace('\x03','').strip()
-            posts.append(embed)
+            if embed.description: posts.append(embed)
             beg += idx
             continue
 
@@ -289,7 +289,7 @@ async def display_thread(cmd, channel, args):
         if len(buffer) < (buffer_size - 200):
             #print("just recorded")
             embed.description = buffer[0:len(buffer)].replace('\x03','').strip()
-            posts.append(embed)
+            if embed.description: posts.append(embed)
             beg += len(buffer)
             continue
 
@@ -301,7 +301,7 @@ async def display_thread(cmd, channel, args):
             if link_end != -1: idx = link_end
 
             embed.description = buffer[0:idx].replace('\x03','').strip()
-            posts.append(embed)
+            if embed.description: posts.append(embed)
             beg += idx
             continue
 
@@ -313,7 +313,7 @@ async def display_thread(cmd, channel, args):
             if link_end != -1: idx = link_end
 
             embed.description = buffer[0:idx].replace('\x03','').strip()
-            posts.append(embed)
+            if embed.description: posts.append(embed)
             beg += idx
             continue
 
@@ -322,7 +322,7 @@ async def display_thread(cmd, channel, args):
         if idx != -1:
             #print("NL")
             embed.description = buffer[0:idx].replace('\x03','').strip()
-            posts.append(embed)
+            if embed.description: posts.append(embed)
             beg += idx + 1
             continue
 
@@ -331,14 +331,14 @@ async def display_thread(cmd, channel, args):
         if idx != -1: 
             #print("space")
             embed.description = buffer[0:idx].replace('\x03','').strip()
-            posts.append(embed)
+            if embed.description: posts.append(embed)
             beg += idx + 1
             continue
 
         # If all else fails
         #print("any")
         embed.description = buffer.replace('\x03','').strip()
-        posts.append(embed)
+        if embed.description: posts.append(embed)
         beg += len(buffer)
 
         
