@@ -68,8 +68,8 @@ async def display_thread(cmd, channel, args):
     subforum_name = subforum_name.replace('\n', '')
     topic_name    = topic_name.replace('\n', '').replace(']', '\]')
     topic_url     = topic_url.replace(')', '\)')
-    poster_names = [auth.replace('\n', '') for auth in poster_names]
-    post_contents = str(post_contents).replace("*", "\*")
+    poster_names  = [auth.replace('\n', '') for auth in poster_names]
+    post_contents = str(post_contents).replace('*', '\*')
 
     # Process data
     root = BeautifulSoup(post_contents, "lxml")
