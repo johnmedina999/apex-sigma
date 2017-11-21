@@ -106,8 +106,8 @@ async def display_thread(cmd, channel, args):
         except: break
 
     while True:
-        try: # Youtube video; Consider making this its own post if it's possible to embed like pictures
-            root.iframe.insert_before(root.iframe['src'])
+        try: # Replace https with vid so we can easily identify Youtube video links later on
+            root.iframe.insert_before(root.iframe['src'].replace('http','vid') + '\x03')
             root.iframe.unwrap()
         except: break
 
@@ -228,6 +228,17 @@ async def display_thread(cmd, channel, args):
             beg += idx
             continue
 
+        # If found, then see if we can get the link's end. If not, get everything prior
+        idx = buffer.rfind('vids://', 0, len(buffer))
+        if idx != -1:
+            #print("vids")
+            link_end = buffer.rfind('\x03', 0, end)
+            if link_end != -1: idx = link_end
+
+            embed.description = buffer[0:idx].replace('vids','https')
+            posts.append(embed)
+            beg += idx
+            continue
         # If the post fits well below the lenth, just record it. 
         # Otherwise, start looking at the best way to split it up
         if len(buffer) < (buffer_size - 200):
