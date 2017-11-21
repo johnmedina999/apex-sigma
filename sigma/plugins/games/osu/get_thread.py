@@ -124,7 +124,6 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Spoiler box arrow
-            root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").insert_after('\n')
             root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").unwrap()
         except: break
 
