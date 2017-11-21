@@ -116,7 +116,7 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Italic text
-            if root.strong.get_text():
+            if root.em.get_text():
                 root.em.insert_before('*')
                 root.em.insert_after('*')
             root.em.unwrap()
