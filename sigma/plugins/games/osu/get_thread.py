@@ -94,7 +94,10 @@ async def display_thread(cmd, channel, args):
         except: break
 
     while True:
-        try: # Can't do centered text in discord well; ignore
+        try: # Centered text
+            if root.center.get_text():
+                root.center.insert_before('\n')
+                root.center.insert_after('\n')
             root.center.unwrap()
         except: break
    
