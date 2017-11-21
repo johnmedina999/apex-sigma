@@ -83,6 +83,14 @@ async def display_thread(cmd, channel, args):
         except: break
 
     while True:
+        try: # Underline text
+            if root.u.get_text():
+                root.u.insert_before('__')
+                root.u.insert_after('__')
+            root.u.unwrap()
+        except: break
+
+    while True:
         try: # Next lines
             root.br.insert_before('\n')
             root.br.unwrap()
