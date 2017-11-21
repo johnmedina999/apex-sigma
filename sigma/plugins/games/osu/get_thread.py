@@ -76,8 +76,9 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Bold text
-            root.strong.insert_before("**")
-            root.strong.insert_after("**")
+            if root.strong.get_text():
+                root.strong.insert_before('**')
+                root.strong.insert_after('**')
             root.strong.unwrap()
         except: break
 
@@ -99,7 +100,8 @@ async def display_thread(cmd, channel, args):
    
     while True:
         try: # List bullets
-            root.li.insert_before("\n    ● ")
+            if root.strong.get_text():
+                root.li.insert_before('\n    ● ')
             root.li.unwrap()
         except: break
 
@@ -111,8 +113,9 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Italic text
-            root.em.insert_before('*')
-            root.em.insert_after('*')
+            if root.strong.get_text():
+                root.em.insert_before('*')
+                root.em.insert_after('*')
             root.em.unwrap()
         except: break
 
