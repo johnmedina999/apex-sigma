@@ -84,7 +84,7 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Next lines
-            root.br.insert_before("\n")
+            root.br.insert_before('\n')
             root.br.unwrap()
         except: break
 
@@ -153,8 +153,8 @@ async def display_thread(cmd, channel, args):
             except: pass
 
             # Replace https with img so we can easily identify image links later on
-            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'].replace('http','img') + "\x03")
-            elif root.img['src']:       root.img.insert_before(root.img['src'].replace('http','img') + "\x03")
+            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'].replace('http','img') + '\x03')
+            elif root.img['src']:       root.img.insert_before(root.img['src'].replace('http','img') + '\x03')
 
             root.img.unwrap()
         except: break
@@ -239,6 +239,7 @@ async def display_thread(cmd, channel, args):
             posts.append(embed)
             beg += idx
             continue
+
         # If the post fits well below the lenth, just record it. 
         # Otherwise, start looking at the best way to split it up
         if len(buffer) < (buffer_size - 200):
