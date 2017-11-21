@@ -75,22 +75,6 @@ async def display_thread(cmd, channel, args):
     root = BeautifulSoup(post_contents, "lxml")
 
     while True:
-        try: # Bold text
-            if root.strong.get_text():
-                root.strong.insert_before('**')
-                root.strong.insert_after('**')
-            root.strong.unwrap()
-        except: break
-
-    while True:
-        try: # Underline text
-            if root.u.get_text():
-                root.u.insert_before('__')
-                root.u.insert_after('__')
-            root.u.unwrap()
-        except: break
-
-    while True:
         try: # Next lines
             root.br.insert_before('\n')
             root.br.unwrap()
@@ -127,14 +111,6 @@ async def display_thread(cmd, channel, args):
         try: # Replace https with vid so we can easily identify Youtube video links later on
             root.iframe.insert_before(root.iframe['src'].replace('http','vid') + '\x03')
             root.iframe.unwrap()
-        except: break
-
-    while True:
-        try: # Italic text
-            if root.em.get_text():
-                root.em.insert_before('*')
-                root.em.insert_after('*')
-            root.em.unwrap()
         except: break
 
     while True:
@@ -178,11 +154,61 @@ async def display_thread(cmd, channel, args):
 
     while True:
         try: # Add markdown for it to be a hyperlink
-            try: root.a.insert_before('[' + root.a.text.replace(']', '\]') + ']' + '(' + root.a['href'].replace(')', '\)') + ')\x03')
+            try: root.a.insert_before('[' + root.a.text.replace('[', '\[').replace(']', '\]') + ']' +
+                                      '(' + root.a['href'].replace('(', '\(').replace(')', '\)') + ')\x03')
             except: pass
 
             root.a.clear()
             root.a.unwrap()
+        except: break
+
+# Italic/underline/bold processing needs to go after url processing (discord doesn't like [**text**](url), but will accept **[text](url)**)
+    while True:
+        try: # Bold text
+            text = root.strong.get_text()
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' **' + text[1:]
+                else:              text = '**' + text
+
+                if text[-1] == ' ': text = text[:-1] + '** '
+                else:               text = text + '**'
+                
+                root.strong.insert_before(text)
+            
+            root.strong.clear()
+            root.strong.unwrap()
+        except: break
+
+    while True:
+        try: # Underline text
+            text = root.u.get_text()
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' __' + text[1:]
+                else:              text = '__' + text
+
+                if text[-1] == ' ': text = text[:-1] + '__ '
+                else:               text = text + '__'
+                
+                root.u.insert_before(text)
+            
+            root.u.clear()
+            root.u.unwrap()
+        except: break
+    
+    while True:
+        try: # Italic text
+            text = root.em.get_text()
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' *' + text[1:]
+                else:              text = '*' + text
+
+                if text[-1] == ' ': text = text[:-1] + '* '
+                else:               text = text + '*'
+                
+                root.em.insert_before(text)
+            
+            root.em.clear()
+            root.em.unwrap()
         except: break
 
     while True:
