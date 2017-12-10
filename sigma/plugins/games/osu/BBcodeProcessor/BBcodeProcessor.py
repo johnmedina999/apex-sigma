@@ -18,6 +18,8 @@ class BBcodeProcessor():
         self.procEmoji(code)
         self.procImage(code)
         self.procHyperlink(code)
+        self.procQuoteHeader(code)
+        self.procBlockQuote(code)
         self.procBoldFormatting(code)
         self.procUnderlineFormatting(code)
         self.procDivWell(code)
@@ -143,6 +145,43 @@ class BBcodeProcessor():
 
                 code.a.clear()
                 code.a.unwrap()
+            except: break
+
+
+    def procQuoteHeader(self, code):
+        while True:
+            try: # Bold text
+                text = code.h4.get_text()
+                if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                    if text[0] == ' ': text = ' **' + text[1:]
+                    else:              text = '**' + text
+
+                    if text[-1] == ' ': text = text[:-1] + '** '
+                    else:               text = text + '**'
+                
+                    code.h4.insert_before(text + '\n')
+            
+                code.h4.clear()
+                code.h4.unwrap()
+            except: break
+
+
+    def procBlockQuote(self, code):
+        while True:
+            try:
+                text = ''
+                for child in list(code.blockquote.children):
+                    try:  text += child
+                    except:
+                        try: text += BBcodeProcessor().Process(str(child)).text
+                        except: break
+
+                text = ''.join(['**|**    ' + line + '\n' for line in text.split('\n')])
+                code.blockquote.insert_before(text + '\n')
+
+                code.blockquote.clear()
+                code.blockquote.unwrap()
+                
             except: break
 
 
