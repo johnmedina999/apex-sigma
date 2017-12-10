@@ -3,6 +3,8 @@ import aiohttp
 import asyncio
 import re
 from bs4 import BeautifulSoup
+from .BBcodeProcessor.BBcodeProcessor import BBcodeProcessor
+from .BBcodeProcessor.DiscordBBcodeCompiler import DiscordBBcodeCompiler
 
 async def display_thread(cmd, channel, args):
 
@@ -70,159 +72,12 @@ async def display_thread(cmd, channel, args):
     topic_url     = topic_url.replace(')', '\)')
     poster_names  = [auth.replace('\n', '') for auth in poster_names]
     post_contents = str(post_contents).replace('*', '\*')
+    # \TODO: sanitize the tokens used to identify images and links below
 
-    # Process data
-    root = BeautifulSoup(post_contents, "lxml")
-
-    while True:
-        try: # Next lines
-            root.br.insert_before('\n')
-            root.br.unwrap()
-        except: break
-
-    while True:
-        try: # Heading 2
-            root.h2.insert_before('\n\n')
-            root.h2.insert_after('\n')
-            root.h2.unwrap()
-        except: break
-
-    while True:
-        try: # List indicator; ignore
-            root.ol.unwrap()
-        except: break
-
-    while True:
-        try: # Centered text
-            if root.center.get_text():
-                root.center.insert_before('\n')
-                root.center.insert_after('\n')
-            root.center.unwrap()
-        except: break
-   
-    while True:
-        try: # List bullets
-            if root.li.get_text():
-                root.li.insert_before('\n    ● ')
-            root.li.unwrap()
-        except: break
-
-    while True:
-        try: # Replace https with vid so we can easily identify Youtube video links later on
-            root.iframe.insert_before(root.iframe['src'].replace('http','vid') + '\x03')
-            root.iframe.unwrap()
-        except: break
-
-    while True:
-        try: # Spoiler box arrow
-            root.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").unwrap()
-        except: break
-
-    while True:
-        try: # Spoiler box open/close thingy
-            root.select_one("div.bbcode-spoilerbox__body").insert_before(':\n ')
-            root.select_one("div.bbcode-spoilerbox__body").insert_after('\n')
-            root.select_one("div.bbcode-spoilerbox__body").unwrap()
-        except: break
-
-    while True:
-        try: # Emojis
-            emoji = root.select_one("img.smiley")
-            if emoji['title'] == 'smile': emoji.insert_after(':smile:')
-            if emoji['title'] == 'wink': emoji.insert_after(':wink:')
-            if emoji['title'] == 'Grin': emoji.insert_after(':grin:')
-            if emoji['title'] == 'cry': emoji.insert_after(':cry:')
-            emoji.unwrap()
-        except: break
-
-    while True:
-        try: # Images
-            
-            try: # For any missed emoji
-                if root.img['class'] == ['smiley']: 
-                    cmd.log.warning("[ get_thread ] Smiley not handled: " + root.img)
-                    root.img.unwrap()
-                    continue
-            except: pass
-
-            # Replace https with img so we can easily identify image links later on
-            if root.img['data-normal']: root.img.insert_before(root.img['data-normal'].replace('http','img') + '\x03')
-            elif root.img['src']:       root.img.insert_before(root.img['src'].replace('http','img') + '\x03')
-
-            root.img.unwrap()
-        except: break
-
-    while True:
-        try: # Add markdown for it to be a hyperlink
-            try: root.a.insert_before('[' + root.a.text.replace('[', '\[').replace(']', '\]') + ']' +
-                                      '(' + root.a['href'].replace('(', '\(').replace(')', '\)') + ')\x03')
-            except: pass
-
-            root.a.clear()
-            root.a.unwrap()
-        except: break
-
-# Italic/underline/bold processing needs to go after url processing (discord doesn't like [**text**](url), but will accept **[text](url)**)
-    while True:
-        try: # Bold text
-            text = root.strong.get_text()
-            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                if text[0] == ' ': text = ' **' + text[1:]
-                else:              text = '**' + text
-
-                if text[-1] == ' ': text = text[:-1] + '** '
-                else:               text = text + '**'
-                
-                root.strong.insert_before(text)
-            
-            root.strong.clear()
-            root.strong.unwrap()
-        except: break
-
-    while True:
-        try: # Underline text
-            text = root.u.get_text()
-            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                if text[0] == ' ': text = ' __' + text[1:]
-                else:              text = '__' + text
-
-                if text[-1] == ' ': text = text[:-1] + '__ '
-                else:               text = text + '__'
-                
-                root.u.insert_before(text)
-            
-            root.u.clear()
-            root.u.unwrap()
-        except: break
-    
-    while True:
-        try: # Italic text
-            text = root.em.get_text()
-            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                if text[0] == ' ': text = ' *' + text[1:]
-                else:              text = '*' + text
-
-                if text[-1] == ' ': text = text[:-1] + '* '
-                else:               text = text + '*'
-                
-                root.em.insert_before(text)
-            
-            root.em.clear()
-            root.em.unwrap()
-        except: break
-
-    while True:
-        try:
-            root.select_one("div.well").insert_before('\n\n')
-            root.select_one("div.well").unwrap()
-        except: break
-
-    # TODO: Consider doing user quotes in code blocks. Not sure how nested quotes will do though
 
     # Compile embed contents
-    post_contents = root.text
-    buffer_size = 2048
-    posts = []; beg = 0
+    post_contents = BBcodeProcessor().Process(post_contents).text
+    posts = []
 
     # Topic Header
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
@@ -230,120 +85,15 @@ async def display_thread(cmd, channel, args):
     embed.set_author(name=poster_names[0], icon_url=poster_avatars[0], url=poster_urls[0])
     posts.append(embed)
 
-    # Process posts. Need to split them up due to discord lenth limits
-    while True:
-               
-        end = min(len(post_contents), beg + buffer_size)
-        if beg >= end: break
-
-        embed = discord.Embed(type='rich', color=0x66CC66)
-        buffer = post_contents[beg:end]
-
-        #input()
-        #print("beg: " + str(beg) + "  end: " + str(end) + "  len: " +  str(len(post_contents)) + "  thread: " + str(thread_id))
-        
-        # If found, then check if there is something to record before that
-        idx = buffer.find('img://', 0, len(buffer))
-        if idx != -1:
-            #print("img")
-            if idx == 0:
-                idx = buffer.find('\x03', 0, end)
-                embed.set_image(url=buffer[0:idx].replace('img','http'))
-            else:
-                embed.description = buffer[0:idx].replace('\x03','').strip()
-                if embed.description: posts.append(embed)
-
-            beg += idx
-            continue
-
-        # If found, then check if there is something to record before that
-        idx = buffer.find('imgs://', 0, len(buffer))
-        if idx != -1: 
-            #print("imgs")
-            if idx == 0: # Record img
-                idx = buffer.find('\x03', 0, end)
-                embed.set_image(url=buffer[0:idx].replace('imgs','https'))
-                #print(buffer[0:idx])
-                posts.append(embed)
-            else:
-                embed.description = buffer[0:idx].replace('\x03','').strip()
-                if embed.description: posts.append(embed)
-            
-            beg += idx
-            continue
-
-        # If found, then see if we can get the link's end. If not, get everything prior
-        idx = buffer.rfind('vids://', 0, len(buffer))
-        if idx != -1:
-            #print("vids")
-            link_end = buffer.rfind('\x03', 0, end)
-            if link_end != -1: idx = link_end
-
-            embed.description = buffer[0:idx].replace('vids','https').replace('\x03','').strip()
-            if embed.description: posts.append(embed)
-            beg += idx
-            continue
-
-        # If the post fits well below the lenth, just record it. 
-        # Otherwise, start looking at the best way to split it up
-        if len(buffer) < (buffer_size - 200):
-            #print("just recorded")
-            embed.description = buffer[0:len(buffer)].replace('\x03','').strip()
-            if embed.description: posts.append(embed)
-            beg += len(buffer)
-            continue
-
-        # If found, then see if we can get the link's end. If not, get everything prior
-        idx = buffer.rfind('http://', 0, len(buffer))
-        if idx != -1: 
-            #print("http")
-            link_end = buffer.rfind('\x03', 0, end)
-            if link_end != -1: idx = link_end
-
-            embed.description = buffer[0:idx].replace('\x03','').strip()
-            if embed.description: posts.append(embed)
-            beg += idx
-            continue
-
-        # If found, then see if we can get the link's end. If not, get everything prior
-        idx = buffer.rfind('https://', 0, len(buffer))
-        if idx != -1:
-            #print("https")
-            link_end = buffer.rfind('\x03', 0, end)
-            if link_end != -1: idx = link_end
-
-            embed.description = buffer[0:idx].replace('\x03','').strip()
-            if embed.description: posts.append(embed)
-            beg += idx
-            continue
-
-        # If found, then record the range
-        idx = buffer.rfind('\n', 0, len(buffer))
-        if idx != -1:
-            #print("NL")
-            embed.description = buffer[0:idx].replace('\x03','').strip()
-            if embed.description: posts.append(embed)
-            beg += idx + 1
-            continue
-
-        # If found, then record the range
-        idx = buffer.rfind(' ', 0, len(buffer))
-        if idx != -1: 
-            #print("space")
-            embed.description = buffer[0:idx].replace('\x03','').strip()
-            if embed.description: posts.append(embed)
-            beg += idx + 1
-            continue
-
-        # If all else fails
-        #print("any")
-        embed.description = buffer.replace('\x03','').strip()
-        if embed.description: posts.append(embed)
-        beg += len(buffer)
+    posts = DiscordBBcodeCompiler().Compile(post_contents, posts)
 
         
     # TODO: img tags now just have img with no attributes
     # TODO: forum links now are wrapped in "postlink" class
+    # TODO: Take account formatting when splitting. Stuff like bold sentences get 
+    #       split up, and are displayed incorrectly (asterisks visible on both ends)
+    # TODO: Quote styling http://i.imgur.com/ysgOpcz.png
+
 
     # TODO: Threads to fix:
     #   626816 - Got stuck
