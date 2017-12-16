@@ -159,7 +159,7 @@ class BBcodeProcessor():
                     if text[-1] == ' ': text = text[:-1] + '** '
                     else:               text = text + '**'
                 
-                    code.h4.insert_before(text + '\n')
+                    code.h4.insert_before(text + '\n\n')
             
                 code.h4.clear()
                 code.h4.unwrap()
