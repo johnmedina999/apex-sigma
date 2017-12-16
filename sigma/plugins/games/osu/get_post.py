@@ -3,8 +3,12 @@ import aiohttp
 import asyncio
 import re
 from bs4 import BeautifulSoup
+
 from .BBcodeProcessor.BBcodeProcessor import BBcodeProcessor
 from .BBcodeProcessor.DiscordBBcodeCompiler import DiscordBBcodeCompiler
+from .Forum.Structs.Topic import Topic
+from .Forum.Structs.User import User
+from .Forum.Structs.Post import Post
 
 async def display_post(cmd, channel, args):
 
@@ -20,58 +24,37 @@ async def display_post(cmd, channel, args):
         await channel.send("Topic does not exist!")
         return
 
-    root = BeautifulSoup(page, "lxml")
+    root  = BeautifulSoup(page, "lxml")
+    topic = Topic(root)
 
     try:
-        # Get relevant sections of the HTML
-        subforum_name  = root.find_all(class_='page-mode-link--is-active')
-        topic_name     = root.find_all(class_='js-forum-topic-title--title')
-        topic_contents = root.find_all(class_='forum-post')
-        post_dates     = [entry.find_all(class_='timeago')[0] for entry in topic_contents]
-        post_body      = root.find_all(class_='forum-post__body')
-        posters        = root.find_all(class_='forum-post__info-panel')
+        subforum_name       = topic.getSubforum()
+        topic_name          = topic.getName()
+        topic_poster_name   = topic.getCreator().getName()
+        topic_poster_avatar = topic.getCreator().getAvatar()
+        topic_poster_url    = topic.getCreator().getUrl()
 
-        # Not all users have urls, avatars, etc in their profile (restricted users)
-        poster_urls = []; poster_avatars = []; poster_names = []
-        
-        for poster in posters:
-            try: poster_name = poster.find_all(class_='forum-post__username')[0]
-            except: poster_name = ""
-            if not poster_name: poster_name = ""
+        post_contents      = None
+        post_poster_name   = None
+        post_poster_avatar = None
+        post_poster_url    = None
+        target_url         = 'https://osu.ppy.sh/community/forums/posts/' + str(post_id)
 
-            try: poster_url = poster.find_all(class_='forum-post__username')[0].get('href')
-            except: poster_url = "https://osu.ppy.sh/users/-1"
-            if not poster_url: poster_url = "https://osu.ppy.sh/users/-1"
-            
-            try: poster_avatar = poster.find_all(class_='avatar avatar--forum')[0].get('style')
-            except: poster_avatar = "background-image: url('');"
-            if not poster_avatar: poster_avatar = "background-image: url('');"
-
-            poster_names.append(poster_name)
-            poster_urls.append(poster_url)
-            poster_avatars.append(poster_avatar)
-
-        # Extract data from HTML
-        post_contents = None
-        for post in post_body:
-            try:
-                if str(post.find_all(class_='js-post-url')[0]['href']) == 'https://osu.ppy.sh/community/forums/posts/' + str(post_id):
-                    post_contents = str(post.find_all(class_='forum-post-content ')[0])
-                    break
-            except: continue
-
-        subforum_name  = [name.text for name in subforum_name][0]
-        topic_url      = [name['href'] for name in topic_name][0]
-        topic_name     = [name.text for name in topic_name][0]
-        post_dates     = [date.text for date in post_dates]
-        poster_names   = [auth.text for auth in poster_names]
-        poster_avatars = [re.findall('background-image: url\(\'(.*?)\'\);', avtr)[0] for avtr in poster_avatars]
-
+        for post in topic.getPosts():
+            if post.getUrl() == target_url:
+                post_contents      = post.getContents()
+                post_poster_name   = post.getCreator().getName()
+                post_poster_avatar = post.getCreator().getAvatar()
+                post_poster_url    = post.getCreator().getUrl()
     except:
         await channel.send("Something went wrong! Contact one of the bot devs.")
         cmd.log.error("[ get_post ] " + topic_url + " is no longer parsable :(")
         return
 
+    # Sanitize data
+    topic_name    = topic_name.replace('\n', '').replace(']', '\]')
+    post_contents = post_contents.replace('*', '\*')
+    # \TODO: sanitize the tokens used to identify images and links below
 
     # Compile embed contents
     post_contents = BBcodeProcessor().Process(post_contents).text
@@ -80,14 +63,14 @@ async def display_post(cmd, channel, args):
     # Topic Header
     embed = discord.Embed(type='rich', color=0x66CC66, title=subforum_name + ' > ' + topic_name)
     embed.url = topic_url
-    embed.set_author(name=poster_names[0], icon_url=poster_avatars[0], url=poster_urls[0])
+    embed.set_author(name=topic_poster_name, icon_url=topic_poster_avatar, url=topic_poster_url)
     posts.append(embed)
 
     posts = DiscordBBcodeCompiler().Compile(post_contents, posts)
+    posts[1].set_author(name=post_poster_name, icon_url=post_poster_avatar, url=post_poster_url)
 
     # Post everything to discord
     for post in posts:
-        #print(post.description)
         await channel.send(None, embed=post)
         await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
