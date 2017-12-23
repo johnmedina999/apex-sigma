@@ -42,7 +42,7 @@ events:
   - name:    ot_feed
     type:    ready
     global:  true
-    enabled: false
+    enabled: true
     pmable:  true
     sfw:     true
     description:

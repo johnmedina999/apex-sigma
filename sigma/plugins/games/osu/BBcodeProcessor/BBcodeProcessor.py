@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
 class BBcodeProcessor():
-
+    # BUG: All current logic erases tags that are nested within tags. Implement a similiar thing as done with quote blocks to fix
     def Process(self, post_contents):
 
         code = BeautifulSoup(post_contents, "lxml")
@@ -246,3 +246,36 @@ class BBcodeProcessor():
                 code.select_one("div.well").insert_before('\n\n')
                 code.select_one("div.well").unwrap()
             except: break
+
+
+
+    # TODO: Threads to fix:
+
+    #   627820 - [Med PRIORITY] Broken link formatting. Happens when an URL link is embedded with img
+    #   627663 - [Med PRIORITY] User links need osu.ppy.sh appended
+    #   627323 - [Med PRIORITY] Bad formatting first post
+    #   627315 - [Med PRIORITY] Bad formatting
+    #   627184 - [Med PRIORITY] Bad spacing (excessive spacing)
+    #   627168 - [Med PRIORITY] Bad spacing (lacking spacing)
+    #   627140 - [Med PRIORITY] Broken link formatting. Happens when an URL link is embedded with img
+    #   626945 - [Med PRIORITY] Misc Formatting with notices
+    #   626710 - [Med PRIORITY] Collapsed text spoiler shows
+
+    #   628675 - [LOW PRIORITY] Useless space in the end
+    #   628627 - [LOW PRIORITY] formatting got split up
+    #   628584 - [LOW PRIORITY] Bad text formatting at the end (stray asterisks)
+    #   628112 - [LOW PRIORITY] Bad text formatting at the end (stray asterisks)
+    #   627663 - [LOW PRIORITY] Figure out how to handle same line images better
+    #   627630 - [LOW PRIORITY] Awkward break off at bottom
+    #   627244 - [LOW PRIORITY] Spoiler box formatting
+    #   627136 - [LOW PRIORITY] Useless space in the beggining one of the split up posts
+    #   627081 - [LOW PRIORITY] Figure out how to handle same line images better
+    #   626918 - [LOW PRIORITY] Figure out how to handle same line images better
+    #   626879 - [LOW PRIORITY] Figure out how to handle same line images better
+    #   626854 - [LOW PRIORITY] Useless space post
+    #   626816 - [LOW PRIORITY] Rogue asterisks
+
+
+    # TODO: Posts to fix:
+
+    #   6204742 - [Med PRIORITY] Uneeded line breaks

@@ -66,7 +66,7 @@ async def display_thread(cmd, channel, args):
 
     # Post everything to discord
     for post in posts:
-        print(post.description)
+        #print(post.description)
         await channel.send(None, embed=post)
         await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
