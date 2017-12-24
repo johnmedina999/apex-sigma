@@ -145,7 +145,7 @@ class BBcodeProcessor():
     def procSpoilerBoxArrow(self, code):
         while True:
             try: # Spoiler box arrow
-                code.select_one("i.fa.fa-chevron-down.bbcode-spoilerbox__arrow").unwrap()
+                code.select_one(self.sanitize('i.bbcode-spoilerbox__arrow')).unwrap()
             except: break
 
 
