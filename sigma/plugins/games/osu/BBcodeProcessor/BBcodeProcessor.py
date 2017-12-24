@@ -65,19 +65,37 @@ class BBcodeProcessor():
 
     def procNewline(self, code):
         while True:
-            try: # Next lines
-                code.br.insert_before('\n')
-                code.br.unwrap()
-            except: break
+            subcode = code.select_one(self.sanitize('br'))
+            if not subcode: break
+
+            subcode.insert_before('\n')
+            subcode.unwrap()
 
 
     def procHeading(self, code):
-        while True:
-            try: # Heading 2
-                code.h2.insert_before('\n\n')
-                code.h2.insert_after('\n')
-                code.h2.unwrap()
-            except: break
+        while True:  # Heading 2
+            subcode = code.select_one(self.sanitize('h2'))
+            if not subcode: break
+
+            text = self.processBBcodeChildren(subcode.children)
+            if text:
+                subcode.insert_before('\n\n' + text + '\n')
+            
+            subcode.unwrap()
+            subcode.clear()
+
+
+    def procCentredFormatting(self, code):
+        while True:  # Centered text
+            subcode = code.select_one(self.sanitize('center'))
+            if not subcode: break
+
+            text = self.processBBcodeChildren(subcode.children)
+            if text:
+                subcode.insert_before('\n' + text + '\n')
+
+            subcode.unwrap()
+            subcode.clear()
 
 
     def procListIndicator(self, code):
@@ -175,34 +193,34 @@ class BBcodeProcessor():
 
     def procQuoteHeader(self, code):
         while True:
-            try: # Bold text
-                text = code.h4.get_text()
-                if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                    if text[0] == ' ': text = ' **' + text[1:]
-                    else:              text = '**' + text
+            subcode = code.select_one(self.sanitize('h4'))
+            if not subcode: break
 
-                    if text[-1] == ' ': text = text[:-1] + '** '
-                    else:               text = text + '**'
+            text = self.processBBcodeChildren(subcode.children)
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' **' + text[1:]
+                else:              text = '**' + text
+
+                if text[-1] == ' ': text = text[:-1] + '** '
+                else:               text = text + '**'
                 
-                    code.h4.insert_before(text + '\n\n')
+                subcode.insert_before(text + '\n\n')
             
-                code.h4.clear()
-                code.h4.unwrap()
-            except: break
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procBlockQuote(self, code):
         while True:
-            try:
-                text = self.processBBcodeChildren(code.blockquote.children)
-                
-                text = ''.join(['**|**    ' + line + '\n' for line in text.split('\n')])
-                code.blockquote.insert_before(text + '\n')
+            subcode = code.select_one(self.sanitize('blockquote'))
+            if not subcode: break
 
-                code.blockquote.clear()
-                code.blockquote.unwrap()
-                
-            except: break
+            text = self.processBBcodeChildren(subcode.children)  
+            text = ''.join(['**|**    ' + line + '\n' for line in text.split('\n')])
+            subcode.insert_before(text + '\n')
+
+            subcode.clear()
+            subcode.unwrap()
 
 
     # Italic/underline/bold processing needs to go after url processing (discord doesn't like [**text**](url), but will accept **[text](url)**)
