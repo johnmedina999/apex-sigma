@@ -205,65 +205,69 @@ class BBcodeProcessor():
 
     # Italic/underline/bold processing needs to go after url processing (discord doesn't like [**text**](url), but will accept **[text](url)**)
     def procBoldFormatting(self, code):
-        while True:
-            try: # Bold text
-                text = code.strong.get_text()
-                if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                    if text[0] == ' ': text = ' **' + text[1:]
-                    else:              text = '**' + text
+        while True:  # Bold text
+            subcode = code.select_one(self.sanitize('strong'))
+            if not subcode: break
 
-                    if text[-1] == ' ': text = text[:-1] + '** '
-                    else:               text = text + '**'
-                
-                    code.strong.insert_before(text)
+            text = self.processBBcodeChildren(subcode.children)
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' **' + text[1:]
+                else:              text = '**' + text
+
+                if text[-1] == ' ': text = text[:-1] + '** '
+                else:               text = text + '**'
+
+                subcode.insert_before(text)
             
-                code.strong.clear()
-                code.strong.unwrap()
-            except: break
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procUnderlineFormatting(self, code):
         while True:
-            try: # Underline text
-                text = code.u.get_text()
-                if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                    if text[0] == ' ': text = ' __' + text[1:]
-                    else:              text = '__' + text
+            subcode = code.select_one(self.sanitize('u'))
+            if not subcode: break
 
-                    if text[-1] == ' ': text = text[:-1] + '__ '
-                    else:               text = text + '__'
+            text = self.processBBcodeChildren(subcode.children)
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' __' + text[1:]
+                else:              text = '__' + text
+
+                if text[-1] == ' ': text = text[:-1] + '__ '
+                else:               text = text + '__'
                 
-                    code.u.insert_before(text)
+                subcode.insert_before(text)
             
-                code.u.clear()
-                code.u.unwrap()
-            except: break
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procItalicFormatting(self, code):
-        while True:
-            try: # Italic text
-                text = code.em.get_text()
-                if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
-                    if text[0] == ' ': text = ' *' + text[1:]
-                    else:              text = '*' + text
+        while True:  # Italic text
+            subcode = code.select_one(self.sanitize('em'))
+            if not subcode: break
 
-                    if text[-1] == ' ': text = text[:-1] + '* '
-                    else:               text = text + '*'
+            text = self.processBBcodeChildren(subcode.children)
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' *' + text[1:]
+                else:              text = '*' + text
+
+                if text[-1] == ' ': text = text[:-1] + '* '
+                else:               text = text + '*'
                 
-                    code.em.insert_before(text)
+                subcode.insert_before(text)
             
-                code.em.clear()
-                code.em.unwrap()
-            except: break
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procDivWell(self, code):
         while True:
-            try:
-                code.select_one("div.well").insert_before('\n\n')
-                code.select_one("div.well").unwrap()
-            except: break
+            subcode = code.select_one(self.sanitize('div.well'))
+            if not subcode: break
+            
+            subcode.insert_before('\n\n')
+            subcode.unwrap()
 
 
 
