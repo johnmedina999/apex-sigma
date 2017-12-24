@@ -39,6 +39,12 @@ class BBcodeProcessor():
             except: break
 
 
+    def sanitize(self, code):
+        sanitizations = [ ('*', '\*'), ('_', '\_') ]
+        for sanitization in sanitizations:
+            code.replace(sanitization[0], sanitization[1])
+
+        return code
 
 
     # Recursively processes the BBcode

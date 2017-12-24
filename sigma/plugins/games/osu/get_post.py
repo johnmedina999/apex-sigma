@@ -53,7 +53,7 @@ async def display_post(cmd, channel, args):
 
     # Sanitize data
     topic_name    = topic_name.replace('\n', '').replace(']', '\]')
-    post_contents = post_contents.replace('*', '\*')
+    post_contents = BBcodeProcessor().sanitize(post_contents)
     # \TODO: sanitize the tokens used to identify images and links below
 
     # Compile embed contents
