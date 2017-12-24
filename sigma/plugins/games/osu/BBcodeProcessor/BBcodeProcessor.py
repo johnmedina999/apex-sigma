@@ -22,7 +22,9 @@ class BBcodeProcessor():
         self.procQuoteHeader(code)
         self.procBlockQuote(code)
         self.procBoldFormatting(code)
+        self.procStrikelineFormatting(code)
         self.procUnderlineFormatting(code)
+        self.procItalicFormatting(code)
         self.procDivWell(code)
 
         return code
@@ -235,6 +237,25 @@ class BBcodeProcessor():
 
                 if text[-1] == ' ': text = text[:-1] + '__ '
                 else:               text = text + '__'
+                
+                subcode.insert_before(text)
+            
+            subcode.clear()
+            subcode.unwrap()
+
+
+    def procStrikelineFormatting(self, code):
+        while True:  # Strikeline text
+            subcode = code.select_one(self.sanitize('del'))
+            if not subcode: break
+
+            text = self.processBBcodeChildren(subcode.children)
+            if text: # Need to make sure the start and ends of seperate formatting blocks don't touch
+                if text[0] == ' ': text = ' ~~' + text[1:]
+                else:              text = '~~' + text
+
+                if text[-1] == ' ': text = text[:-1] + '~~ '
+                else:               text = text + '~~'
                 
                 subcode.insert_before(text)
             
