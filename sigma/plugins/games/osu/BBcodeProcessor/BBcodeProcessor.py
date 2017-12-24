@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import textwrap
 
 class BBcodeProcessor():
     # BUG: All current logic erases tags that are nested within tags. Implement a similiar thing as done with quote blocks to fix
@@ -37,6 +38,22 @@ class BBcodeProcessor():
                 element.unwrap()
             except: break
 
+
+
+
+    # Recursively processes the BBcode
+    def processBBcodeChildren(self, children):
+        text = ''
+        for child in list(children):
+            # Text to wrap a certain amount of lines since discord rich text wraps it, and '|' will not show on that new line
+            try:  text += textwrap.fill(child, width=75, drop_whitespace=False, replace_whitespace=False)
+            except:
+                # If we couldn't append text, then it's unprocessed HTML code
+                try: text += BBcodeProcessor().Process(str(child)).text
+                except: break
+        
+        return text
+    
 
     def procNewline(self, code):
         while True:
@@ -169,13 +186,8 @@ class BBcodeProcessor():
     def procBlockQuote(self, code):
         while True:
             try:
-                text = ''
-                for child in list(code.blockquote.children):
-                    try:  text += child
-                    except:
-                        try: text += BBcodeProcessor().Process(str(child)).text
-                        except: break
-
+                text = self.processBBcodeChildren(code.blockquote.children)
+                
                 text = ''.join(['**|**    ' + line + '\n' for line in text.split('\n')])
                 code.blockquote.insert_before(text + '\n')
 
