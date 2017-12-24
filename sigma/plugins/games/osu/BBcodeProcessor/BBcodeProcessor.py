@@ -10,9 +10,9 @@ class BBcodeProcessor():
         self.procNewline(code)
         self.procHeading(code)
         self.procListIndicator(code)
+        self.procListTitle(code)
         self.procListIndicator(code)
         self.procCentredFormatting(code)
-        self.procListBullet(code)
         self.procVideoFrame(code)
         self.procSpoilerBoxArrow(code)
         self.procSpoilerBoxHeader(code)
@@ -98,30 +98,40 @@ class BBcodeProcessor():
             subcode.clear()
 
 
+    def procListTitle(self, code):
+        while True:
+            subcode = code.select_one(self.sanitize('ul.bbcode__list-title'))
+            if not subcode: break
+
+            text = self.processBBcodeChildren(subcode.children)
+            text = ''.join(['    ' + line for line in text.splitlines(True)])
+
+            subcode.insert_before(text)
+            subcode.clear()
+            subcode.unwrap()
+
+
     def procListIndicator(self, code):
-        while True:
-            try: # List indicator; ignore
-                code.ol.unwrap()
-            except: break
+        while True:  # List indicator
+            subcode = code.select_one(self.sanitize('ol.unordered'))
+            if not subcode: break
 
+            while True:  # Process bullets
+                bullet = subcode.select_one(self.sanitize('li'))
+                if not bullet: break
 
-    def procCentredFormatting(self, code):
-        while True:
-            try: # Centered text
-                if code.center.get_text():
-                    code.center.insert_before('\n')
-                    code.center.insert_after('\n')
-                code.center.unwrap()
-            except: break
+                text = self.processBBcodeChildren(bullet.children)
+                if text:
+                    bullet.insert_before('●  ' + text)
+                    bullet.clear()
+                    bullet.unwrap()
 
+            text = self.processBBcodeChildren(subcode.children)
+            text = '\n' + ''.join(['    ' + line for line in text.splitlines(True)]) + '\n'
 
-    def procListBullet(self, code):
-        while True:
-            try: # List bullets
-                if code.li.get_text():
-                    code.li.insert_before('\n    ● ')
-                code.li.unwrap()
-            except: break
+            subcode.insert_before(text)
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procVideoFrame(self, code):
