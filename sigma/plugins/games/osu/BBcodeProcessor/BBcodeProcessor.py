@@ -69,6 +69,7 @@ class BBcodeProcessor():
             if not subcode: break
 
             subcode.insert_before('\n')
+            subcode.clear()
             subcode.unwrap()
 
 
@@ -81,8 +82,8 @@ class BBcodeProcessor():
             if text:
                 subcode.insert_before('\n\n' + text + '\n')
             
-            subcode.unwrap()
             subcode.clear()
+            subcode.unwrap()
 
 
     def procCentredFormatting(self, code):
@@ -94,8 +95,8 @@ class BBcodeProcessor():
             if text:
                 subcode.insert_before('\n' + text + '\n')
 
-            subcode.unwrap()
             subcode.clear()
+            subcode.unwrap()
 
 
     def procListTitle(self, code):
@@ -148,14 +149,23 @@ class BBcodeProcessor():
                 code.select_one(self.sanitize('i.bbcode-spoilerbox__arrow')).unwrap()
             except: break
 
+            subcode.clear()
+            subcode.unwrap()
+
 
     def procSpoilerBoxHeader(self, code):
+                
+            subcode.clear()
+            subcode.unwrap()
         while True:
             try: # Spoiler box open/close thingy
                 code.select_one("div.bbcode-spoilerbox__body").insert_before(':\n ')
                 code.select_one("div.bbcode-spoilerbox__body").insert_after('\n')
                 code.select_one("div.bbcode-spoilerbox__body").unwrap()
             except: break
+
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procEmoji(self, code):
@@ -166,6 +176,7 @@ class BBcodeProcessor():
                 if emoji['title'] == 'wink': emoji.insert_after(':wink:')
                 if emoji['title'] == 'Grin': emoji.insert_after(':grin:')
                 if emoji['title'] == 'cry': emoji.insert_after(':cry:')
+                emoji.clear()
                 emoji.unwrap()
             except: break
 
@@ -177,6 +188,7 @@ class BBcodeProcessor():
                 try: # For any missed emoji
                     if code.img['class'] == ['smiley']: 
                         #cmd.log.warning("[ get_thread ] Smiley not handled: " + code.img)
+                        code.img.clear()
                         code.img.unwrap()
                         continue
                 except: pass
@@ -185,6 +197,7 @@ class BBcodeProcessor():
                 if code.img['data-normal']: code.img.insert_before(code.img['data-normal'].replace('http','img') + '\x03')
                 elif code.img['src']:       code.img.insert_before(code.img['src'].replace('http','img') + '\x03')
 
+                code.img.clear()
                 code.img.unwrap()
             except: break
 
@@ -316,6 +329,7 @@ class BBcodeProcessor():
             if not subcode: break
             
             subcode.insert_before('\n\n')
+            subcode.clear()
             subcode.unwrap()
 
 
