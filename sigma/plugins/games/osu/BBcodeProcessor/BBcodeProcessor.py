@@ -79,8 +79,7 @@ class BBcodeProcessor():
             if not subcode: break
 
             text = self.processBBcodeChildren(subcode.children)
-            if text:
-                subcode.insert_before('\n\n' + text + '\n')
+            if text: subcode.insert_before('\n\n' + text + '\n')
             
             subcode.clear()
             subcode.unwrap()
@@ -92,8 +91,7 @@ class BBcodeProcessor():
             if not subcode: break
 
             text = self.processBBcodeChildren(subcode.children)
-            if text:
-                subcode.insert_before('\n' + text + '\n')
+            if text: subcode.insert_before('\n' + text + '\n')
 
             subcode.clear()
             subcode.unwrap()
