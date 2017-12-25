@@ -328,7 +328,8 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('div.well'))
             if not subcode: break
             
-            subcode.insert_before('\n\n')
+            text = self.processBBcodeChildren(subcode.children)
+            if text: subcode.insert_before('\n\n' + text)
             subcode.clear()
             subcode.unwrap()
 
