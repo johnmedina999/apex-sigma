@@ -187,7 +187,7 @@ class BBcodeProcessor():
 
     def procImage(self, code):
         while True: # Images
-            subcode = code.select_one(self.sanitize('img'))
+            subcode = code.select_one(self.sanitize('img.proportional-container__content'))
             if not subcode: break
 
             # Replace https with img so we can easily identify image links later on
