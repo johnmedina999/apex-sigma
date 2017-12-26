@@ -173,16 +173,14 @@ class BBcodeProcessor():
 
     def procEmoji(self, code):
         while True:
-            try: # Emojis
-                emoji = code.select_one("img.smiley")
-                if emoji['title'] == 'smile': emoji.insert_after(':smile:')
-                if emoji['title'] == 'wink': emoji.insert_after(':wink:')
-                if emoji['title'] == 'Grin': emoji.insert_after(':grin:')
-                if emoji['title'] == 'cry': emoji.insert_after(':cry:')
-                
-                emoji.clear()
-                emoji.unwrap()
-            except: break
+            subcode = code.select_one(self.sanitize('img.smiley'))
+            if not subcode: break
+
+            text = subcode['alt']
+            subcode.insert_before(text + ' ')
+
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procImage(self, code):
