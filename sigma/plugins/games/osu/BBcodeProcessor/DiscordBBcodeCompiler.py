@@ -27,7 +27,7 @@ class DiscordBBcodeCompiler():
 
         self.Compile(text[:beg], posts)
 
-        content = text[beg:end + token_len].replace('img','http').replace('\x03', '').strip()
+        content = text[beg:end + token_len].replace('img','http').strip()
         if content:
             print('DiscordBBcodeCompiler.py : parseImage')
 
@@ -50,7 +50,7 @@ class DiscordBBcodeCompiler():
 
         self.Compile(text[:beg], posts)
 
-        content = text[beg:end + token_len].replace('imgs','https').replace('\x03', '').strip()
+        content = text[beg:end + token_len].replace('imgs','https').strip()
         if content:
             print('DiscordBBcodeCompiler.py : parseSecureImage')
             print(content)
@@ -74,7 +74,7 @@ class DiscordBBcodeCompiler():
 
         self.Compile(text[:beg], posts)
 
-        content = text[beg:end + token_len].replace('vids','https').replace('\x03', '').strip()
+        content = text[beg:end + token_len].replace('vids','https').strip()
         if content:
             print('DiscordBBcodeCompiler.py : parseVideo')
 
@@ -97,7 +97,7 @@ class DiscordBBcodeCompiler():
 
         self.Compile(text[:beg], posts)
         
-        content = text[beg:end + token_len].replace('\x03', '').strip()
+        content = text[beg:end + token_len].strip()
         if content:
             print('DiscordBBcodeCompiler.py : parseLink')
 
@@ -120,7 +120,7 @@ class DiscordBBcodeCompiler():
 
         self.Compile(text[:beg], posts)
 
-        content = text[beg:end + token_len].replace('\x03', '').strip()
+        content = text[beg:end + token_len].strip()
         if content:
             print('DiscordBBcodeCompiler.py : parseSecureLink')
 

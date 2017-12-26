@@ -136,7 +136,7 @@ class BBcodeProcessor():
     def procVideoFrame(self, code):
         while True:
             try: # Replace https with vid so we can easily identify Youtube video links later on
-                code.iframe.insert_before(code.iframe['src'].replace('http','vid') + '\x03')
+                code.iframe.insert_before(code.iframe['src'].replace('http','vid') + ' ')
                 code.iframe.unwrap()
             except: break
 
@@ -204,7 +204,7 @@ class BBcodeProcessor():
         while True:
             try: # Add markdown for it to be a hyperlink
                 try: code.a.insert_before('[' + code.a.text.replace('[', '\[').replace(']', '\]') + ']' +
-                                          '(' + code.a['href'].replace('(', '\(').replace(')', '\)') + ')\x03')
+                                          '(' + code.a['href'].replace('(', '\(').replace(')', '\)') + ') ')
                 except: pass
 
                 code.a.clear()
