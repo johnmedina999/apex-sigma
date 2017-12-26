@@ -121,12 +121,12 @@ class BBcodeProcessor():
 
                 text = self.processBBcodeChildren(bullet.children)
                 if text:
-                    bullet.insert_before('●  ' + text)
+                    bullet.insert_before('●  ' + text + '\n')
                     bullet.clear()
                     bullet.unwrap()
 
             text = self.processBBcodeChildren(subcode.children)
-            text = '\n' + ''.join(['    ' + line for line in text.splitlines(True)]) + '\n'
+            text = ''.join(['    ' + line for line in text.splitlines(True)])
 
             subcode.insert_before(text)
             subcode.clear()
