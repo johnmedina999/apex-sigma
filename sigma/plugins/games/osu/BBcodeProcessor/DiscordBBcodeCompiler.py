@@ -29,7 +29,7 @@ class DiscordBBcodeCompiler():
 
         content = text[beg:end + token_len].replace('img','http').strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseImage')
+            #print('DiscordBBcodeCompiler.py : parseImage')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.set_image(url=content)
@@ -52,8 +52,7 @@ class DiscordBBcodeCompiler():
 
         content = text[beg:end + token_len].replace('imgs','https').strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseSecureImage')
-            print(content)
+            #print('DiscordBBcodeCompiler.py : parseSecureImage')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.set_image(url=content)
@@ -76,7 +75,7 @@ class DiscordBBcodeCompiler():
 
         content = text[beg:end + token_len].replace('vids','https').strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseVideo')
+            #print('DiscordBBcodeCompiler.py : parseVideo')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.description = content
@@ -99,7 +98,7 @@ class DiscordBBcodeCompiler():
         
         content = text[beg:end + token_len].strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseLink')
+            #print('DiscordBBcodeCompiler.py : parseLink')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.description = content
@@ -122,7 +121,7 @@ class DiscordBBcodeCompiler():
 
         content = text[beg:end + token_len].strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseSecureLink')
+            #print('DiscordBBcodeCompiler.py : parseSecureLink')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.description = content
@@ -142,7 +141,7 @@ class DiscordBBcodeCompiler():
         
         content = text[beg:end + token_len].strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseNewline')
+            #print('DiscordBBcodeCompiler.py : parseNewline')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.description = content
@@ -162,7 +161,7 @@ class DiscordBBcodeCompiler():
         
         content = text[beg:end + token_len].strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseSpace')
+            #print('DiscordBBcodeCompiler.py : parseSpace')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.description = content
@@ -183,7 +182,7 @@ class DiscordBBcodeCompiler():
         
         content = text[beg:end].strip()
         if content:
-            print('DiscordBBcodeCompiler.py : parseText')
+            #print('DiscordBBcodeCompiler.py : parseText')
 
             embed = discord.Embed(type='rich', color=0x66CC66)
             embed.description = content
