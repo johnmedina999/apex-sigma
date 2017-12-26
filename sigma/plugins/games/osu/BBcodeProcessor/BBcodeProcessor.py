@@ -174,30 +174,25 @@ class BBcodeProcessor():
                 if emoji['title'] == 'wink': emoji.insert_after(':wink:')
                 if emoji['title'] == 'Grin': emoji.insert_after(':grin:')
                 if emoji['title'] == 'cry': emoji.insert_after(':cry:')
+                
                 emoji.clear()
                 emoji.unwrap()
             except: break
 
 
     def procImage(self, code):
-        while True:
-            try: # Images
-            
-                try: # For any missed emoji
-                    if code.img['class'] == ['smiley']: 
-                        #cmd.log.warning("[ get_thread ] Smiley not handled: " + code.img)
-                        code.img.clear()
-                        code.img.unwrap()
-                        continue
-                except: pass
+        while True: # Images
+            subcode = code.select_one(self.sanitize('img'))
+            if not subcode: break
 
-                # Replace https with img so we can easily identify image links later on
-                if code.img['data-normal']: code.img.insert_before(code.img['data-normal'].replace('http','img') + '\x03')
-                elif code.img['src']:       code.img.insert_before(code.img['src'].replace('http','img') + '\x03')
+            # Replace https with img so we can easily identify image links later on
+            if subcode['data-normal']: text = subcode['data-normal']
+            elif subcode['src']:       text = subcode['src']
 
-                code.img.clear()
-                code.img.unwrap()
-            except: break
+            subcode.insert_before(text.replace('http','img') + ' ')
+
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procHyperlink(self, code):
@@ -236,7 +231,7 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('blockquote'))
             if not subcode: break
 
-            text = self.processBBcodeChildren(subcode.children)  
+            text = self.processBBcodeChildren(subcode.children)
             text = ''.join(['**|**    ' + line + '\n' for line in text.split('\n')])
             subcode.insert_before(text + '\n')
 
@@ -325,9 +320,10 @@ class BBcodeProcessor():
         while True:
             subcode = code.select_one(self.sanitize('div.well'))
             if not subcode: break
-            
+
             text = self.processBBcodeChildren(subcode.children)
             if text: subcode.insert_before('\n\n' + text)
+
             subcode.clear()
             subcode.unwrap()
 
