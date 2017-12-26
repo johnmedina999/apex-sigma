@@ -52,12 +52,11 @@ async def display_post(cmd, channel, args):
         return
 
     # Sanitize data
-    topic_name    = topic_name.replace('\n', '').replace(']', '\]')
-    post_contents = BBcodeProcessor().sanitize(post_contents)
-    # \TODO: sanitize the tokens used to identify images and links below
+    topic_name = topic_name.replace('\n', '').replace(']', '\]')
 
     # Compile embed contents
-    post_contents = BBcodeProcessor().Process(post_contents).text
+    post_contents = BBcodeProcessor().Process(post_contents)
+    post_contents = post_contents.text
     posts = []
 
     # Topic Header
@@ -66,7 +65,7 @@ async def display_post(cmd, channel, args):
     embed.set_author(name=topic_poster_name, icon_url=topic_poster_avatar, url=topic_poster_url)
     posts.append(embed)
 
-    posts = DiscordBBcodeCompiler().Compile(post_contents, posts)
+    DiscordBBcodeCompiler().Compile(post_contents, posts)
     posts[1].set_author(name=post_poster_name, icon_url=post_poster_avatar, url=post_poster_url)
 
     # Post everything to discord
