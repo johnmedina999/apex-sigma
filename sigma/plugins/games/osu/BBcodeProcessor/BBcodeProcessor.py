@@ -134,11 +134,16 @@ class BBcodeProcessor():
 
 
     def procVideoFrame(self, code):
-        while True:
-            try: # Replace https with vid so we can easily identify Youtube video links later on
-                code.iframe.insert_before(code.iframe['src'].replace('http','vid') + ' ')
-                code.iframe.unwrap()
-            except: break
+        while True:  # Replace https with vid so we can easily identify Youtube video links later on
+            subcode = code.select_one(self.sanitize('iframe'))
+            if not subcode: break
+
+            text = subcode['src']
+            if text:
+                subcode.insert_before(text.replace('http','vid').replace('embed/', 'watch?v=').replace('?rel=0', '') + ' ')
+
+            subcode.clear()
+            subcode.unwrap()
 
     
     def procSpoilerBoxArrow(self, code):
