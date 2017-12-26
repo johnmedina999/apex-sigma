@@ -196,15 +196,14 @@ class BBcodeProcessor():
 
 
     def procHyperlink(self, code):
-        while True:
-            try: # Add markdown for it to be a hyperlink
-                try: code.a.insert_before('[' + code.a.text.replace('[', '\[').replace(']', '\]') + ']' +
-                                          '(' + code.a['href'].replace('(', '\(').replace(')', '\)') + ') ')
-                except: pass
+        while True:  # Add markdown for it to be a hyperlink
+            subcode = code.select_one(self.sanitize('a'))
+            if not subcode: break
 
-                code.a.clear()
-                code.a.unwrap()
-            except: break
+            subcode.insert_before('[' + subcode.text.replace('[', '\[').replace(']', '\]') + ']' +
+                                  '(' + subcode['href'].replace('(', '\(').replace(')', '\)') + ') ')
+            subcode.clear()
+            subcode.unwrap()
 
 
     def procQuoteHeader(self, code):
