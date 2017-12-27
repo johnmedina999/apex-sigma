@@ -45,9 +45,9 @@ class BBcodeProcessor():
     # Recursively processes the BBcode
     def processBBcodeChildren(self, children):
         text = ''
-        for child in list(children):
+        for child in list(children): # TODO: Longer links become malformed if wrapped. Figure out how to detect and not wrap them
             # Text to wrap a certain amount of lines since discord rich text wraps it, and '|' will not show on that new line
-            try:  text += textwrap.fill(child, width=75, drop_whitespace=False, replace_whitespace=False)
+            try:  text += child #textwrap.fill(child, width=75, drop_whitespace=False, replace_whitespace=False)
             except:
                 # If we couldn't append text, then it's unprocessed HTML code
                 try: text += BBcodeProcessor().Process(str(child)).text
