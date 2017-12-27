@@ -40,10 +40,7 @@ async def display_thread(cmd, channel, args):
         return
 
     # Sanitize data
-    topic_name    = topic_name.replace('\n', '').replace(']', '\]')
-    post_contents = post_contents.replace('*', '\*')
-    # \TODO: sanitize the tokens used to identify images and links below
-
+    topic_name = topic_name.replace('\n', '').replace(']', '\]')
 
     # Compile embed contents
     post_contents = BBcodeProcessor().Process(post_contents).text
@@ -55,14 +52,7 @@ async def display_thread(cmd, channel, args):
     embed.set_author(name=topic_poster_name, icon_url=topic_poster_avatar, url=topic_poster_url)
     posts.append(embed)
 
-    posts = DiscordBBcodeCompiler().Compile(post_contents, posts)
-
-        
-    # TODO: img tags now just have img with no attributes
-    # TODO: forum links now are wrapped in "postlink" class
-    # TODO: Take account formatting when splitting. Stuff like bold sentences get 
-    #       split up, and are displayed incorrectly (asterisks visible on both ends)
-
+    DiscordBBcodeCompiler().Compile(post_contents, posts)
 
     # Post everything to discord
     for post in posts:
@@ -72,7 +62,6 @@ async def display_thread(cmd, channel, args):
 
 
 async def get_thread(cmd, message, args):
-
     if len(args) < 1:
         await message.channel.send(cmd.help())
         return
