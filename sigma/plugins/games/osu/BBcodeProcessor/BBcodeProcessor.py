@@ -15,8 +15,9 @@ class BBcodeProcessor():
         self.procListIndicator(code)
         self.procCentredFormatting(code)
         self.procVideoFrame(code)
-        self.procSpoilerBoxArrow(code)
+        #self.procSpoilerBoxArrow(code)
         self.procSpoilerBoxHeader(code)
+        self.procSpoilerBoxBody(code)
         self.procEmoji(code)
         self.procImage(code)
         self.procHyperlink(code)
@@ -148,25 +149,39 @@ class BBcodeProcessor():
 
     
     def procSpoilerBoxArrow(self, code):
-        while True:
-            try: # Spoiler box arrow
-                code.select_one(self.sanitize('i.bbcode-spoilerbox__arrow')).unwrap()
-            except: break
+        while True: # Spoiler box arrow
+            subcode = code.select_one(self.sanitize('i.bbcode-spoilerbox__arrow'))
+            if not subcode: break
 
             subcode.clear()
             subcode.unwrap()
 
 
     def procSpoilerBoxHeader(self, code):
+        while True: # Spoiler box open/close thingy
+            subcode = code.select_one(self.sanitize('a.bbcode-spoilerbox__link'))
+            if not subcode: break
+
+            print('BBcodeProcessor.py : procSpoilerBoxHeader')
+
+            text = subcode.get_text()
+            if text: subcode.insert_before(text + ':\n' if text != 'collapsed text' else '')
                 
             subcode.clear()
             subcode.unwrap()
+
+
+    def procSpoilerBoxBody(self, code):
         while True:
-            try: # Spoiler box open/close thingy
-                code.select_one("div.bbcode-spoilerbox__body").insert_before(':\n ')
-                code.select_one("div.bbcode-spoilerbox__body").insert_after('\n')
-                code.select_one("div.bbcode-spoilerbox__body").unwrap()
-            except: break
+            subcode = code.select_one(self.sanitize('div.bbcode-spoilerbox__body'))
+            if not subcode: break
+
+            print('BBcodeProcessor.py : procSpoilerBoxBody')
+
+            text = self.processBBcodeChildren(subcode.children)
+            if text:
+                text = ''.join(['    ' + line + '\n' for line in text.split('\n')])
+                subcode.insert_before(text)
 
             subcode.clear()
             subcode.unwrap()
