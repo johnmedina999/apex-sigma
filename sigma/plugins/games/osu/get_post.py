@@ -21,7 +21,7 @@ async def display_post(cmd, channel, args):
             page = await data.text()
 
     if page.find("Page Missing") != -1 or page.find("You shouldn&#039;t be here.") != -1:
-        await channel.send("Topic does not exist!")
+        await channel.send("Post does not exist! Maybe you wanted to get by topic instead? (>>get_topic)")
         return
 
     root  = BeautifulSoup(page, "lxml")
