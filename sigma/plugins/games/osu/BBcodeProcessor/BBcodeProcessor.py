@@ -15,7 +15,6 @@ class BBcodeProcessor():
         self.procListIndicator(code)
         self.procCentredFormatting(code)
         self.procVideoFrame(code)
-        #self.procSpoilerBoxArrow(code)
         self.procSpoilerBoxHeader(code)
         self.procSpoilerBoxBody(code)
         self.procEmoji(code)
@@ -143,15 +142,6 @@ class BBcodeProcessor():
             text = subcode['src']
             if text:
                 subcode.insert_before(text.replace('http','vid').replace('embed/', 'watch?v=').replace('?rel=0', '') + ' ')
-
-            subcode.clear()
-            subcode.unwrap()
-
-    
-    def procSpoilerBoxArrow(self, code):
-        while True: # Spoiler box arrow
-            subcode = code.select_one(self.sanitize('i.bbcode-spoilerbox__arrow'))
-            if not subcode: break
 
             subcode.clear()
             subcode.unwrap()
