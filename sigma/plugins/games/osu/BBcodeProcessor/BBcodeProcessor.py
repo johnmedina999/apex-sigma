@@ -32,14 +32,6 @@ class BBcodeProcessor():
 
 
     # TODO: Figure out how to simplify all into a generic method
-    def processBBcode(self, element, content, before_elem='', after_elem=''):
-        while True:
-            try:
-                if element.get_text():
-                    element.insert_before(before_elem)
-                    element.insert_after(after_elem)
-                element.unwrap()
-            except: break
 
 
     def sanitize(self, code):
