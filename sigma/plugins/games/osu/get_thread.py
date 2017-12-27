@@ -10,7 +10,7 @@ from .Forum.Structs.Topic import Topic
 
 async def display_thread(cmd, channel, args):
 
-    thread_id = args[0]
+    thread_id = get_thread_id(args[0])
 
     # Get the HTML page
     topic_url = 'https://osu.ppy.sh/community/forums/topics/' + thread_id
@@ -61,7 +61,27 @@ async def display_thread(cmd, channel, args):
         await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
 
+def get_thread_id(arg):
+    token = 'https://osu.ppy.sh/community/forums/topics/'
+    idx = arg.find(token)
+    if idx != -1:
+        beg = len(token)
+        token = '?start='
+        idx = arg.find(token)
+
+        if idx != -1: return arg[beg:idx]
+        else:         return arg[beg:]
+
+    token = 'https://osu.ppy.sh/forum/t/'
+    idx = arg.find(token)
+    if idx != -1: return arg[len(token):]
+
+    return arg
+
+
 async def get_thread(cmd, message, args):
+    args = [arg for arg in args if arg != '']
+
     if len(args) < 1:
         await message.channel.send(cmd.help())
         return

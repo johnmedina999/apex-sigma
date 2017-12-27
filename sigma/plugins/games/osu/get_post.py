@@ -12,8 +12,8 @@ from .Forum.Structs.Post import Post
 
 async def display_post(cmd, channel, args):
 
-    post_id = args[0]
-
+    post_id = get_post_id(args[0])
+    
     # Get the HTML page
     topic_url = 'https://osu.ppy.sh/community/forums/posts/' + post_id
     async with aiohttp.ClientSession() as session:
@@ -73,7 +73,29 @@ async def display_post(cmd, channel, args):
         await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
 
+def get_post_id(arg):
+    token = 'https://osu.ppy.sh/community/forums/topics/'
+    idx = arg.find(token)
+    if idx != -1:
+        token = '?start='
+        idx = arg.find(token)
+
+        if idx != -1: return arg[idx:]
+
+    token = 'https://osu.ppy.sh/community/forums/posts/'
+    idx = arg.find(token)
+    if idx != -1: return arg[len(token):]
+
+    token = 'https://osu.ppy.sh/forum/p/'
+    idx = arg.find(token)
+    if idx != -1: return arg[len(token):]
+
+    return arg
+
+
 async def get_post(cmd, message, args):
+    args = [arg for arg in args if arg != '']
+
     if len(args) < 1:
         await message.channel.send(cmd.help())
         return
