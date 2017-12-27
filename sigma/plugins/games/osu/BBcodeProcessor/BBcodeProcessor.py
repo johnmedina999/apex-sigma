@@ -5,6 +5,7 @@ class BBcodeProcessor():
     # BUG: All current logic erases tags that are nested within tags. Implement a similiar thing as done with quote blocks to fix
     def Process(self, post_contents):
 
+        self.sanitize(post_contents)
         code = BeautifulSoup(post_contents, "lxml")
 
         self.procNewline(code)
