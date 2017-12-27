@@ -71,6 +71,8 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('h2'))
             if not subcode: break
 
+            #print('BBcodeProcessor.py : procHeading')
+
             text = self.processBBcodeChildren(subcode.children)
             if text: subcode.insert_before('\n\n' + text + '\n')
             
@@ -83,6 +85,8 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('center'))
             if not subcode: break
 
+            #print('BBcodeProcessor.py : procCentredFormatting')
+
             text = self.processBBcodeChildren(subcode.children)
             if text: subcode.insert_before('\n' + text + '\n')
 
@@ -94,6 +98,8 @@ class BBcodeProcessor():
         while True:
             subcode = code.select_one(self.sanitize('ul.bbcode__list-title'))
             if not subcode: break
+
+            #print('BBcodeProcessor.py : procListTitle')
 
             text = self.processBBcodeChildren(subcode.children)
             text = ''.join(['    ' + line for line in text.splitlines(True)])
@@ -108,9 +114,13 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('ol.unordered'))
             if not subcode: break
 
+            #print('BBcodeProcessor.py : procListIndicator')
+
             while True:  # Process bullets
                 bullet = subcode.select_one(self.sanitize('li'))
                 if not bullet: break
+
+                #print('BBcodeProcessor.py : procListIndicator > Bullet')
 
                 text = self.processBBcodeChildren(bullet.children)
                 if text:
@@ -144,7 +154,7 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('a.bbcode-spoilerbox__link'))
             if not subcode: break
 
-            print('BBcodeProcessor.py : procSpoilerBoxHeader')
+            #print('BBcodeProcessor.py : procSpoilerBoxHeader')
 
             text = subcode.get_text()
             if text: subcode.insert_before(text + ':\n' if text != 'collapsed text' else '')
@@ -158,7 +168,7 @@ class BBcodeProcessor():
             subcode = code.select_one(self.sanitize('div.bbcode-spoilerbox__body'))
             if not subcode: break
 
-            print('BBcodeProcessor.py : procSpoilerBoxBody')
+            #print('BBcodeProcessor.py : procSpoilerBoxBody')
 
             text = self.processBBcodeChildren(subcode.children)
             if text:
