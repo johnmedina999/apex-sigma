@@ -10,7 +10,7 @@ from .Forum.Structs.Topic import Topic
 
 async def display_thread(cmd, channel, args):
 
-    thread_id = args[0]
+    thread_id = get_thread_id(args[0])
 
     # Get the HTML page
     topic_url = 'https://osu.ppy.sh/community/forums/topics/' + thread_id
@@ -40,10 +40,7 @@ async def display_thread(cmd, channel, args):
         return
 
     # Sanitize data
-    topic_name    = topic_name.replace('\n', '').replace(']', '\]')
-    post_contents = post_contents.replace('*', '\*')
-    # \TODO: sanitize the tokens used to identify images and links below
-
+    topic_name = topic_name.replace('\n', '').replace(']', '\]')
 
     # Compile embed contents
     post_contents = BBcodeProcessor().Process(post_contents).text
@@ -55,23 +52,35 @@ async def display_thread(cmd, channel, args):
     embed.set_author(name=topic_poster_name, icon_url=topic_poster_avatar, url=topic_poster_url)
     posts.append(embed)
 
-    posts = DiscordBBcodeCompiler().Compile(post_contents, posts)
-
-        
-    # TODO: img tags now just have img with no attributes
-    # TODO: forum links now are wrapped in "postlink" class
-    # TODO: Take account formatting when splitting. Stuff like bold sentences get 
-    #       split up, and are displayed incorrectly (asterisks visible on both ends)
-
+    DiscordBBcodeCompiler().Compile(post_contents, posts)
 
     # Post everything to discord
     for post in posts:
-        print(post.description)
+        #print(post.description)
         await channel.send(None, embed=post)
         await asyncio.sleep(1) # Delay so that the posts don't get shuffled later on
 
 
+def get_thread_id(arg):
+    token = 'https://osu.ppy.sh/community/forums/topics/'
+    idx = arg.find(token)
+    if idx != -1:
+        beg = len(token)
+        token = '?start='
+        idx = arg.find(token)
+
+        if idx != -1: return arg[beg:idx]
+        else:         return arg[beg:]
+
+    token = 'https://osu.ppy.sh/forum/t/'
+    idx = arg.find(token)
+    if idx != -1: return arg[len(token):]
+
+    return arg
+
+
 async def get_thread(cmd, message, args):
+    args = [arg for arg in args if arg != '']
 
     if len(args) < 1:
         await message.channel.send(cmd.help())
