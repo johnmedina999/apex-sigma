@@ -55,8 +55,7 @@ async def display_post(cmd, channel, args):
     topic_name = topic_name.replace('\n', '').replace(']', '\]')
 
     # Compile embed contents
-    post_contents = BBcodeProcessor().Process(post_contents)
-    post_contents = post_contents.text
+    post_contents = BBcodeProcessor().Process(post_contents).text
     posts = []
 
     # Topic Header
