@@ -238,7 +238,7 @@ class BBcodeProcessor():
                 if text[-1] == ' ': text = text[:-1] + '** '
                 else:               text = text + '**'
                 
-                subcode.insert_before(text + '\n\n')
+                subcode.insert_before(text + '\n')
             
             subcode.clear()
             subcode.unwrap()
@@ -251,7 +251,7 @@ class BBcodeProcessor():
 
             text = self.processBBcodeChildren(subcode.children)
             text = ''.join(['**|**    ' + line + '\n' for line in text.split('\n')])
-            subcode.insert_before(text + '\n')
+            subcode.insert_before('\n' + text + '\n')
 
             subcode.clear()
             subcode.unwrap()
