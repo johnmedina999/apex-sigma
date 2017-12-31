@@ -6,7 +6,7 @@ import discord
 async def giverole(cmd, message, args):
     
     if not check_man_roles(message.author, message.channel):
-        out_content = discord.Embed(type='rich', color=0xDB0000, title='⛔ Insufficient Permissions. Server Admin Only.')
+        out_content = discord.Embed(type='rich', color=0xDB0000, title='⛔ Insufficient Permissions. Needs manage roles permission.')
         await message.channel.send(None, embed=out_content)
         return
     
