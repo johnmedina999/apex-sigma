@@ -8,6 +8,7 @@ from .db_nodes.details import update_details
 from .db_nodes.settings import set_settings_node, add_new_server_settings_node
 from .db_nodes.settings import get_settings_node, init_server_settings_node, check_for_missing_settings_node
 from .db_nodes.inventory import get_inventory, add_to_inventory, del_from_inventory
+from .db_nodes.profiles import updateDiscordProfileLink, removeDiscordProfileLink, getDiscordProfileLink, setModerationDiscordProfileLink, isModerationDiscordProfileLink
 
 
 class DatabaseError(Exception):
@@ -110,3 +111,17 @@ class Database(object):
     def check_for_missing_settings(self, server):
         check_for_missing_settings_node(self.db, server)
 
+    def updateDiscordProfileLink(self, uid, profile_type, link):
+        updateDiscordProfileLink(self.db, uid, profile_type, link)
+
+    def removeDiscordProfileLink(self, uid, profile_type=None):
+        removeDiscordProfileLink(self.db, uid, profile_type)
+
+    def getDiscordProfileLink(self, uid, profile_type=None):
+        return getDiscordProfileLink(self.db, uid, profile_type)
+
+    def setModerationDiscordProfileLink(self, uid, moderation):
+        setModerationDiscordProfileLink(self.db, uid, moderation)
+
+    def isModerationDiscordProfileLink(self, uid):
+        return isModerationDiscordProfileLink(self.db, uid)

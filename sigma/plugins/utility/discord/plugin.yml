@@ -141,3 +141,15 @@ commands:
     usage:   "{pfx:s}{cmd:s} Hello world!"
     description:
       Repeats the given text.
+
+  - name:    getlinkeduserprofiles
+    alts:
+        - "Profiles"
+        - "profiles"
+    global:  true
+    enabled: true
+    admin:   false
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person profile_type"
+    description:
+      Lists the profiles associated with the user or lists the specific one if provided
