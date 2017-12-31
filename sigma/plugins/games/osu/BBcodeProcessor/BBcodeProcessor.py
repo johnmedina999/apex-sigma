@@ -157,7 +157,7 @@ class BBcodeProcessor():
             #print('BBcodeProcessor.py : procSpoilerBoxHeader')
 
             text = subcode.get_text()
-            if text: subcode.insert_before(text + ':\n' if text != 'collapsed text' else '')
+            if text: subcode.insert_before('\n__' + text + '__:\n' if text != 'collapsed text' else '')
                 
             subcode.clear()
             subcode.unwrap()

@@ -19,7 +19,7 @@ async def display_thread(cmd, channel, args):
             page = await data.text()
 
     if page.find("Page Missing") != -1 or page.find("You shouldn&#039;t be here.") != -1:
-        await channel.send("Topic does not exist!")
+        await channel.send("Topic does not exist! Maybe you want to get by post instead? (>>get_post)")
         return
 
     root = BeautifulSoup(page, "lxml")
