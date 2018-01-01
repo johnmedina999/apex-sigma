@@ -7,17 +7,16 @@ def updateDiscordProfileLink(db, uid, profile_type, link):
     if not link:         raise Exception('db_node/profiles.py : updateDiscordProfileLink | link   = None')
     
     uid = str(uid)
-    user_data_out    = { 'UserID': uid, 'Moderated': False, 'Profiles' : {} }
-    profile_data_out = { 'ProfileType': profile_type, 'Link': link }
+    user_data = db[collection].find_one({ 'UserID': uid })
 
-    user_data_in = db[collection].find_one({ 'UserID': uid })
-    if not user_data_in: db[collection].insert_one(user_data_out)
+    if not user_data: 
+        user_data = { 'UserID': uid, 'Moderated': False, 'Profiles' : {} }
+        db[collection].insert_one(user_data)
+        user_data = db[collection].find_one({ 'UserID': uid })
 
-    user_data_out = db[collection].find_one({ 'UserID': uid })
-    user_data_out['Profiles'][profile_type] = link
-
-    db[collection].update_one({'UserID': uid},
-                              {'$set': user_data_out})
+    user_data['Profiles'][profile_type] = link
+    db[collection].update_one({ 'UserID': uid },
+                              { '$set': {'Profiles' : user_data['Profiles']} })
 
 
 def removeDiscordProfileLink(db, uid, profile_type=None):
@@ -30,9 +29,8 @@ def removeDiscordProfileLink(db, uid, profile_type=None):
     if not profile_type: db[collection].delete_one({ 'UserID': uid }); return
     if not profile_type in user_data['Profiles']: return
 
-    user_data['Profiles'].remove(profile_type)
-    db[collection].update_one({'UserID': uid},
-                              {'$set': user_data})
+    db[collection].update_one({ 'UserID': uid },
+                              { '$unset': {profile_type : ''} })
 
 
 def getDiscordProfileLink(db, uid, profile_type=None):
@@ -55,10 +53,8 @@ def setModerationDiscordProfileLink(db, uid, moderation):
     user_data = db[collection].find_one({ 'UserID': uid })
 
     if not user_data: raise Exception('User does not exist')
-    user_data['Moderated'] = moderation
-
-    db[collection].update_one({'UserID': uid},
-                              {'$set': user_data})
+    db[collection].update_one({ 'UserID': uid },
+                              { '$set': {'Moderated' : moderation} })
 
 
 def isModerationDiscordProfileLink(db, uid):
