@@ -22,10 +22,12 @@ async def linkuserprofiles(cmd, message, args):
         return
 
     if (message.author.id == target.id) and not check_man_srv(message.author, message.channel):
-        if cmd.db.isModerationDiscordProfileLink(target.id) is True:
-            embed = discord.Embed(type='rich', color=0xDB0000, title='⛔ You have been restricted from modifying your own profile links.')
-            await message.channel.send(None, embed=embed)
-            return
+        try:
+            if cmd.db.isModerationDiscordProfileLink(target.id) is True:
+                embed = discord.Embed(type='rich', color=0xDB0000, title='⛔ You have been restricted from modifying your own profile links.')
+                await message.channel.send(None, embed=embed)
+                return
+        except: pass  # Profile doesn't exist yet. No moderation control (yet)
 
     cmd.db.updateDiscordProfileLink(target.id, account_type, account_link)
 
