@@ -35,7 +35,7 @@ def removeDiscordProfileLink(db, uid, profile_type=None):
                               {'$set': user_data})
 
 
-def getDiscordProfileLink(db, uid, data, profile_type=None):
+def getDiscordProfileLink(db, uid, profile_type=None):
     if not uid: raise Exception('db_node/profiles.py : updateDiscordProfileLink | uid = None')
 
     uid = str(uid)
