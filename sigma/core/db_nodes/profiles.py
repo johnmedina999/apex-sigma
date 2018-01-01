@@ -27,7 +27,7 @@ def removeDiscordProfileLink(db, uid, profile_type=None):
     user_data = db[collection].find_one({ 'UserID': uid })
     
     if not user_data: return
-    if not profile_type: db[collection].delete_one({ 'UserID': uid })
+    if not profile_type: db[collection].delete_one({ 'UserID': uid }); return
     if not profile_type in user_data['Profiles']: return
 
     user_data['Profiles'].remove(profile_type)
