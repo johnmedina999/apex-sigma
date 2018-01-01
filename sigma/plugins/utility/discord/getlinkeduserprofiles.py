@@ -2,7 +2,8 @@ import discord
 
 
 async def getlinkeduserprofiles(cmd, message, args):
-    
+    args = [arg for arg in args if arg.strip() != '']
+
     if not message.mentions:
         out_content = discord.Embed(type='rich', color=0xDB0000, title='❗ Error')
         out_content.add_field(name='Invalid Arguments', value=cmd.help())

@@ -3,6 +3,7 @@ from sigma.core.permission import check_man_srv
 
 
 async def setlinkeduserprofilemoderation(cmd, message, args):
+    args = [arg for arg in args if arg.strip() != '']
     
     if not message.mentions:
         out_content = discord.Embed(type='rich', color=0xDB0000, title='❗ Error')
