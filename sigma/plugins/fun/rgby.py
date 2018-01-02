@@ -1,6 +1,7 @@
 import discord
 import aiohttp
 import os
+import PIL.ImageOps  
 from PIL import Image
 from io import BytesIO
 
@@ -19,6 +20,10 @@ async def rgby(cmd, message, args):
 
     if len(args) > 2: exposure = int(args[2])
     else:             exposure = 100
+
+    if len(args) > 3: 
+        if args[3] == 'invert': invert = True
+    else:             invert = False
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as data:
@@ -48,10 +53,10 @@ async def rgby(cmd, message, args):
         if hor > force_width: hor = 1; text += '\n'
         r,g,b,a = pixel
 
-        # If color is more than 127, make it 1, otherwise 0
-        r = min(1, max((r - exposure), 0))
-        g = min(1, max((g - exposure), 0))
-        b = min(1, max((b - exposure), 0))
+        # If color is more than 127, make it 1, otherwise 0. Make -127 be 127 and vice versa if invert flag is true
+        r = min(1, max((r - exposure) * -1 if invert == True else 1, 0))
+        g = min(1, max((g - exposure) * -1 if invert == True else 1, 0))
+        b = min(1, max((b - exposure) * -1 if invert == True else 1, 0))
 
         '''
         1 = r
