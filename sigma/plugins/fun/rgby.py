@@ -15,7 +15,7 @@ async def rgby(cmd, message, args):
 
     url = args[0]
 
-    if len(args) > 1: force_width = int(args[1])
+    if len(args) > 1: force_width = min(int(args[1]), 64)
     else:             force_width = 32
 
     if len(args) > 2: exposure = int(args[2])
