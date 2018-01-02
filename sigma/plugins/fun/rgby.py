@@ -54,9 +54,9 @@ async def rgby(cmd, message, args):
         r,g,b,a = pixel
 
         # If color is more than 127, make it 1, otherwise 0. Make -127 be 127 and vice versa if invert flag is true
-        r = min(1, max((r - exposure) * -1 if invert == True else 1, 0))
-        g = min(1, max((g - exposure) * -1 if invert == True else 1, 0))
-        b = min(1, max((b - exposure) * -1 if invert == True else 1, 0))
+        r = min(1, max((r - exposure) * (-1 if invert == True else 1), 0))
+        g = min(1, max((g - exposure) * (-1 if invert == True else 1), 0))
+        b = min(1, max((b - exposure) * (-1 if invert == True else 1), 0))
 
         '''
         1 = r
