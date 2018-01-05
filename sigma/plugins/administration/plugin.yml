@@ -165,6 +165,7 @@ commands:
     global:  true
     enabled: true
     sfw:     true
+    pmable:  true
     usage:   "{pfx:s}{cmd:s} fun"
     description:
       Reloads the selected plugin
