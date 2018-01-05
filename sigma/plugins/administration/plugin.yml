@@ -188,6 +188,16 @@ commands:
     description:
       Toggles if a server by the given ID is or is not an Aurora Project partner.
 
+  - name:    triggerupdate
+    global:  true
+    enabled: true
+    admin:   true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Updates the bot
+
 
 events:
   - name:    pmdetect
