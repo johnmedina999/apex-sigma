@@ -165,15 +165,6 @@ commands:
       Translates the given sentence from and to the inputted languages.
       If you do not know your language code, search Google for ISO 639.1 Laguage Codes.
 
-  - name: modules
-    global:  true
-    enabled: true
-    sfw:     true
-    pmable:  true
-    usage:   "{pfx:s}{cmd:s}"
-    description:
-      Shows the list of all the module groups in Sigma.
-
   - name: commands
     alts:
       - "cmds"
