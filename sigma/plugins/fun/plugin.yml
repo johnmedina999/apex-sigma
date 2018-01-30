@@ -235,7 +235,7 @@ commands:
       Outputs a random CSS Humor codeblock.
       Frontend devs love this stuff.
 
-  - name: unflip
+  - name:    unflip
     global:  true
     enabled: true
     sfw:     true
@@ -243,6 +243,15 @@ commands:
     description:
       Toggles automatic unfliping of tables
       Requires the user to be a server Administrator.
+
+  - name:    rgby
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} link width exposure"
+    description:
+      Converts linked image to 4 color emoji art. Width retains the image proportions. Exposure controls how bright the image is (to get otherwise darker details)
+    
 
   # - name: chatterbot
   #   alts:

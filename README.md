@@ -7,8 +7,8 @@
 <img src="https://img.shields.io/badge/License-GPLv3-red.svg?style=flat-square" />
 </p>
 <p align="center">
-<a href="https://travis-ci.org/aurora-pro/apex-sigma.svg?branch=master"><img src="https://travis-ci.org/aurora-pro/apex-sigma.svg?style=flat-square" /></a>
-<a href="https://ci.appveyor.com/project/AXAz0r/apex-sigma-eogfm"><img src="https://ci.appveyor.com/api/projects/status/s3861v84u4olvili?svg=true" /></a>
+<a href="https://travis-ci.org/abraker95/apex-sigma.svg?branch=master"><img src="https://travis-ci.org/abraker95/apex-sigma.svg?style=flat-square"/></a>
+<a href="https://ci.appveyor.com/project/abraker95/apex-sigma"><img src="https://ci.appveyor.com/api/projects/status/7vkpfaoodeiw2mjr?svg=true"/></a>
 <a href="https://codeclimate.com/github/aurora-pro/apex-sigma"><img src="https://codeclimate.com/github/aurora-pro/apex-sigma/badges/gpa.svg?style=flat-square" /></a>
 <a href='https://www.versioneye.com/user/projects/58782eec1fe8e3002b4a9b50'><img src='https://www.versioneye.com/user/projects/58782eec1fe8e3002b4a9b50/badge.svg' /></a>
 </p>

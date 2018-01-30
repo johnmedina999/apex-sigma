@@ -42,7 +42,49 @@ commands:
     usage:   "{pfx:s}{cmd:s} number back"
     description:
       Prints a number of logs for the bot starting from the amount going back
-      
+  
+  - name: linkuserprofiles
+    alts:
+      - "linkuserprofile"
+      - "LinkUserProfile"
+      - "Link"
+      - "link"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person profile_type link"
+    description:
+      Associates a user with the provided profile (steam, osu!, misc forums, etc)
+      Settings will be global across all servers this instance of the bot is hosted on
+      Command requires the Manage Role permission if you are doing this for another user
+
+  - name: setlinkeduserprofilemoderation
+    alts:
+      - "SetLinkedUserProfileModeration"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person {enable | disable}"
+    description:
+      Sets moderation flag for aser profile linking. If moderation flag is on, then the user cannot adjust their own user profile links
+      Settings will be global across all servers this instance of the bot is hosted on
+      Command requires the Manage Server permission
+
+  - name: removelinkeduserprofile
+    alts:
+      - "RemoveLinkedUserProfile"
+      - "removelinkeduserprofiles"
+      - "RemoveLinkedUserProfiles"
+      - "removelinked"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} @person profile_type"
+    description:
+      Removes specified linked profile if it is linked. Removes all if not specified
+      Settings will be global across all servers this instance of the bot is hosted on
+      Command requires the Manage Role permission if you are removing specified linked for another user
+      Only Bot Owner can remove the entire entry
 
 events:
   - name:    custom_command_detection

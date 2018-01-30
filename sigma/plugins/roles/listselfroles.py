@@ -11,16 +11,16 @@ async def listselfroles(cmd, message, args):
             if role == srv_role.id or role == srv_role.name:
                 role_list.append(srv_role.name)
     
-    if role_list == '':
+    if not role_list:
         embed = discord.Embed(type='rich', color=0x0099FF, title='ℹ No Self Assignable Roles Set')
         await message.channel.send(None, embed=embed)
         return
 
-    rl_out = ''
     role_list = sorted(role_list)
-    for rl in role_list:
-        rl_out += '\n - ' + rl
-    
-    embed = discord.Embed(color=0x1ABC9C)
-    embed.add_field(name='Self Assignable Roles On ' + message.guild.name, value='```\n' + rl_out + '\n```')    
-    await message.channel.send(None, embed=embed)
+    rl_str = '\n- ' + '\n- '.join(role_list)
+    rl_out = [ '\n'.join(rl_str.splitlines()[50*i:i*50+50]) for i in range(0, int(rl_str.count('\n')/50) + 1) ]
+
+    for rl in rl_out:
+        embed = discord.Embed(type='rich', color=0x1ABC9C)
+        embed.add_field(name='Self Assignable Roles On ' + message.guild.name, value='```\n' + rl + '\n```')    
+        await message.channel.send(None, embed=embed)
