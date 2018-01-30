@@ -5,8 +5,8 @@ from config import Prefix
 async def commands(cmd, message, args):
     
     if not args:
-        embed = discord.Embed(color=0x696969, title='🔍 Please Enter a Module Group Name')
-        embed.set_footer(text='Module groups can be seen with the ' + Prefix + 'modules command.')
+        embed = discord.Embed(color=0x696969, title='🔍 Please Enter a Module Name.')
+        embed.set_footer(text='The module groups can be seen with the ' + Prefix + 'help command.')
         await message.channel.send(None, embed=embed)
         return
 
@@ -19,14 +19,10 @@ async def commands(cmd, message, args):
             command_list.append(f'{Prefix}{command}')
     
     if len(command_list) == 0:
-        embed = discord.Embed(color=0x696969, title='🔍 Module Group Not Found')
+        embed = discord.Embed(color=0x696969, title='🔍 Module Group Not Found!')
         await message.channel.send(None, embed=embed)
         return
     
-    embed_to_user = discord.Embed(color=0x1abc9c)
-    embed_to_user.add_field(name='Sigma\'s Commands In ' + module_group.title(), value='```yaml\n' + ', '.join(command_list) + '\n```')
-    await message.author.send(None, embed=embed_to_user)
-    
-    if message.guild:
-        embed_local = discord.Embed(color=0x66CC66, title='✅ List Sent To Your DM')
-        await message.channel.send(None, embed=embed_local)
+    embed_to_channel = discord.Embed(color=0x1abc9c)
+    embed_to_channel.add_field(name='Sickle\'s commands in ' + module_group.title(), value='```yaml\n' + ', '.join(command_list) + '\n```')
+    await message.channel.send(None, embed=embed_to_channel)
