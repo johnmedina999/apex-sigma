@@ -210,6 +210,15 @@ events:
     description:
       Redirects PM info to the bot owner.
 
+  - name:    spam_monitor
+    type:    message
+    global:  true
+    enabled: true
+    sfw:     true
+    pmable:  false
+    description:
+      Monitors the servers for possible spam
+
   - name:    version_updater
     type:    ready
     global:  true

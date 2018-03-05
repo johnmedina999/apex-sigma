@@ -167,14 +167,12 @@ class Sigma(discord.AutoShardedClient):
 
 
     async def on_message(self, message):
-
-        if not self.ready: 
-            return
+        if not self.ready: return
 
         self.db.add_stats('MSGCount')
         self.message_count += 1
         args = message.content.split(' ')
-            
+
         # handle mention events
         if type(message.author) == discord.Member:
             black = check_black(self.db, message)
