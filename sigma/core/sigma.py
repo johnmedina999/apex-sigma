@@ -155,8 +155,8 @@ class Sigma(discord.AutoShardedClient):
         # self.loop.create_task(self.db.refactor_users(self.get_all_members()))
         # self.log.info('Starting ServerList Refactor Node')
         # self.loop.create_task(self.db.refactor_servers(self.guilds))
-        self.log.info('Updating Bot Listing APIs...')
-        self.loop.create_task(self.update_discordlist())
+        # self.log.info('Updating Bot Listing APIs...')
+        # self.loop.create_task(self.update_discordlist())
         self.log.info('-----------------------------------')
         self.ready = True
         self.log.info('Finished Loading and Successfully Connected to Discord!')
