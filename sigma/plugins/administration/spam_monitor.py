@@ -106,9 +106,13 @@ async def spam_monitor(ev, message, args):
             if tier >= 3: 
                 # TODO: Remove message post permission from everyone in the channel
                 # TODO: Send warns to all people that spammed
+                #       warn(cmd, message, args)
                 pass
             if tier >= 4: 
                 # TODO: Revoke invite links
+                #  ev.db.set_settings(guild_id, 'BlockInvites', True)
+                #  embed = discord.Embed(color=0x66CC66, title=':white_check_mark: Invite Blocking Has Been Enabled')
+                #  await admin_channel.send(None, embed=embed)  # send alert to admin channel
                 pass
         
             users_info = ', '.join([ message.author.name for message in channel_sample ])
@@ -138,12 +142,6 @@ async def spam_monitor(ev, message, args):
     #       if message.author.created_at > arrow.utcnow().timestamp - one_Hour:
     #           lets not do that yet... instead, just alert admin channel about user if hadn't alerted before ---> ban user
     #           delete message
-    #
-    #   if tier >= 4:
-    #       if guild_id in flagged_guilds:      # If this is the guild that is having spam issues
-    #           ev.db.set_settings(guild_id, 'BlockInvites', True)
-    #           embed = discord.Embed(color=0x66CC66, title=':white_check_mark: Invite Blocking Has Been Enabled')
-    #           await admin_channel.send(None, embed=embed)  # send alert to admin channel
         
     # Reset sample
     message_sample = {}
