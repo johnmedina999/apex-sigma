@@ -166,3 +166,13 @@ commands:
       It needs to be specified if it is a command or module group.
       If it is a command use C and if it is a module use M following the example.
       Command usable only by Server Admins.
+
+  - name:    setspam
+    global:  true
+    enabled: true
+    admin:   true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Updates spam settings for the server

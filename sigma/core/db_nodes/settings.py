@@ -30,7 +30,8 @@ def generate_defaults(server):
         'Announcement': False,
         'AnnouncementChannel': server.default_channel.id,
         'ModeratorChannel': None,
-        'ModeratorNotifications': False
+        'ModeratorNotifications': False,
+        'SpamThreshold' : 40               # number of posts/SpamSampleTime until it is considered spam
     }
     return default_settings
 
@@ -69,8 +70,7 @@ def set_settings_node(db, server_id, setting, setting_variable):
 def check_for_missing_settings_node(db, server):
     default = generate_defaults(server)
     for key in default:
-        try:
-            get_settings_node(db, server.id, key)
+        try: get_settings_node(db, server.id, key)
         except:
             value = default[key]
             set_settings_node(db, server.id, key, value)

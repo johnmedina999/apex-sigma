@@ -2,7 +2,6 @@ import asyncio
 import discord
 import arrow
 
-from config import SpamThreshold
 from config import SpamSampleTime
 
 ''' Format:
@@ -54,8 +53,9 @@ async def spam_monitor(ev, message, args):
     if arrow.utcnow().timestamp <= prev_time + SpamSampleTime: return
         
     for guild_id, guild_sample in message_sample.items():
-        for channel_id, channel_sample in guild_sample.items():        
-            if not len(channel_sample) >= SpamThreshold: continue   # If number of messages don't exceed spam threshold, then nothing more to do
+        for channel_id, channel_sample in guild_sample.items():
+            guild_spam_threshold = ev.db.get_settings(guild_id, 'SpamThreshold')
+            if not len(channel_sample) >= guild_spam_threshold: continue   # If number of messages don't exceed spam threshold, then nothing more to do
             
             # TIER 1 action
             await message.channel.delete_messages(channel_sample)
