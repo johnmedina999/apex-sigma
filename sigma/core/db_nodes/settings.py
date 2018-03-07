@@ -36,11 +36,11 @@ def generate_defaults(server):
 
 
 def add_new_server_settings_node(db, server):
-    search = db['ServerSettings'].find({'ServerID': server.id})
-    n = len(list(search))
-    if n == 0:
-        default_settings = generate_defaults(server)
-        db['ServerSettings'].insert_one(default_settings)
+    server_db = db['ServerSettings'].find({'ServerID': server.id})
+    default_settings = generate_defaults(server)
+    
+    if len(list(server_db)) == 0: db['ServerSettings'].insert_one(default_settings)
+    else: check_for_missing_settings_node(db, server)
 
 
 def init_server_settings_node(db, servers):
