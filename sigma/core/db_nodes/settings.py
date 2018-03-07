@@ -28,7 +28,9 @@ def generate_defaults(server):
         'WarnedUsers': {},
         'WarnLimit': 2,
         'Announcement': False,
-        'AnnouncementChannel': server.default_channel.id
+        'AnnouncementChannel': server.default_channel.id,
+        'ModeratorChannel': None,
+        'ModeratorNotifications': False
     }
     return default_settings
 
