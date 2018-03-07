@@ -53,11 +53,10 @@ def get_settings_node(db, server_id, setting):
     finddata = {
         'ServerID': server_id,
     }
+    
     search = db[collection].find_one(finddata)
-    if search:
-        return search[setting]
-    else:
-        return None
+    if search: return search[setting]
+    else: return None
 
 
 def set_settings_node(db, server_id, setting, setting_variable):
