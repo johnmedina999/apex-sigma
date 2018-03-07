@@ -89,6 +89,11 @@ async def spam_monitor(ev, message, args):
                 continue
 
             add_to_spam_info(ev, guild_id, channel_id)
+            
+            # 100 msgs is max it can delete at once
+            if len(channel_sample) > 75 and spam_info[guild_id][channel_id][1] < 3:
+                spam_info[guild_id][channel_id][1] = 3      # Auto escalation as panic response
+
             persistance = spam_info[guild_id][channel_id][0]
             tier = spam_info[guild_id][channel_id][1]
 
