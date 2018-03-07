@@ -60,3 +60,5 @@ Currency = 'Kud ⚜'
 SlotWinChannelID = 12345679123456789
 permitted_id = [123456789123456789]
 DefaultVolume = 100
+SpamThreshold = 40    # number of posts/SpamSampleTime until it is considered spam
+SpamSampleTime = 3    # in seconds
