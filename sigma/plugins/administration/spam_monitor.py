@@ -51,7 +51,7 @@ def add_to_spam_info(ev, guild_id, channel_id):
     global spam_info                # Contains how persistant spam is on a server (persistance, tier)
 
     try:
-        if spam_info[guild_id][channel_id][0] == 3:
+        if spam_info[guild_id][channel_id][0] == 2:
             spam_info[guild_id][channel_id][0] = 0
             spam_info[guild_id][channel_id][1] += 1
         else:
