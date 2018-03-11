@@ -105,11 +105,15 @@ async def spam_monitor(ev, message, args):
                 if persistance == 1:
                     embed = discord.Embed(title=':bat: Stop Spamming!!! :bat:', color=0xDBD000)
                     await channel_sample[0].channel.send(None, embed=embed)
-            if tier >= 3: 
-                # TODO: Remove message post permission from everyone in the channel
+            if tier >= 3:
+                # TODO: Set a timer to re-enable send message permission for @everyone after a minute
+                try: 
+                    everyone_role = discord.utils.find(lambda r: r.name == '@everyone', channel_sample[0].guild.roles)
+                    await message.channel.set_permissions(everyone_role, send_messages=False)
+                except:
+                    ev.log.info('[SPAM MONITOR] Unable to disable @everyone send messages permission for channel ' + channel_sample[0].channel.name + ' in ' + channel_sample[0].guild.name)
                 # TODO: Send warns to all people that spammed
                 #       warn(cmd, message, args)
-                pass
             if tier >= 4: 
                 # TODO: Revoke invite links
                 #  ev.db.set_settings(guild_id, 'BlockInvites', True)
