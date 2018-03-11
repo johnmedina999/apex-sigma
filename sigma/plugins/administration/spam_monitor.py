@@ -98,7 +98,9 @@ async def spam_monitor(ev, message, args):
             tier = spam_info[guild_id][channel_id][1]
 
             # TIER actions for severity detection
-            if tier >= 1: await message.channel.delete_messages(channel_sample)
+            if tier >= 1: 
+                try: await message.channel.delete_messages(channel_sample)
+                except discord.errors.NotFound: pass
             if tier >= 2: 
                 if persistance == 1:
                     embed = discord.Embed(title=':bat: Stop Spamming!!! :bat:', color=0xDBD000)
