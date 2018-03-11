@@ -3,11 +3,11 @@ def generate_defaults(server):
         'ServerID': server.id,
         'Greet': True,
         'GreetMessage': 'Hello %user_mention%, welcome to %server_name%',
-        'GreetChannel': server.default_channel.id,
+        'GreetChannel': server.default_channel.id if server.default_channel else None,
         'GreetPM': False,
         'Bye': True,
         'ByeMessage': '%user_mention% has left the server.',
-        'ByeChannel': server.default_channel.id,
+        'ByeChannel': server.default_channel.id if server.default_channel else None,
         'CleverBot': True,
         'Unflip': False,
         'ShopEnabled': True,
@@ -28,7 +28,7 @@ def generate_defaults(server):
         'WarnedUsers': {},
         'WarnLimit': 2,
         'Announcement': False,
-        'AnnouncementChannel': server.default_channel.id
+        'AnnouncementChannel': server.default_channel.id if server.default_channel else None,
     }
     return default_settings
 
