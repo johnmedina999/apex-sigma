@@ -47,15 +47,18 @@ def add_to_message_sample(ev, message):
 # Tier 4: Revoke invite keys
 #         Possibly escalate to Tier 4 if it sees a spike of invites and there is spam
 
+PERSISTANCE = 0
+TIER        = 1
+
 def add_to_spam_info(ev, guild_id, channel_id):
     global spam_info                # Contains how persistant spam is on a server (persistance, tier)
 
     try:
-        if spam_info[guild_id][channel_id][0] == 2:
-            spam_info[guild_id][channel_id][0] = 0
-            spam_info[guild_id][channel_id][1] += 1
+        if spam_info[guild_id][channel_id][PERSISTANCE] == 2:
+            spam_info[guild_id][channel_id][PERSISTANCE] = 0
+            spam_info[guild_id][channel_id][TIER] += 1
         else:
-            spam_info[guild_id][channel_id][0] += 1
+            spam_info[guild_id][channel_id][PERSISTANCE] += 1
     except:
         try: spam_info[guild_id][channel_id] = [0, 1]
         except:
@@ -91,11 +94,11 @@ async def spam_monitor(ev, message, args):
             add_to_spam_info(ev, guild_id, channel_id)
             
             # 100 msgs is max it can delete at once
-            if len(channel_sample) > 75 and spam_info[guild_id][channel_id][1] < 3:
-                spam_info[guild_id][channel_id][1] = 3      # Auto escalation as panic response
+            if len(channel_sample) > 75 and spam_info[guild_id][channel_id][TIER] < 3:
+                spam_info[guild_id][channel_id][TIER] = 3      # Auto escalation as panic response
 
-            persistance = spam_info[guild_id][channel_id][0]
-            tier = spam_info[guild_id][channel_id][1]
+            persistance = spam_info[guild_id][channel_id][PERSISTANCE]
+            tier = spam_info[guild_id][channel_id][TIER]
 
             # TIER actions for severity detection
             if tier >= 1: 
