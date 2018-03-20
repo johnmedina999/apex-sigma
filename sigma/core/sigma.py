@@ -173,7 +173,7 @@ class Sigma(discord.AutoShardedClient):
 
         self.db.add_stats('MSGCount')
         self.message_count += 1
-        args = message.content.split(' ')
+        args = message.content.split()
             
         # handle mention events
         if type(message.author) == discord.Member:
