@@ -145,10 +145,6 @@ async def spam_monitor(ev, message, args):
                 ev.log.info('[SPAM MONITOR] No moderator notification sent because server named ' + channel_sample[0].guild.name + \
                             ' does not have a moderator channel set up')
 
-    #       if message.author.created_at > arrow.utcnow().timestamp - one_Hour:
-    #           lets not do that yet... instead, just alert admin channel about user if hadn't alerted before ---> ban user
-    #           delete message
-        
     # Reset sample
     message_sample = {}
     prev_time = arrow.utcnow().timestamp
