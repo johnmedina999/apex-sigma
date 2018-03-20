@@ -79,7 +79,7 @@ async def spam_monitor(ev, message, args):
     # If timer has not expired, it's early to go through messages
     if arrow.utcnow().timestamp <= prev_time + SpamSampleTime: return
         
-    for guild_id, guild_sample in message_sample.items():
+    for guild_id, guild_sample in message_sample.copy():
         for channel_id, channel_sample in guild_sample.items():
             
             # If number of messages don't exceed spam threshold, then reset persistance
