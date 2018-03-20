@@ -1,6 +1,7 @@
 import asyncio
 import discord
 import arrow
+import copy
 
 from config import SpamSampleTime
 
@@ -49,6 +50,7 @@ def add_to_message_sample(ev, message):
 
 PERSISTANCE = 0
 TIER        = 1
+MUTED       = 2
 
 def add_to_spam_info(ev, guild_id, channel_id):
     global spam_info                # Contains how persistant spam is on a server (persistance, tier)
@@ -60,11 +62,11 @@ def add_to_spam_info(ev, guild_id, channel_id):
         else:
             spam_info[guild_id][channel_id][PERSISTANCE] += 1
     except:
-        try: spam_info[guild_id][channel_id] = [0, 1]
+        try: spam_info[guild_id][channel_id] = [0, 1, False]
         except:
             try: 
                 spam_info[guild_id] = {}
-                spam_info[guild_id][channel_id] = [0, 1]
+                spam_info[guild_id][channel_id] = [0, 1, False]
             except: 
                 ev.log.info('[SPAM MONITOR] Unable to record spam info for channel id ' + channel_id + ' in guild id' + guild_id)
 
@@ -81,12 +83,20 @@ async def spam_monitor(ev, message, args):
 
     # If timer has not expired, it's early to go through messages
     if arrow.utcnow().timestamp <= prev_time + SpamSampleTime: return
-        
-    for guild_id, guild_sample in message_sample.copy():
-        for channel_id, channel_sample in guild_sample.items():
+
+    for guild_id, guild_sample in copy.copy(message_sample).items():
+        for channel_id, channel_sample in copy.copy(guild_sample).items():
             
+            ######################################################
+            ##   Prcessing
+            ######################################################
+
+            try: # Skip processing if the channel is muted due to spamming; It's being processed in another task
+                if spam_info[guild_id][channel_id][MUTED]: continue
+            except: pass
+
             # If number of messages don't exceed spam threshold, then reset persistance
-            if not len(channel_sample) >= ev.db.get_settings(guild_id, 'SpamThreshold'): 
+            if len(channel_sample) < ev.db.get_settings(guild_id, 'SpamThreshold'): 
                 try: del spam_info[guild_id][channel_id]
                 except: pass
                 continue
@@ -100,21 +110,108 @@ async def spam_monitor(ev, message, args):
             persistance = spam_info[guild_id][channel_id][PERSISTANCE]
             tier = spam_info[guild_id][channel_id][TIER]
 
-            # TIER actions for severity detection
+
+            ######################################################
+            ##   Notifications
+            ######################################################
+
+            users_info = ', '.join([ message.author.name for message in channel_sample ])
+            ev.log.info('[SPAM MONITOR] TIER ' + str(tier) + ' - Channel Detected: ' + channel_sample[0].channel.name + ' in ' + channel_sample[0].guild.name + '\n' \
+                        '\t Users: ' + users_info)
+
+            try:
+                mod_notifications_enabled = ev.db.get_settings(guild_id, 'ModeratorNotifications')
+                if not mod_notifications_enabled: raise Exception
+                    
+                modchannel_id = ev.db.get_settings(guild_id, 'ModeratorChannel')
+                modchannel    = discord.utils.find(lambda c: c.id == modchannel_id, channel_sample[0].guild.channels)
+            except:
+                ev.log.info('[SPAM MONITOR] No moderator notification sent because server named ' + channel_sample[0].guild.name + \
+                            ' does not have a moderator channel set up')
+            else:
+                actions = ''
+                if tier >= 1: actions += 'Deleted Messages'
+                if tier >= 2: actions += ', Warned users'
+                if tier >= 3: actions += ', Muted Channel'
+                if tier >= 4: actions += ', Disabled invites'
+                if tier >= 5: actions = 'PANIC!!! IT\'S THE END OF THE WORLD AS WE KNOW IT!!! :bat: :skull:'
+    
+                embed = discord.Embed(title='TIER ' + str(tier) + ' SPAM EVENT DETECTED', color=0xDB0000)
+                embed.add_field(name='Channel: ', value=channel_sample[0].channel.name)
+                embed.add_field(name='Action Taken: ', value=actions)
+                embed.add_field(name='Users: ', value=users_info)
+
+                await modchannel.send(None, embed=embed)
+
+                if tier == 2 and persistance == 2:
+                    pass #await modchannel.send(":bat: @here AHHHH!!! Where are the mods??? Help me!!!")
+
+
+            ######################################################
+            ##   ACTIONS; TIER actions for severity detection
+            ######################################################
+
             if tier >= 1: 
-                try: await message.channel.delete_messages(channel_sample)
+                try: await channel_sample[0].channel.delete_messages(channel_sample)
                 except discord.errors.NotFound: pass
             if tier >= 2: 
                 if persistance == 1:
                     embed = discord.Embed(title=':bat: Stop Spamming!!! :bat:', color=0xDBD000)
                     await channel_sample[0].channel.send(None, embed=embed)
             if tier >= 3:
-                # TODO: Set a timer to re-enable send message permission for @everyone after a minute
-                try: 
-                    everyone_role = discord.utils.find(lambda r: r.name == '@everyone', channel_sample[0].guild.roles)
-                    await message.channel.set_permissions(everyone_role, send_messages=False)
-                except:
-                    ev.log.info('[SPAM MONITOR] Unable to disable @everyone send messages permission for channel ' + channel_sample[0].channel.name + ' in ' + channel_sample[0].guild.name)
+
+                '''
+                everyone_role = discord.utils.find(lambda r: r.name == '@everyone', channel_sample[0].guild.roles)
+                permissions = channel_sample[0].channel.overwrites_for(everyone_role)
+                
+                permissions.send_messages = False
+                await channel_sample[0].channel.set_permissions(everyone_role, overwrite=permissions)
+                spam_info[guild_id][channel_id][MUTED] = True
+
+                await asyncio.sleep(60)
+                
+                permissions.send_messages = True
+                await channel_sample[0].channel.set_permissions(everyone_role, overwrite=permissions)
+                spam_info[guild_id][channel_id][MUTED] = False
+                '''
+
+                spam_info[guild_id][channel_id][MUTED] = True
+                roles_changed  = []
+                added_overides = []
+
+                for role in channel_sample[0].guild.roles:
+                    try:
+                        # Check role permissions
+                        general_permission = 0b01111100000000000000000010111111
+                        if role.permissions.value > general_permission: continue
+                        if role.permissions.send_messages == False: continue
+                    
+                        # Check channel role overides
+                        permissions = channel_sample[0].channel.overwrites_for(role)
+                        if permissions.send_messages == False: continue
+                    
+                        if permissions.is_empty(): added_overides.append(role)
+                        else: roles_changed.append(role)
+
+                        # Apply channel specific role mute
+                        permissions.send_messages = False
+                        await channel_sample[0].channel.set_permissions(role, overwrite=permissions)
+                        
+                    except:
+                        ev.log.info('[SPAM MONITOR] Unable to disable @' + role.name + ' send messages permission for channel ' + channel_sample[0].channel.name + ' in ' + channel_sample[0].guild.name)
+                
+                await asyncio.sleep(60)
+                
+                for role in roles_changed:
+                    permissions = channel_sample[0].channel.overwrites_for(role)
+                    permissions.send_messages = True
+                    await channel_sample[0].channel.set_permissions(role, overwrite=permissions)
+
+                for role in added_overides:
+                    await channel_sample[0].channel.set_permissions(role, overwrite=None)
+
+                spam_info[guild_id][channel_id][MUTED] = False
+                    
                 # TODO: Send warns to all people that spammed
                 #       warn(cmd, message, args)
             if tier >= 4: 
@@ -123,31 +220,7 @@ async def spam_monitor(ev, message, args):
                 #  embed = discord.Embed(color=0x66CC66, title=':white_check_mark: Invite Blocking Has Been Enabled')
                 #  await admin_channel.send(None, embed=embed)  # send alert to admin channel
                 pass
-        
-            users_info = ', '.join([ message.author.name for message in channel_sample ])
-            ev.log.info('[SPAM MONITOR] TIER ' + str(tier) + ' - Channel Detected: ' + channel_sample[0].channel.name + ' in ' + channel_sample[0].guild.name + '\n' \
-                        '\t Users: ' + users_info)
 
-            # Notify mod channel
-            try:
-                mod_notifications_enabled = ev.db.get_settings(guild_id, 'ModeratorNotifications')
-                if not mod_notifications_enabled: continue
-                    
-                modchannel_id = ev.db.get_settings(guild_id, 'ModeratorChannel')
-                modchannel    = discord.utils.find(lambda c: c.id == modchannel_id, channel_sample[0].guild.channels)
-            
-                embed = discord.Embed(title='TIER ' + str(tier) + ' SPAM EVENT DETECTED', color=0xDB0000)
-                embed.add_field(name='Channel: ', value=channel_sample[0].channel.name)
-                embed.add_field(name='Action Taken: ', value='Deleted Messages')
-                embed.add_field(name='Users: ', value=users_info)
-                await modchannel.send(None, embed=embed)
-
-                if tier == 2 and persistance == 2:
-                    await modchannel.send(":bat: @here AHHHH!!! Where are the mods??? Help me!!!")
-            except:
-                ev.log.info('[SPAM MONITOR] No moderator notification sent because server named ' + channel_sample[0].guild.name + \
-                            ' does not have a moderator channel set up')
-
-    # Reset sample
+    # Reset sample, update time
     message_sample = {}
     prev_time = arrow.utcnow().timestamp
