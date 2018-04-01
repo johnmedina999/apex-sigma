@@ -20,7 +20,7 @@ async def post_to_mod_channel(ev, guild_id, channel_sample, users_info, tier, pe
         if tier >= 1: actions += 'Deleted Messages'
         if tier >= 2: actions += ', Warned users'
         if tier >= 3: actions += ', Muted Channel'
-        if tier >= 4: actions += ', Disabled invites'
+        if tier >= 4: actions += ', Redirected autorole'
         if tier >= 5: actions = 'PANIC!!! IT\'S THE END OF THE WORLD AS WE KNOW IT!!! :bat: :skull:'
     
         embed = discord.Embed(title='TIER ' + str(tier) + ' SPAM EVENT DETECTED', color=0xDB0000)
@@ -97,7 +97,7 @@ async def tier_actions_begin(ev, channel_sample, spam_info):
         # When TIER is descalates, keep the channel
         restricted_role = discord.utils.find(lambda r: r.name == 'restricted', guild.roles)
         if not restricted_role:
-            restricted_role = guild.create_role(name='restricted', permissions=discord.Permissions().none)
+            restricted_role = await guild.create_role(name='restricted')
 
         restricted_channel = discord.utils.find(lambda c: c.name == 'restricted', guild.channels)
         if not restricted_channel:
@@ -106,7 +106,7 @@ async def tier_actions_begin(ev, channel_sample, spam_info):
                 restricted_role:    discord.PermissionOverwrite(read_messages=True, send_messages=True)
             }
 
-            guild.create_text_channel(name='restricted', overwrites=restricted_channel_overwrites)
+            await guild.create_text_channel(name='restricted', overwrites=restricted_channel_overwrites)
     
         # Set autorole to give the "restricted" role
         ev.db.set_settings(guild.id, 'AutoRole', restricted_role.id)
