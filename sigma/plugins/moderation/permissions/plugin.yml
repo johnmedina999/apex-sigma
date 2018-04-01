@@ -17,6 +17,18 @@ commands:
       Changes the channel that the bot will post announcements to. If no channel is entered announcements will be turned off.
       Server Administrator Only.
 
+  - name: moderatorchannel
+    alts:
+      - "modch"
+      - "setmodch"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} #channel_name"
+    description:
+      Changes the channel that the bot will post moderator notifications to. If no channel is entered notifications will be turned off.
+      Server Administrator Only.
+
   - name: blacklist
     alts:
       - "black"
@@ -155,3 +167,13 @@ commands:
       It needs to be specified if it is a command or module group.
       If it is a command use C and if it is a module use M following the example.
       Command usable only by Server Admins.
+
+  - name:    setspam
+    global:  true
+    enabled: true
+    admin:   true
+    sfw:     true
+    pmable:  true
+    usage:   "{pfx:s}{cmd:s}"
+    description:
+      Updates spam settings for the server

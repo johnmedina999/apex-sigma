@@ -8,8 +8,7 @@ async def member_join_control(ev, member):
     greet = ev.db.get_settings(server.id, 'Greet')
     greet_pm = ev.db.get_settings(server.id, 'GreetPM')
     
-    try:
-        autorole = ev.db.get_settings(server.id, 'AutoRole')
+    try: autorole = ev.db.get_settings(server.id, 'AutoRole')
     except KeyError:
         ev.db.set_settings(server.id, 'AutoRole', None)
         autorole = None

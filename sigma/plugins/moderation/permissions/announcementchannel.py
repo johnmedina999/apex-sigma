@@ -12,19 +12,12 @@ async def announcementchannel(cmd, message, args):
         await message.channel.send(None, embed=embed)
         return
 
-    newchannel = message.channel_mentions[0]
-
-    if not check_write(message.guild.get_member(cmd.bot.user.id), newchannel):
-        embed = discord.Embed(title='⛔ Missing write permissions for this channel', color=0xDB0000)
-        await message.channel.send(None, embed=embed)
-        return
-
     if message.channel_mentions:
         # argument exists and is a channel
         # channel can be written to -> turn on announcements and set channelid
         cmd.db.set_settings(message.guild.id, 'Announcement', True)
-        cmd.db.set_settings(message.guild.id, 'AnnouncementChannel', newchannel.id)
-        embed = discord.Embed(title='✅ Announcements will be posted to #' + newchannel.name, color=0x66CC66)
+        cmd.db.set_settings(message.guild.id, 'AnnouncementChannel', message.channel_mentions[0].id)
+        embed = discord.Embed(title='✅ Announcements will be posted to #' + message.channel_mentions[0].name, color=0x66CC66)
     elif len(args) == 0:
         # no argument given, announcements will be turned off
         cmd.db.set_settings(message.guild.id, 'Announcement', False)

@@ -155,8 +155,8 @@ class Sigma(discord.AutoShardedClient):
         # self.loop.create_task(self.db.refactor_users(self.get_all_members()))
         # self.log.info('Starting ServerList Refactor Node')
         # self.loop.create_task(self.db.refactor_servers(self.guilds))
-        self.log.info('Updating Bot Listing APIs...')
-        self.loop.create_task(self.update_discordlist())
+        # self.log.info('Updating Bot Listing APIs...')
+        # self.loop.create_task(self.update_discordlist())
         self.log.info('-----------------------------------')
         self.ready = True
         self.log.info('Finished Loading and Successfully Connected to Discord!')
@@ -167,14 +167,12 @@ class Sigma(discord.AutoShardedClient):
 
 
     async def on_message(self, message):
-
-        if not self.ready: 
-            return
+        if not self.ready: return
 
         self.db.add_stats('MSGCount')
         self.message_count += 1
         args = message.content.split()
-            
+
         # handle mention events
         if type(message.author) == discord.Member:
             black = check_black(self.db, message)
