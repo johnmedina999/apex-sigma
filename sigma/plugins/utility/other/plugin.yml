@@ -37,7 +37,7 @@ commands:
     sfw:     true
     usage:   "{pfx:s}{cmd:s} 1:03:15 LEEEEROOOOY JEEEEEENKIIIIINS!"
     description:
-      Sets a timer in seconds and displays the message inputted after it's done.
+      Sets a timer in seconds and displays the message input after it's done.
 
   - name:    ping
     global:  true
