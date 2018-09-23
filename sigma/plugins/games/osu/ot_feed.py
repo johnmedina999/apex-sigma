@@ -71,10 +71,10 @@ class Connection():
         embed.set_author(name=data['user'], url=data['user_profile'], icon_url=data['avatar'])
         embed.add_field(name=data['thread_title'], value=data['post_url'])
 
-        target_channels = [ channel for channel in [ channels for channels in [ server.channels for server in self.ev.bot.guilds ] ][0] if channel.name == 'ot-feed' ]
-        for target_channel in target_channels:
-            await target_channel.send(embed=embed)
-            
+        for server in self.ev.bot.guilds:
+            for channel in server.channels:
+                if channel.name == 'ot-feed':
+                    await channel.send(embed=embed)            
             
 
 async def ot_feed(ev):
