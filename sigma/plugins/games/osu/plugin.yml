@@ -37,3 +37,14 @@ commands:
     usage:   "{pfx:s}{cmd:s} 622834"
     description:
       Displays forum post
+
+
+events:
+  - name:    ot_feed
+    type:    ready
+    global:  true
+    enabled: true
+    pmable:  true
+    sfw:     true
+    description:
+      provides the server a feed of new threads and posts from osu's off-topic subforum
