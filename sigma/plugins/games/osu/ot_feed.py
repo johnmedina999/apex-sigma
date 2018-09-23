@@ -19,6 +19,7 @@ class Connection():
         
 
     def __del__(self):
+        self.connection.send(b'')
         self.connection.close()
 
 
@@ -31,6 +32,7 @@ class Connection():
 
 
     def handle_sudden_disconnect(self):
+        self.connection.send(b'')
         self.connection.close()
         self.create_new_connection()
         self.connected = False
@@ -44,7 +46,9 @@ class Connection():
                 self.connected = True
                 self.ev.log.info('Connected to ' + self.ip_addr + ':' + str(self.port))
                 break
-            except socket.error as e: pass
+            except socket.error as e: 
+                print(e)
+                pass
 
             await asyncio.sleep(5)
 
