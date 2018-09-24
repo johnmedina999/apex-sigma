@@ -67,9 +67,12 @@ class Connection():
 
         data = json.loads(data.decode('utf-8'))
         
+        new_link = 'https://osu.ppy.sh/community/forums/posts/' + data['post_id']
+        old_link = 'https://old.ppy.sh/forum/p/' + data['post_id']
+
         embed = discord.Embed(color=0x1ABC9C, timestamp=parse(data['time']))
         embed.set_author(name=data['user'], url=data['user_profile'], icon_url=data['avatar'])
-        embed.add_field(name=data['thread_title'], value=data['post_url'])
+        embed.add_field(name=data['thread_title'], value=new_link + '\n' + old_link)
 
         for server in self.ev.bot.guilds:
             for channel in server.channels:
