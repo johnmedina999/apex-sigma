@@ -19,8 +19,10 @@ class Connection():
         
 
     def __del__(self):
-        self.connection.send(b'')
-        self.connection.close()
+        try:
+            self.connection.send(b'')
+            self.connection.close()
+        except socket.timeout: pass
 
 
     def create_new_connection(self):
@@ -63,9 +65,20 @@ class Connection():
                 return
 
         except socket.timeout: return   # If we timed out, sleep a bit and try again
-        except socket.error as e: self.handle_sudden_disconnect()
+        except socket.error as e: 
+            self.handle_sudden_disconnect()
+            return
+        except Exception as e: 
+            self.handle_sudden_disconnect()
+            self.ev.log.error('Unexpected error while recieving data: ' + str(e))
+            return
 
-        data = json.loads(data.decode('utf-8'))
+        data = data.decode('utf-8')
+
+        try: data = json.loads(data)
+        except Exception as e:
+            self.ev.log.error('Unable to parse json data;\n' + data)
+            return
         
         new_link = 'https://osu.ppy.sh/community/forums/posts/' + data['post_id']
         old_link = 'https://old.ppy.sh/forum/p/' + data['post_id']
