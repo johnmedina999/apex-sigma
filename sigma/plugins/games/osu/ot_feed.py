@@ -83,8 +83,11 @@ class Connection():
         new_link = 'https://osu.ppy.sh/community/forums/posts/' + data['post_id']
         old_link = 'https://old.ppy.sh/forum/p/' + data['post_id']
 
+        avatar_url = data['avatar'] if data['avatar'] != '' else discord.Embed.Empty
+        user_url   = data['user_profile'] if data['user_profile'] != '' else discord.Embed.Empty
+
         embed = discord.Embed(color=0x1ABC9C, timestamp=parse(data['time']))
-        embed.set_author(name=data['user'], url=data['user_profile'], icon_url=data['avatar'])
+        embed.set_author(name=data['user'], url=user_url, icon_url=avatar_url)
         embed.add_field(name=data['thread_title'], value=new_link + '\n' + old_link)
 
         try:
