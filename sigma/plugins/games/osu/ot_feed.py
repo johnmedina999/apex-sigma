@@ -87,10 +87,13 @@ class Connection():
         embed.set_author(name=data['user'], url=data['user_profile'], icon_url=data['avatar'])
         embed.add_field(name=data['thread_title'], value=new_link + '\n' + old_link)
 
-        for server in self.ev.bot.guilds:
-            for channel in server.channels:
-                if channel.name == 'ot-feed':
-                    await channel.send(embed=embed)            
+        try:
+            for server in self.ev.bot.guilds:
+                for channel in server.channels:
+                    if channel.name == 'ot-feed':
+                        await channel.send(embed=embed)
+        except Exception as e:
+            self.ev.log.error('Unable to send message to ot-feed;\n' + str(data) + '\n' + str(e))
             
 
 async def ot_feed(ev):
