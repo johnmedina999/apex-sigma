@@ -5,7 +5,7 @@ import discord
 
 async def xkcd(cmd, message, args):
 
-    comic_no = str(random.randint(1, 1724))
+    comic_no = str(random.randint(1, 2171))
     if args:
         if not is_int(args[0]):
             await message.channel.send(None, embed=discord.Embed(title=':exclamation: Invalid number', color=0x993333))
