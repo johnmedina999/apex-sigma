@@ -21,7 +21,10 @@ async def xkcd(cmd, message, args):
                 await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested XKCD doesn\'t exist', color=0x993333))
                 return
 
-    await message.channel.send(None, embed=discord.Embed(color=0x1abc9c, title='🚽 An XKCD Comic').set_image(url=joke_json['img']))
+    embed = discord.Embed(color=0x1abc9c, title=f'🚽 xkcd Comic #{comic_no}').set_image(url=joke_json['img'])
+    embed.set_footer(text=joke_json['alt'])
+
+    await message.channel.send(None, embed=embed)
 
 def is_int(s):
     try: int(s); return True
