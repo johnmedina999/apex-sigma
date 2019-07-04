@@ -8,13 +8,13 @@ imgurpython
 praw
 chatterbot
 pyyaml
-https://github.com/Rapptz/discord.py/archive/rewrite.zip#egg=discord.py[voice]
+discord==1.0.1
 wikipedia
 humanfriendly
 python-twitch
 wolframalpha
 geopy
-pymongo
+pymongo==2.9
 google-api-python-client
 pafy
 youtube_dl
