@@ -1,4 +1,4 @@
-import pip
+import subprocess
 import platform
 import os
 
@@ -10,7 +10,7 @@ elf_x64 = ["https://pypi.python.org/packages/d0/a5/7a6410801991a8a67a6c319d41a5e
 
 def install(packages):
     for package in packages:
-        pip.main(['install', package]) 
+        subprocess.check_call(['python', '-m', 'pip', 'install', package])
 
 
 if __name__ == '__main__':
