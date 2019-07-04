@@ -5,7 +5,7 @@ import sys
 win_x86 = ["install/Shapely-1.6.4.post2-cp37-cp37m-win32.whl",]
 win_x64 = ["install/Shapely-1.6.4.post2-cp37-cp37m-win_amd64.whl",]
 elf_x86 = ["",]
-elf_x64 = ["https://pypi.python.org/packages/d0/a5/7a6410801991a8a67a6c319d41a5ebaee2d18e473a952f0fca2e5e4ee9ed/Shapely-1.6b4-cp36-cp36m-manylinux1_x86_64.whl#md5=687106f4483565a6ecf755af2b686172",]
+elf_x64 = ["Shapely",]
 
 
 def install(packages):
