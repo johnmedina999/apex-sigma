@@ -1,8 +1,7 @@
 language: python
 python:
-  - "3.6"
-  - "3.6-dev"
-  - "nightly"
+  - "3.7"
+  - "3.7-dev"
 
 install: python install/install.py
 script: .ci/run_tests.sh
