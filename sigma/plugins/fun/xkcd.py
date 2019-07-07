@@ -6,7 +6,7 @@ async def xkcd(cmd, message, args):
 
     random_comic = True
     if args:
-        if not is_int(args[0]):
+        if not isinstance(args[0], int):
             await message.channel.send(None, embed=discord.Embed(title=':exclamation: Invalid number', color=0x993333))
             return
 
@@ -35,7 +35,3 @@ async def xkcd(cmd, message, args):
     embed.set_footer(text=joke_json['alt'])
 
     await message.channel.send(None, embed=embed)
-
-def is_int(s):
-    try: int(s); return True
-    except ValueError: return False
