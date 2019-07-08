@@ -20,8 +20,7 @@ async def xkcd(cmd, message, args):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(joke_url) as data:
-                try:
-                    joke_json = await data.json()
+                try: joke_json = await data.json()
                 except Exception:
                     await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
                     return
