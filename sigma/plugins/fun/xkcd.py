@@ -4,7 +4,6 @@ import discord
 
 async def xkcd(cmd, message, args):
 
-    random_comic = True
     if args:
         try: int(args[0]) #args[0] is always a string
         except ValueError:
@@ -12,7 +11,10 @@ async def xkcd(cmd, message, args):
             return
 
         comic_no = args[0]
-        random_comic = False
+
+    random_comic = (len(args) == 0)
+        # True if args is empty
+        # False otherwise
 
     while True:
         if not random_comic: joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
