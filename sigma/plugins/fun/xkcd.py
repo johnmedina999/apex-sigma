@@ -16,7 +16,7 @@ async def xkcd(cmd, message, args):
 
     while True:
         if not random_comic: joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
-        else: joke_url = 'http://xkcd.com/info.0.json'
+        else:                joke_url = 'http://xkcd.com/info.0.json'
 
         async with aiohttp.ClientSession() as session:
             async with session.get(joke_url) as data:
