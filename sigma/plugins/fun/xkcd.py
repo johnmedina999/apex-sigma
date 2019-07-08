@@ -14,9 +14,8 @@ async def xkcd(cmd, message, args):
 
     random_comic = (len(args) == 0) #True if args is empty, False otherwise
 
-    while True:
-        if not random_comic: joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
-        else:                joke_url = 'http://xkcd.com/info.0.json'
+    if not random_comic:
+        joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
 
         async with aiohttp.ClientSession() as session:
             async with session.get(joke_url) as data:
@@ -24,12 +23,26 @@ async def xkcd(cmd, message, args):
                 except Exception:
                     await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
                     return
+    else:
+        joke_url = 'http://xkcd.com/info.0.json'
 
-        if random_comic:
-            comic_no = str(random.randint(1, joke_json['num']))
-            random_comic = False
-            continue
-        break
+        async with aiohttp.ClientSession() as session:
+            async with session.get(joke_url) as data:
+                try: joke_json = await data.json()
+                except Exception:
+                    await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
+                    return
+        
+        comic_no = str(random.randint(1, joke_json['num']))
+
+        joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(joke_url) as data:
+                try: joke_json = await data.json()
+                except Exception:
+                    await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
+                    return
 
     embed = discord.Embed(color=0x1abc9c, title='🚽 xkcd Comic #{}: {}'.format(comic_no, joke_json['title']) ).set_image(url=joke_json['img'])
     embed.set_footer(text=joke_json['alt'])
