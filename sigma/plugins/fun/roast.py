@@ -8,7 +8,7 @@ async def roast(cmd, message, args):
     if message.mentions: target = message.mentions[0]
     else: target = message.author
 
-    page_num = random.randint(0, 10)
+    page_num = random.randint(0, 36)
     async with aiohttp.ClientSession() as session:
         async with session.get(f'http://onelinefun.com/insults/{page_num}/') as data:
             page = await data.text()
