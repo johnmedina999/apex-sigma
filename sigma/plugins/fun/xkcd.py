@@ -6,7 +6,8 @@ async def xkcd(cmd, message, args):
 
     random_comic = True
     if args:
-        if not isinstance(args[0], int):
+        try: int(args[0]) #args[0] is always a string
+        except ValueError:
             await message.channel.send(None, embed=discord.Embed(title=':exclamation: Invalid number', color=0x993333))
             return
 
