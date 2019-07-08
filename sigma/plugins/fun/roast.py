@@ -13,7 +13,7 @@ async def roast(cmd, message, args):
         async with session.get(f'http://onelinefun.com/insults/{page_num}/') as data:
             page = await data.text()
 
-    root = BeautifulSoup(page)
+    root = BeautifulSoup(page, 'html.parser')
     roast_html = root.find_all(class_='oneliner')
 
     if len(roast_html) != 10:
