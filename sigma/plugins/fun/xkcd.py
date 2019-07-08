@@ -12,9 +12,7 @@ async def xkcd(cmd, message, args):
 
         comic_no = args[0]
 
-    random_comic = (len(args) == 0)
-        # True if args is empty
-        # False otherwise
+    random_comic = (len(args) == 0) #True if args is empty, False otherwise
 
     while True:
         if not random_comic: joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
