@@ -17,7 +17,7 @@ async def roast(cmd, message, args):
     roast_html = root.find_all(class_='oneliner')
 
     if len(roast_html) != 10:
-        cmd.log(f'Error parsing http://onelinefun.com/insults/{page_num}/')
+        cmd.log.error(f'Error parsing http://onelinefun.com/insults/{page_num}/')
         embed = discord.Embed(color=0xDB0000, title='Something went wrong. Notify bot owner.')
         await message.channel.send(None, embed=embed)
         return
