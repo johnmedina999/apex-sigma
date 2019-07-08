@@ -26,11 +26,11 @@ async def xkcd(cmd, message, args):
                     await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
                     return
 
-                if random_comic:
-                    comic_no = str(random.randint(1, joke_json['num']))
-                    random_comic = False
-                    continue
-                break
+        if random_comic:
+            comic_no = str(random.randint(1, joke_json['num']))
+            random_comic = False
+            continue
+        break
 
     embed = discord.Embed(color=0x1abc9c, title='🚽 xkcd Comic #{}: {}'.format(comic_no, joke_json['title']) ).set_image(url=joke_json['img'])
     embed.set_footer(text=joke_json['alt'])
