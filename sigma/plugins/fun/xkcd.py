@@ -24,19 +24,17 @@ async def xkcd(cmd, message, args):
                     await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
                     return
     else:
+        # To grab info of latest comic
         joke_url = 'http://xkcd.com/info.0.json'
-
         async with aiohttp.ClientSession() as session:
             async with session.get(joke_url) as data:
                 try: joke_json = await data.json()
                 except Exception:
                     await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
                     return
-        
-        comic_no = str(random.randint(1, joke_json['num']))
 
-        joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
-
+        # To grab info of comic to be displayed
+        joke_url = 'http://xkcd.com/' + str(random.randint(1, joke_json['num'])) + '/info.0.json'
         async with aiohttp.ClientSession() as session:
             async with session.get(joke_url) as data:
                 try: joke_json = await data.json()
