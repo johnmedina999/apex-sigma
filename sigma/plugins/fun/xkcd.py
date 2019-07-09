@@ -5,14 +5,15 @@ import discord
 async def xkcd(cmd, message, args):
 
     if args:
-        try: int(args[0]) #args[0] is always a string
+        try: int(args[0]) # args[0] is always a string
         except ValueError:
             await message.channel.send(None, embed=discord.Embed(title=':exclamation: Invalid number', color=0x993333))
             return
 
         comic_no = args[0]
 
-    random_comic = (len(args) == 0) #True if args is empty, False otherwise
+    # True if args is empty, False otherwise
+    random_comic = (len(args) == 0)
 
     if not random_comic: joke_url = 'http://xkcd.com/' + comic_no + '/info.0.json'
     else:
@@ -27,7 +28,7 @@ async def xkcd(cmd, message, args):
     async with aiohttp.ClientSession() as session:
         async with session.get(joke_url) as data:
             try: joke_json = await data.json()
-            except Exception:
+            except:
                 await message.channel.send(None, embed=discord.Embed(title=':exclamation: Requested xkcd doesn\'t exist', color=0x993333))
                 return
 
