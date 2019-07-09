@@ -2,10 +2,21 @@ import random
 import aiohttp
 import discord
 from bs4 import BeautifulSoup
+import sigma.core.find_member as fm
 
 async def roast(cmd, message, args):
 
-    if message.mentions: target = message.mentions[0]
+    if message.mentions:
+        target = message.mentions[0]
+
+    elif args:
+        try:
+            target = await fm.find_member(user=' '.join(args).strip('"'), guild=message.guild)
+        except fm.MemberNotFoundError as e:
+            embed = discord.Embed(color=0xDB0000, title=str(e))
+            await message.channel.send(None, embed=embed)
+            return
+
     else: target = message.author
 
     page_num = random.randint(0, 36)
