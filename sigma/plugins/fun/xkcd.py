@@ -20,6 +20,7 @@ async def xkcd(cmd, message, args):
         async with aiohttp.ClientSession() as session:
             async with session.get('http://xkcd.com/info.0.json') as data:
                 joke_json = await data.json()
+
         joke_url = 'http://xkcd.com/' + str(random.randint(1, joke_json['num'])) + '/info.0.json'
 
     # To grab info of comic to be displayed
