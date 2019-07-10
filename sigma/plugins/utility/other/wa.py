@@ -9,6 +9,12 @@ async def wa(cmd, message, args):
         await message.channel.send(cmd.help())
         return
 
+    if WolframAlphaAppID == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key WolframAlphaAppID not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     wa_q = ' '.join(args)
     wac = wolframalpha.Client(WolframAlphaAppID)
     results = wac.query(wa_q)
