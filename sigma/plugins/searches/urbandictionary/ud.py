@@ -5,6 +5,16 @@ from config import MashapeKey
 
 async def ud(cmd, message, args):
 
+    if not args:
+        await message.channel.send(cmd.help())
+        return
+
+    if MashapeKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key MashapeKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     ud_input = ' '.join(args)
     url = "https://mashape-community-urban-dictionary.p.mashape.com/define?term=" + ud_input
     headers = {'X-Mashape-Key': MashapeKey, 'Accept': 'text/plain'}
