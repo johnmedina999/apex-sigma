@@ -10,7 +10,13 @@ async def img(cmd, message, args):
     if not args:
         await message.channel.send(cmd.help())
         return
-    
+
+    if (GoogleAPIKey == '') or (GoogleCSECX == ''):
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key GoogleAPIKey and/or GoogleCSECX not found.', value='Please ask the bot owner to add them.')
+        await message.channel.send(None, embed=embed)
+        return
+
     search = ' '.join(args)
     url = 'https://www.googleapis.com/customsearch/v1?q=' + search + '&cx=' + GoogleCSECX + '&searchType=image&safe=high' + '&key=' + GoogleAPIKey
     async with aiohttp.ClientSession() as session:
