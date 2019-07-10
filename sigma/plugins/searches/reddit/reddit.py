@@ -6,7 +6,17 @@ from sigma.core.permission import check_channel_nsfw
 
 
 async def reddit(cmd, message, args):
-    
+
+    if not args:
+        await message.channel.send(cmd.help())
+        return
+
+    if (RedditClientID == '') or (RedditClientSecret == ''):
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key RedditClientID and/or RedditClientSecret not found.', value='Please ask the bot owner to add them.')
+        await message.channel.send(None, embed=embed)
+        return
+
     req = praw.Reddit(user_agent='Apex Sigma', client_id=RedditClientID, client_secret=RedditClientSecret)
     q = ' '.join(args)
     sub = req.subreddit(str(q))
