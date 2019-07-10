@@ -9,7 +9,7 @@ async def cat(cmd, message, args):
 
     if CatAPIKey == '':
         embed = discord.Embed(color=0xDB0000)
-        embed.add_field(name=f':exclamation: API key CatAPIKey not found.', value='Please ask the bot owner to add it.')
+        embed.add_field(name='API key CatAPIKey not found.', value='Please ask the bot owner to add it.')
         await message.channel.send(None, embed=embed)
         return
 
