@@ -35,7 +35,7 @@ def split_list(alist, wanted_parts=1):
 
 def user_avatar(user):
     if user.avatar_url != '':
-        user_ava = '.'.join(user.avatar_url.split('.')[:-1])
+        user_ava = '.'.join(str(user.avatar_url).split('.')[:-1])
     else:
         user_ava = user.default_avatar_url
     user_ava += '.png'
