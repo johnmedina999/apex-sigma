@@ -11,7 +11,13 @@ async def rl(cmd, message, args):
     if not args:
         await message.channel.send(cmd.help())
         return
-    
+
+    if RLAPIKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key RLAPIKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     try:
         platform = args[0]
         user = ' '.join(args[1:])
