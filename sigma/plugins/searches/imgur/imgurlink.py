@@ -5,7 +5,17 @@ from config import ImgurClientID, ImgurClientSecret
 imgur_client = None
 
 async def imgurlink(cmd, message, args):
-    
+
+    if not args:
+        await message.channel.send(cmd.help())
+        return
+
+    if (ImgurClientID == '') or (ImgurClientSecret == ''):
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key ImgurClientID and/or ImgurClientSecret not found.', value='Please ask the bot owner to add them.')
+        await message.channel.send(None, embed=embed)
+        return
+
     try:
         imgur_client = imgurpython.ImgurClient(ImgurClientID, ImgurClientSecret)
     except Exception as e:
