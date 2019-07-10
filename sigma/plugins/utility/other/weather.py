@@ -2,14 +2,20 @@
 from geopy.geocoders import Nominatim as Geolocator
 from config import OpenMapsAPIKey
 from humanfriendly.tables import format_pretty_table as boop
-
+import discord
 
 async def weather(cmd, message, args):
     
     if not args:
         await message.channel.send(cmd.help())
         return
-    
+
+    if OpenMapsAPIKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key OpenMapsAPIKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     location = ' '.join(args)
     
    ##try:
