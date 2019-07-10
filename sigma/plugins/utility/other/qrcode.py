@@ -10,6 +10,12 @@ async def qrcode(cmd, message, args):
         await cmd.bot.send_message(message.channel, cmd.help())
         return
 
+    if MashapeKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key MashapeKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     url = 'https://neutrinoapi-qr-code.p.mashape.com/qr-code'
     content = ' '.join(args)
     headers = {
