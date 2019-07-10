@@ -7,7 +7,7 @@ from io import BytesIO
 async def qrcode(cmd, message, args):
     
     if not args:
-        await cmd.bot.send_message(message.channel, cmd.help())
+        await message.channel.send(cmd.help())
         return
 
     if MashapeKey == '':
