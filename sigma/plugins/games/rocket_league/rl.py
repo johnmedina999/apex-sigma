@@ -2,7 +2,7 @@ import os
 import requests
 from io import BytesIO
 from PIL import Image, ImageFont, ImageDraw
-
+import discord
 from config import RLAPIKey
 
 
