@@ -8,6 +8,12 @@ async def csgo(cmd, message, args):
         await message.channel.send(cmd.help())
         return
 
+    if SteamAPI == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key SteamAPI not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     csgo_input = ' '.join(args)
 
     try:
