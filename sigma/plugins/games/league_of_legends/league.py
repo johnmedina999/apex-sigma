@@ -17,6 +17,13 @@ async def league(cmd, message, args):
     await message.channel.send("This command is currently unsuppported. Bug the bot devs if you want this supported")
 
     '''
+
+    if RiotAPIKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key RiotAPIKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     try: region, smnr_name = lol_input.lower().split(maxsplit=1)
     except Exception as e:
         cmd.log.error(e)

@@ -36,6 +36,12 @@ async def queue(cmd, message, args):
                     sound = pafy.new(song_url)
                     sound_type = 0
                 elif 'soundcloud' in qry:
+                    if SoundCloudClientID == '':
+                        embed = discord.Embed(color=0xDB0000)
+                        embed.add_field(name='API key CatAPIKey not found.', value='Please ask the bot owner to add it.')
+                        await message.channel.send(None, embed=embed)
+                        return
+
                     song_url = qry
                     sc_cli = soundcloud.Client(client_id=SoundCloudClientID)
                     sound = sc_cli.get('/resolve', url=qry).fields()

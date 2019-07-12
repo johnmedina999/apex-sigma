@@ -7,7 +7,13 @@ from config import ParagonAPIKey
 async def paragon(cmd, message, args):
 
     if not args: await message.channel.send(cmd.help()); return
-    
+
+    if ParagonAPIKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key ParagonAPIKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     username = ' '.join(args)
     search_url = f'https://developer-paragon.epicgames.com/v1/accounts/find/{username.replace(" ", "%20")}'
     headers = {'X-Epic-ApiKey': ParagonAPIKey, 'Accept': 'application/json; charset=utf-8'}

@@ -11,6 +11,12 @@ async def smite(cmd, message, args):
         await message.channel.send(cmd.help())
         return
 
+    if HiRezDevID == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key HiRezDevID not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     session_id = await get_session(cmd)
     if session_id == -1: 
         await message.channel.send('Something just went wrong! Contact the bot owner.')

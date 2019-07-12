@@ -14,6 +14,12 @@ async def queuedeezerplaylist(cmd, message, args):
         await message.channel.send(embed=response)
         return
 
+    if MashapeKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key MashapeKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     initial_response = discord.Embed(color=0xFFCC66, title='💽 Processing...')
     init_resp_msg = await message.channel.send(embed=initial_response)
     playlist_id = ''.join(args)
