@@ -6,6 +6,12 @@ from config import MashapeKey
 
 async def hearthstone(cmd, message, args):
 
+    if MashapeKey == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key MashapeKey not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     hs_input = ' '.join(args).strip()
     if hs_input == '': await message.channel.send(cmd.help()); return
 

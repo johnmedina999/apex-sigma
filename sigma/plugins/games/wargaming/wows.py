@@ -5,6 +5,17 @@ from config import WarGamingAppID
 
 
 async def wows(cmd, message, args):
+
+    if not args:
+        await message.channel.send(cmd.help())
+        return
+
+    if WarGamingAppID == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key WarGamingAppID not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     q = ' '.join(args).lower()
     game_region, game_username = q.split(maxsplit=1)
     if game_region == 'na':

@@ -10,6 +10,12 @@ async def paladins(cmd, message, args):
         await message.channel.send(cmd.help())
         return
 
+    if HiRezDevID == '':
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key HiRezDevID not found.', value='Please ask the bot owner to add it.')
+        await message.channel.send(None, embed=embed)
+        return
+
     username = ' '.join(args)
     session_id = await get_session()
     hr_ts = make_timestamp()

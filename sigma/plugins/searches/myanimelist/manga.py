@@ -17,7 +17,13 @@ async def manga(cmd, message, args):
     
     mal_input = ' '.join(args)
     if mal_input == '': await message.channel.send(cmd.help()); return
-    
+
+    if (MALUserName == '') or (MALPassword == ''):
+        embed = discord.Embed(color=0xDB0000)
+        embed.add_field(name='API key MALUserName and/or MALPassword not found.', value='Please ask the bot owner to add them.')
+        await message.channel.send(None, embed=embed)
+        return
+
     mal_url = 'https://myanimelist.net/api/manga/search.xml?q=' + mal_input
     async with aiohttp.ClientSession() as session:
         async with session.get(mal_url, auth=aiohttp.BasicAuth(MALUserName, MALPassword)) as data:
