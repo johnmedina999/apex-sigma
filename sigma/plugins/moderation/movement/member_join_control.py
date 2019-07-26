@@ -24,7 +24,7 @@ async def member_join_control(ev, member):
         if not greet_pm:
             greet_channel = ev.db.get_settings(server.id, 'GreetChannel')
             
-            if not greet_channel: target_channel = server.default_channe
+            if not greet_channel: return
             else: target_channel = discord.utils.find(lambda x: x.id == greet_channel, member.guild.channels)
             
             greet_message_object = await target_channel.send(greet_message)

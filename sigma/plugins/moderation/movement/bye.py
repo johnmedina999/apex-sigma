@@ -13,8 +13,7 @@ async def bye(cmd, message, args):
     greet_channel = cmd.db.get_settings(message.guild.id, 'ByeChannel')
 
     if not active:
-        if not greet_channel:
-            cmd.db.set_settings(message.guild.id, 'ByeChannel', message.guild.default_channel.id)
+        if not greet_channel: return
 
         cmd.db.set_settings(message.guild.id, 'Bye', True)
         embed = discord.Embed(color=0x66CC66, title='✅ Goodbye Messages Enabled')
