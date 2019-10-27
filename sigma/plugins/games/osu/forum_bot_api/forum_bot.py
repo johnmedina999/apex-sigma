@@ -18,7 +18,7 @@ async def forum_bot(cmd, message, args):
         'bot'  : bot,
         'cmd'  : name,
         'args' : [],
-        'key'  : None
+        'key'  : message.author.id
     }
 
     if len(args) > 1:
