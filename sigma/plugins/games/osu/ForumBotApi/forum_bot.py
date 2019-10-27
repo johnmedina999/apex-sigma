@@ -11,7 +11,8 @@ async def forum_bot(cmd, message, args):
         await message.channel.send(cmd.help())
         return
 
-    bot, name = args[0].split('.')
+    try:    bot, name = args[0].split('.')
+    except: bot, name = 'Core', 'help'
 
     data = {
         'bot'  : bot,
