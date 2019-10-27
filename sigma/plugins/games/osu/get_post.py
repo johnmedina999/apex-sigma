@@ -4,11 +4,11 @@ import asyncio
 import re
 from bs4 import BeautifulSoup
 
-from .BBcodeProcessor.BBcodeProcessor import BBcodeProcessor
-from .BBcodeProcessor.DiscordBBcodeCompiler import DiscordBBcodeCompiler
-from .Forum.Structs.Topic import Topic
-from .Forum.Structs.User import User
-from .Forum.Structs.Post import Post
+from .misc.BBcodeProcessor.BBcodeProcessor import BBcodeProcessor
+from .misc.BBcodeProcessor.DiscordBBcodeCompiler import DiscordBBcodeCompiler
+from .misc.Forum.Structs.Topic import Topic
+from .misc.Forum.Structs.User import User
+from .misc.Forum.Structs.Post import Post
 
 async def display_post(cmd, channel, args):
 

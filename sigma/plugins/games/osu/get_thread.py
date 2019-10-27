@@ -4,9 +4,9 @@ import asyncio
 import re
 from bs4 import BeautifulSoup
 
-from .BBcodeProcessor.BBcodeProcessor import BBcodeProcessor
-from .BBcodeProcessor.DiscordBBcodeCompiler import DiscordBBcodeCompiler
-from .Forum.Structs.Topic import Topic
+from .misc.BBcodeProcessor.BBcodeProcessor import BBcodeProcessor
+from .misc.BBcodeProcessor.DiscordBBcodeCompiler import DiscordBBcodeCompiler
+from .misc.Forum.Structs.Topic import Topic
 
 async def display_thread(cmd, channel, args):
 
