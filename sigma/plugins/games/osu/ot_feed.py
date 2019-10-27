@@ -1,85 +1,15 @@
 import asyncio
 import discord
-import socket
 import json
-import threading
 
+from sigma.core.ctrl_client import CtrlClient
 from dateutil.parser import parse
 
 
-class Connection():
-
-    def __init__(self, ev, ip_addr, port):
-        self.ev        = ev
-        self.ip_addr   = ip_addr
-        self.port      = port
-        self.connected = False
-
-        self.create_new_connection()
-        
-
-    def __del__(self):
-        try:
-            self.connection.send(b'')
-            self.connection.close()
-        except socket.timeout: pass
-
-
-    def create_new_connection(self):
-        try: 
-            self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)            
-            self.connection.settimeout(0.2)  # Time to wait (seconds) to revieve data from client every try
-        except socket.error as err: 
-            self.ev.log.info('socket creation failed with error %s' %(err))
-
-
-    def handle_sudden_disconnect(self):
-        self.connection.send(b'')
-        self.connection.close()
-        self.create_new_connection()
-        self.connected = False
-        self.ev.log.info('Disconnected from ' + self.ip_addr + ':' + str(self.port))
-
-
-    async def connect_to_ot_forum_bot(self):
-        while True:
-            try: 
-                self.connection.connect((self.ip_addr, self.port))
-                self.connected = True
-                self.ev.log.info('Connected to ' + self.ip_addr + ':' + str(self.port))
-                break
-            except socket.error as e: 
-                print(e)
-                pass
-
-            await asyncio.sleep(5)
-
-
-    async def process_data(self):
-        if not self.connected: return
-
-        try:
-            data = self.connection.recv(1024)
-            if data == b'':
-                self.handle_sudden_disconnect()
-                return
-
-        except socket.timeout: return   # If we timed out, sleep a bit and try again
-        except socket.error as e: 
-            self.handle_sudden_disconnect()
-            return
-        except Exception as e: 
-            self.handle_sudden_disconnect()
-            self.ev.log.error('Unexpected error while recieving data: ' + str(e))
-            return
-
-        data = data.decode('utf-8')
-
-        try: data = json.loads(data)
-        except Exception as e:
-            self.ev.log.error('Unable to parse json data;\n' + data)
-            return
-        
+class DataHandler():
+    
+    @staticmethod
+    async def handle_data(ev, data):
         new_link = 'https://osu.ppy.sh/community/forums/posts/' + data['post_id']
         old_link = 'https://old.ppy.sh/forum/p/' + data['post_id']
 
@@ -91,26 +21,17 @@ class Connection():
         embed.add_field(name=data['thread_title'], value=new_link + '\n' + old_link)
 
         try:
-            for server in self.ev.bot.guilds:
+            for server in ev.bot.guilds:
                 for channel in server.channels:
                     if channel.name == 'ot-feed':
                         await channel.send(embed=embed)
         except Exception as e:
-            self.ev.log.error('Unable to send message to ot-feed;\n' + str(data) + '\n' + str(e))
-            
+            ev.log.error('Unable to send message to ot-feed;\n' + str(data) + '\n' + str(e))
+
 
 async def ot_feed(ev):
 
-    ip_addr = '127.0.0.1'
-    port    = 55555
-
-    ot_bot_connection = Connection(ev, ip_addr, port)
-    client_thread     = threading.Thread(target=ot_bot_connection.process_data, args=())
-
+    connection = CtrlClient(ev, '127.0.0.1', 55555, DataHandler.handle_data)
     while True:
-        await asyncio.sleep(1)
-
-        if not ot_bot_connection.connected:
-            await ot_bot_connection.connect_to_ot_forum_bot()
-        
-        await ot_bot_connection.process_data()
+        await asyncio.sleep(0.1)
+        await connection.read_data()
