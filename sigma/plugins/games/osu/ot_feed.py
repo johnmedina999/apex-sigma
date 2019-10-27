@@ -2,14 +2,14 @@ import asyncio
 import discord
 import json
 
-from sigma.core.ctrl_reciever import CtrlReciever
+from sigma.core.data_reciever import DataReciever
 from dateutil.parser import parse
 
 
 class DataHandler():
     
     @staticmethod
-    async def handle_data(ev, data):
+    async def handle_data(data, ev):
         new_link = 'https://osu.ppy.sh/community/forums/posts/' + data['post_id']
         old_link = 'https://old.ppy.sh/forum/p/' + data['post_id']
 
@@ -31,7 +31,7 @@ class DataHandler():
 
 async def ot_feed(ev):
 
-    connection = CtrlReciever(ev, '127.0.0.1', 55555, DataHandler.handle_data)
+    data_reciever = DataReciever(55555, DataHandler.handle_data)
     while True:
         await asyncio.sleep(0.1)
-        await connection.read_data()
+        await data_reciever.read_data((ev,))
