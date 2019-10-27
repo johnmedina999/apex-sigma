@@ -17,12 +17,12 @@ async def forum_bot(cmd, message, args):
     data = {
         'bot'  : bot,
         'cmd'  : name,
-        'args' : []
+        'args' : [],
+        'key'  : None
     }
 
-    if len(args) > 1: 
+    if len(args) > 1:
         data['args'] = args[1:]
-
 
     success = await CtrlClient(cmd.log, 44444, handle_data).request(data, (message, cmd.log))
     if not success:
