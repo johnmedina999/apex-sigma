@@ -17,5 +17,5 @@ class DataReciever():
 
 
     async def read_data(self, args):
-        if self.poller.poll(0.1*1000): 
+        if self.poller.poll(0.2*1000): 
             await self.handler(self.socket.recv_json(), *args)
