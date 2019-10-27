@@ -22,7 +22,7 @@ class CtrlClient():
             self.logger.error('Request failed to send')
             return False
 
-        if self.poller.poll(0.1*1000):
+        if self.poller.poll(0.2*1000): 
             await self.handler(self.socket.recv_json(), *args)
             return True
         else:
