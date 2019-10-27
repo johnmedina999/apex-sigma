@@ -22,7 +22,8 @@ class CtrlClient():
             self.logger.error('Request failed to send')
             return False
 
-        if self.poller.poll(0.2*1000): 
+        # We can afford to poll for so long since it's a one off command and is async
+        if self.poller.poll(15.0*1000):
             await self.handler(self.socket.recv_json(), *args)
             return True
         else:
