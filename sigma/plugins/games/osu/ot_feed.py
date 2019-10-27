@@ -2,7 +2,7 @@ import asyncio
 import discord
 import json
 
-from sigma.core.ctrl_client import CtrlClient
+from sigma.core.ctrl_reciever import CtrlReciever
 from dateutil.parser import parse
 
 
@@ -31,7 +31,7 @@ class DataHandler():
 
 async def ot_feed(ev):
 
-    connection = CtrlClient(ev, '127.0.0.1', 55555, DataHandler.handle_data)
+    connection = CtrlReciever(ev, '127.0.0.1', 55555, DataHandler.handle_data)
     while True:
         await asyncio.sleep(0.1)
         await connection.read_data()
