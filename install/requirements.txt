@@ -28,3 +28,4 @@ https://pypi.doubanio.com/packages/80/b6/9476cc9b1cd7c85ea713205f7a5b0818bc02890
 pytz
 tzwhere
 file_read_backwards
+zmq

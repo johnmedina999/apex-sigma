@@ -1,5 +1,4 @@
 import time
-import msgpack
 import zmq
 
 
