@@ -2,6 +2,11 @@ import discord
 
 
 async def handle_data(reply, message, logger):
+    if reply == None:
+        logger.error('Cmd reply is none')
+        await message.channel.send('Something went horribly wrong!')
+        return
+
     if not 'status' in reply:
         logger.error('Invalid data: ' + str(reply))
         await message.channel.send('Failed')
