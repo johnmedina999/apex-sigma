@@ -1,4 +1,4 @@
-
+import discord
 
 
 async def handle_data(reply, message, logger):
@@ -6,10 +6,12 @@ async def handle_data(reply, message, logger):
         logger.error('Invalid data: ' + str(reply))
         await message.channel.send('Failed')
         return
+    
+    if 'msg' in reply: msg = str(reply['msg'])
+    else:              msg = 'Done' if reply['status'] == 0 else 'Failed'
 
-    if 'msg' in reply: 
-        await message.channel.send(reply['msg'])
-        return
+    if reply['status'] == -1:  embed = discord.Embed(color=0x880000, description=msg)
+    elif reply['status'] == 0: embed = discord.Embed(color=0x008800, description=msg)
+    else:                      embed = discord.Embed(color=0x880088, description=msg)
 
-    if reply['status'] == 0: await message.channel.send('Done')
-    else:                    await message.channel.send('Failed')
+    await message.channel.send(None, embed=embed)
