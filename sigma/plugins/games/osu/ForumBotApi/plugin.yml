@@ -1,0 +1,15 @@
+name: ForumBotApi
+
+categories:
+  - games
+
+enabled: true
+
+commands:
+  - name:    forum_bot
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} bot cmd args"
+    description:
+      TODO
