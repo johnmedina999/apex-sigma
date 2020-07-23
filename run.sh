@@ -10,5 +10,9 @@ cd "$(dirname "$0")"
 # activate local python version
 pyenv local 3.8.2
 
+# Apperently the way pyenv installed python 3.8 makes ssl cry if left alone
+# Make sure this is up to date by doing `apt-get update ca-certificates --upgrade`
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
 # Execute the bot
 exec python ./run.py
