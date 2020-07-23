@@ -8,6 +8,7 @@ cd "$(dirname "$0")"
 #source ".venv/bin/activate"
 
 # activate local python version
+eval "$(pyenv init -)"
 pyenv local 3.8.2
 
 # Apperently the way pyenv installed python 3.8 makes ssl cry if left alone
