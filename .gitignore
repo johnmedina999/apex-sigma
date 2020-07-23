@@ -33,3 +33,4 @@ lolsig.png
 /.vscode/launch.json
 _config.yml
 .vscode/settings.json
+/venv/*
