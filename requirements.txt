@@ -2,7 +2,7 @@ arrow
 discord.py
 pyyaml
 file-read-backwards
-pymongo
+pymongo==2.9
 pafy
 youtube-dl
 soundcloud
