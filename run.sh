@@ -8,4 +8,4 @@ cd "$(dirname "$0")"
 source ".venv/bin/activate"
 
 # Execute the bot
-exec python3.6 ./run.py
+exec python3.8 ./run.py
