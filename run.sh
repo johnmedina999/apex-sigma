@@ -8,6 +8,7 @@ cd "$(dirname "$0")"
 #source ".venv/bin/activate"
 
 # activate local python version
+export PATH=$(HOME)/bin/.pyenv/shims:$PATH
 eval "$(pyenv init -)"
 pyenv local 3.8.2
 
