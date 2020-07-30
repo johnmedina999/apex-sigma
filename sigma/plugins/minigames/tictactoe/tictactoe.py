@@ -79,9 +79,6 @@ async def tictactoe(cmd, message, args):
                         elif board.draw:
                             embed_color = 0x696969
                             embed_title = ':link: It\'s a draw.'
-                        else:
-                            embed_color = 0x1ABC9C
-                            embed_title = 'Tic Tac Toe'
                         del games[player.id]
 
                     else:
