@@ -39,6 +39,7 @@ class Board(object):
     def cpu_move(self, coordinates):
         self.set_piece(coordinates, self.cpu)
 
+
     def get_piece(self, coordinates):
         return self.rows[coordinates[0]].fields[coordinates[1]].piece
 
