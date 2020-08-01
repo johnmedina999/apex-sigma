@@ -49,6 +49,19 @@ commands:
       Makes a role self assignable.
       Requires the user who calls the command to have the Manage Roles permision.
 
+  - name: addselfcolorrole
+    alts:
+      - "ascr"
+      - "addselfcolourrole"
+    global:  true
+    enabled: true
+    sfw:     true
+    usage:   "{pfx:s}{cmd:s} <hex color>"
+    description:
+      Makes a color role with the given color. The name of the role will be the hexadecimal color code.
+      Requires the user who calls the command to have the Manage Roles permission.
+      You can check the color of the role by using the "color" command.
+
   - name: delselfrole
     alts:
       - "dsr"
