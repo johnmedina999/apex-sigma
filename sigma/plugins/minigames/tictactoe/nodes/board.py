@@ -1,5 +1,5 @@
 class Board(object):
-    def __init__(self,player, cpu):
+    def __init__(self, player, cpu):
         self.rows = [Row() for i in range(3)]
         self.player = player
         self.cpu = cpu
@@ -7,11 +7,8 @@ class Board(object):
         self.lost = False
         self.draw = False
         self.over = False
-        self.total_fields = 3 ** 2
         self.empty_fields = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
         self.taken_fields = []
-        self.number_of_empty_fields = self.total_fields
-        self.number_of_taken_fields = 0
 
     def view(self):
         top = [':arrow_lower_right:', ':regional_indicator_a:', ':regional_indicator_b:', ':regional_indicator_c:']
@@ -34,7 +31,7 @@ class Board(object):
         self.rows[coordinates[0]].fields[coordinates[1]].set_piece(piece)
         self.taken_fields.append(coordinates)
         self.empty_fields.remove(coordinates)
-        self.update_status()
+        self.update_status(coordinates)
 
     def player_move(self, coordinates):
         self.set_piece(coordinates, self.player)
@@ -42,24 +39,25 @@ class Board(object):
     def cpu_move(self, coordinates):
         self.set_piece(coordinates, self.cpu)
 
+
     def get_piece(self, coordinates):
         return self.rows[coordinates[0]].fields[coordinates[1]].piece
 
-    def update_status(self):
+    def update_status(self, last_piece):
         win_combos = [[[[0, 0], [1, 0], [2, 0]], [[0, 1], [1, 1], [2, 1]], [[0, 2], [1, 2], [2, 2]]],  # Horizontal Wins
                       [[[0, 0], [0, 1], [0, 2]], [[1, 0], [1, 1], [1, 2]], [[2, 0], [2, 1], [2, 2]]],  # Vertical Wins
                       [[[0, 0], [1, 1], [2, 2]], [[0, 2], [1, 1], [2, 0]]]]  # Diagonal Wins
         for combo in win_combos:
             finish = self.check_matching(combo)
             if finish:
-                checked_piece = self.get_piece(combo[0][0])
+                checked_piece = self.get_piece(last_piece)
                 if checked_piece == self.player:
                     self.won = True
                 else:
                     self.lost = True
                 self.over = True
             else:
-                if self.number_of_empty_fields == 0:
+                if len(self.empty_fields) == 0:
                     self.draw = True
                     self.over = True
 

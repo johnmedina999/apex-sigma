@@ -34,14 +34,6 @@ commands:
     description:
       Writes a random cringy dad joke. Honestly I have no idea why I made some commands.
 
-  - name:    joke
-    global:  true
-    enabled: true
-    sfw:     true
-    usage:   "{pfx:s}{cmd:s}"
-    description:
-      Outputs a random joke, do not expect them to be even slightly good.
-
   - name:    ronswanson
     alts:
       - "ron"
