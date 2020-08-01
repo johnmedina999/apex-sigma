@@ -17,4 +17,4 @@ pyenv local 3.8.2
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 # Execute the bot
-exec python ./run.py
+python run.py
