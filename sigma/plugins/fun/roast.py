@@ -5,10 +5,9 @@ from bs4 import BeautifulSoup
 
 async def roast(cmd, message, args):
 
-    if message.mentions: target = message.mentions[0]
-    else: target = message.author
+    target = message.author if not message.mentions else message.mentions[0]
 
-    page_num = random.randint(0, 36)
+    page_num = random.randint(1, 30)
     async with aiohttp.ClientSession() as session:
         async with session.get(f'http://onelinefun.com/insults/{page_num}/') as data:
             page = await data.text()
@@ -25,9 +24,6 @@ async def roast(cmd, message, args):
         await message.channel.send(None, embed=embed)
         return
 
-    roast_choose = random.randint(0, 9)
-    roast_text = content[roast_choose]
-
     embed = discord.Embed(color=0xCC6666)
-    embed.add_field(name=':fire::fire::fire::fire::fire::fire:', value=f'<@%s> {roast_text} ' % target.id)
+    embed.add_field(name=':fire::fire::fire::fire::fire::fire:', value=f'<@{target.id}> {random.choice(content)} ')
     await message.channel.send(None, embed=embed)
